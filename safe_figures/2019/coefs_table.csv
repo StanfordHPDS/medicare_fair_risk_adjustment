@@ -1,0 +1,106 @@
+"HCC","HCC label","beta","equity","equity_diff"
+"CHF_gCopdCF",,0.01,0.02,0
+"DIABETES_CHF",,669.21,626.05,-43.16
+"HCC1","HIV/AIDS",1426.14,1759.28,333.14
+"HCC10","Lymphoma and Other Cancers",6823.11,6709.7,-113.41
+"HCC100","Ischemic or Unspecified Stroke",1291.81,1299.08,7.28
+"HCC103","Hemiplegia/Hemiparesis",1152.28,1281.32,129.04
+"HCC104","Monoplegia, Other Paralytic Syndromes",1332.84,1358.44,25.6
+"HCC106","Atherosclerosis of the Extremities with Ulceration",8741.77,8746.35,4.57
+"HCC107","Vascular Disease with Complications",2799.08,2801.85,2.77
+"HCC108","Vascular Disease",2246.67,2222.11,-24.57
+"HCC11","Colorectal, Bladder, and Other Cancers",4042.48,3949.36,-93.12
+"HCC110","Cystic Fibrosis",4859.48,4670.13,-189.35
+"HCC111","Chronic Obstructive Pulmonary Disease",2555.8,2453.88,-101.92
+"HCC112","Fibrosis of Lung and Other Chronic Lung",2321.74,2294.48,-27.26
+"HCC114","Aspiration and Specified Bacterial Pneumonias",742.25,714.25,-28
+"HCC115","Pneumococcal Pneumonia, Empyema, Lung",1110.22,1072.27,-37.95
+"HCC12","Breast, Prostate, and Other Cancers and Tumors",2173.04,2142.77,-30.26
+"HCC122","Proliferative Diabetic Retinopathy and Vitreous",2930.92,3072.86,141.94
+"HCC124","Exudative Macular Degeneration",6361.99,6169.11,-192.88
+"HCC134","Dialysis Status",9530.29,9724.99,194.71
+"HCC135","Acute Renal Failure",2941.72,3019.57,77.85
+"HCC136","Chronic Kidney Disease, Stage 5",3236.54,3472.07,235.54
+"HCC137","Chronic Kidney Disease, Severe (Stage 4)",3172.84,3260.63,87.79
+"HCC138","Chronic Kidney Disease, Moderate (Stage 3)",1370.18,1426.32,56.13
+"HCC157","Pressure Ulcer of Skin with Necrosis Through to",5082.75,5119.56,36.81
+"HCC158","Pressure Ulcer of Skin with Full Thickness Skin",1867.75,1819.65,-48.09
+"HCC159","Pressure Ulcer of Skin with Partial Thickness Skin",1595.42,1513.47,-81.96
+"HCC161","Chronic Ulcer of Skin, Except Pressure",3429.45,3278.29,-151.16
+"HCC162","Severe Skin Burn or Condition",159.96,138.52,-21.44
+"HCC166","Severe Head Injury",4411.47,4386.97,-24.5
+"HCC167","Major Head Injury",673.15,620.57,-52.58
+"HCC169","Vertebral Fractures without Spinal Cord Injury",2646.31,2559.05,-87.26
+"HCC17","Diabetes with Acute Complications",2894.44,3157.05,262.6
+"HCC170","Hip Fracture/Dislocation",873.16,743.56,-129.6
+"HCC173","Traumatic Amputations and Complications",614.01,580.27,-33.74
+"HCC176","Complications of Specified Implanted Device or",4645.25,4580.1,-65.16
+"HCC18","Diabetes with Chronic Complications",2124.59,2358.75,234.16
+"HCC186","Major Organ Transplant or Replacement Status",8065.55,8044.07,-21.48
+"HCC188","Artificial Openings for Feeding or Elimination",2925.54,2918.2,-7.34
+"HCC189","Amputation Status, Lower Limb/Amputation",2954.91,2970.49,15.58
+"HCC19","Diabetes without Complication",895.97,1101.64,205.66
+"HCC2","Septicemia, Sepsis, Systemic Inflammatory",1251.71,1234.67,-17.04
+"HCC21","Protein-Calorie Malnutrition",338.22,430.7,92.48
+"HCC22","Morbid Obesity",1690.12,1678.8,-11.32
+"HCC23","Other Significant Endocrine and Metabolic",2788.24,2779.08,-9.16
+"HCC27","End-Stage Liver Disease",6341.22,6310.27,-30.95
+"HCC28","Cirrhosis of Liver",3183.2,3185.32,2.12
+"HCC29","Chronic Hepatitis",1772.1,2314.04,541.94
+"HCC33","Intestinal Obstruction/Perforation",2191.15,2183.25,-7.9
+"HCC34","Chronic Pancreatitis",3378.3,3341.07,-37.23
+"HCC35","Inflammatory Bowel Disease",5188.11,5050.12,-137.99
+"HCC39","Bone/Joint/Muscle Infections/Necrosis",3699.53,3641.69,-57.84
+"HCC40","Rheumatoid Arthritis and Inflammatory",4831.42,4786.16,-45.26
+"HCC46","Severe Hematological Disorders",13728.08,13725.55,-2.53
+"HCC47","Disorders of Immunity",6068.74,6072.56,3.82
+"HCC47_gCancer",,5734.32,5767.99,33.67
+"HCC48","Coagulation Defects and Other Specified",2106.22,2052.8,-53.41
+"HCC51","Dementia With Complications",401.76,386.47,-15.29
+"HCC52","Dementia Without Complication",0,0,0
+"HCC54","Substance Use with Psychotic Complications",1508.72,1469.7,-39.02
+"HCC55","Substance Use Disorder, Moderate/Severe, or",3128.73,3069.45,-59.27
+"HCC56","Substance Use Disorder, Mild, Except Alcohol",2477.42,2664.64,187.22
+"HCC57","Schizophrenia",3102.03,3217.95,115.93
+"HCC58","Reactive and Unspecified Psychosis",2756.73,2725.7,-31.03
+"HCC59","Major Depressive, Bipolar, and Paranoid",2319.22,2142.87,-176.35
+"HCC6","Opportunistic Infections",2972.06,2921,-51.06
+"HCC60","Personality Disorders",1410.35,1182.07,-228.28
+"HCC70","Quadriplegia",4628.71,4755.58,126.86
+"HCC71","Paraplegia",4784.82,4762.94,-21.87
+"HCC72","Spinal Cord Disorders/Injuries",4497.46,4472.44,-25.02
+"HCC73","Amyotrophic Lateral Sclerosis and Other Motor",4530.95,4434.23,-96.72
+"HCC74","Cerebral Palsy",34.52,0.74,-33.78
+"HCC75","Myasthenia Gravis/Myoneural Disorders and",8168.27,8097.25,-71.02
+"HCC76","Muscular Dystrophy",4343.93,4159.44,-184.5
+"HCC77","Multiple Sclerosis",5657.03,5463.1,-193.93
+"HCC78","Parkinson's and Huntington's Diseases",2832.17,2744.52,-87.65
+"HCC79","Seizure Disorders and Convulsions",1704.64,1705.01,0.36
+"HCC8","Metastatic Cancer and Acute Leukemia",26175.61,26136.48,-39.14
+"HCC80","Coma, Brain Compression/Anoxic Damage",2465.45,2518.05,52.6
+"HCC82","Respirator Dependence/Tracheostomy Status",6734.58,6787.57,52.99
+"HCC83","Respiratory Arrest",3868.1,3956.06,87.96
+"HCC84","Cardio-Respiratory Failure and Shock",2027.57,1991.28,-36.3
+"HCC85","Congestive Heart Failure",2728.66,2773.44,44.78
+"HCC85_HCC96",,0.01,0.1,0.09
+"HCC85_gRenal_V24",,0.03,0.16,0.13
+"HCC86","Acute Myocardial Infarction",1644.78,1636.35,-8.43
+"HCC87","Unstable Angina and Other Acute Ischemic Heart",1825.25,1788.01,-37.24
+"HCC88","Angina Pectoris",1698.93,1661.21,-37.72
+"HCC9","Lung and Other Severe Cancers",13645.23,13643.93,-1.3
+"HCC96","Specified Heart Arrhythmias",2453.07,2286.54,-166.53
+"HCC99","Intracranial Hemorrhage",1727.5,1794.77,67.28
+"age_sexFemale_70-74",,484.59,461.81,-22.77
+"age_sexFemale_75-79",,922.61,865.94,-56.67
+"age_sexFemale_80-84",,891.85,836.22,-55.63
+"age_sexFemale_85-89",,750.26,673.11,-77.15
+"age_sexFemale_90+",,138.39,43.65,-94.75
+"age_sexMale_65-69",,286.33,276.74,-9.59
+"age_sexMale_70-74",,800.22,751.64,-48.58
+"age_sexMale_75-79",,1651.35,1585.19,-66.17
+"age_sexMale_80-84",,1789.62,1729.68,-59.94
+"age_sexMale_85-89",,1663.27,1593.12,-70.15
+"age_sexMale_90+",,796.17,723.92,-72.25
+"gCopdCF_CARD_RESP_FAIL",,0.5,23.65,23.15
+"orig_dis_f",,1754.28,2004.07,249.78
+"orig_dis_m",,773.18,970.09,196.91

@@ -1,0 +1,642 @@
+---
+title: "Algorithms to Improve Fairness in Medicare Risk Adjustment"
+author:
+  - name: Marissa B. Reitsma, PhD
+    affiliations:
+      - name: Department of Health Policy, School of Medicine, Stanford University
+  - name: Thomas G. McGuire, PhD
+    affiliations:
+      - name: Department of Health Care Policy, Harvard Medical School
+  - name: Sherri Rose, PhD
+    affiliations:
+      - name: Department of Health Policy, School of Medicine, Stanford University
+bibliography: references.bib
+csl: american-medical-association.csl
+# format:
+#  docx:
+#    toc: false
+#    number-sections: false
+#    highlight-style: github
+---
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+library(data.table)
+library(kableExtra)
+library(scales)
+options(scipen = 999)
+```
+
+## Key Points
+
+##### Question
+
+Can modern algorithms improve group-level fairness while maintaining overall performance in Medicare risk adjustment?
+
+##### Findings
+
+In this evaluation of Medicare risk adjustment algorithms, constrained regression and post-processing both achieved fair spending targets for minoritized racial/ethnic groups without sacrificing overall payment system fit.
+
+##### Meaning
+
+Feasible extensions of the current risk adjustment algorithm can yield additional payments for minoritized racial/ethnic groups in Medicare.
+
+## Abstract
+
+##### Importance
+
+Payment system design creates incentives that impact healthcare spending, access, and outcomes. With Medicare Advantage accounting for more than half of Medicare spending, changes to its risk adjustment algorithm have the potential for broad consequences.
+
+##### Objective
+
+To develop risk adjustment algorithms that can achieve fair spending targets, and compare their performance to a baseline that emulates the least squares regression approach used by the Centers for Medicare and Medicaid Services.
+
+##### Design
+
+Retrospective analysis of Traditional Medicare enrollment and claims data between January 2017 and December 2020. Diagnoses in claims were mapped to Hierarchical Condition Categories (HCCs). Algorithms used demographic indicators and HCCs from one calendar year to predict Medicare spending in the subsequent year.
+
+##### Setting
+
+Data from Medicare beneficiaries with documented residence in the United States or Puerto Rico.
+
+##### Participants
+
+A random 20% sample of beneficiaries enrolled in Traditional Medicare. Included beneficiaries were aged 65 years and older, and did not have Medicaid dual eligibility. Race/ethnicity was assigned using the Research Triangle Institute enhanced indicator.
+
+##### Main Outcome and Measures
+
+Prospective healthcare spending by Medicare. Overall performance was measured by payment system fit and mean absolute error. Net compensation was used to assess group-level fairness.
+
+##### Results
+
+```{r, echo = FALSE, warning= FALSE, message = FALSE}
+num_df <- fread("safe_figures/2018/number_plugging_df.csv")
+table2 <- fread("safe_figures/2018/table2.csv")[rti_race == "Hispanic"]
+```
+
+The main analysis included `{r} format(round(num_df$number[num_df$label=="num_benes"]), big.mark = ",")` Medicare beneficiaries with a mean age of `{r} round(num_df$number[num_df$label=="mean_age"], 1)` years and mean annual Medicare spending of `{r} dollar(round(num_df$number[num_df$label=="mean_spending"]))`. Out-of-sample payment system fit for the baseline regression was `{r} percent(table2$r2[table2$spec=="Baseline"], accuracy = .1)`. Constrained regression and post-processing both achieved fair spending targets, while maintaining payment system fit values of `{r} percent(table2$r2[table2$spec=="Constrained Regression Disparities"], accuracy = .1)` and `{r} percent(table2$r2[table2$spec=="Post-Process Disparities"], accuracy = .1)`, respectively. Whereas post-processing only increased mean payments for beneficiaries in minoritized racial/ethnic groups, constrained regression increased mean payments for beneficiaries in minoritized racial/ethnic groups and beneficiaries in other groups residing in counties with greater exposure to socioeconomic factors that can adversely affect health outcomes.
+
+##### Conclusions and Relevance
+
+Constrained regression and post-processing can incorporate fairness objectives in the Medicare risk adjustment algorithm with minimal reduction in overall fit.
+
+## Background
+
+Risk adjustment is a core component of capitated payment systems, aiming to mitigate selection incentives that encourage plans to attract profitable enrollees and avoid unprofitable enrollees. [@pope2004; @pope2011; @mcwilliams2012; @ellis2018; @reportt2021] The algorithms used to risk adjust payments to Medicare Advantage plans predict healthcare spending as a function of beneficiary demographic characteristics and a set of diagnosed health conditions. [@pope2004; @reportt2021; @medicarepaymentadvisorycommission2024] With Medicare Advantage accounting for more than half of Medicare spending, improvements to Medicare's risk adjustment system have the potential to lead to substantial changes in healthcare spending, access, and outcomes.
+
+Currently, Medicare Advantage plan payment risk adjustment is based on least squares regression. Prior studies have proposed approaches to improve risk adjustment by increasing predictive power, mitigating incentives for upcoding, and reducing opportunities for favorable selection. [@rose2016; @rose2017; @rose2018; @kan2019; @bergquist2019; @irvin2020; @zink2020; @zink2021; @mcguire2021; @andriola2024; @skopec] These studies employ a range of methods, including constrained regressions, penalized regressions, data transformations, random forests, and other machine learning algorithms. Only a few consider fair regression methods, which optimize for both overall and group-level fit metrics for marginalized groups. These methods do not add marginalized groups as predictors in the regression, which can reinforce inequities from the data. [@bergquist2019; @zink2020] Notably, algorithms to achieve fairness goals across multiple minoritized racial/ethnic groups in Medicare have not been examined previously. This gap in the literature is important because a greater percentage of Black, Hispanic, and Asian/Pacific Islander beneficiaries are enrolled in Medicare Advantage plans, compared to white beneficiaries. [@meyers2021; @ochieng2023] Additionally, the population aged 65 years and older is projected to become more racially and ethnically diverse over the coming decades. [@bureau]
+
+Although Medicare eligibility reduces racial/ethnic disparities in insurance coverage, disparities in healthcare access, utilization, spending, and outcomes persist. [@wallace2021; @dieleman2021; @baik2023; @mcwilliams2023; @nationalacademiesofsciencesengineeringandmedicine2024] Historical fee-for-service spending data, which are used to estimate risk scores and determine payments, embed these longstanding disparities. Recently, risk adjusted payments were documented to exceed observed spending for Black and Hispanic beneficiaries. This suggests that population-based payment systems could promote health equity though resource reallocation towards historically marginalized groups. [@mcwilliams2023] The existing payment system leaves access and utilization disparities for Medicare Advantage beneficiaries, [@gangopadhyaya2023; @ochieng2023] which can lead to the risk adjusted payments exceeding the observed (suboptimal) spending.
+
+This study demonstrates the potential for algorithmic tools to achieve more equitable plan payment for Medicare. First, we describe existing levels of net compensation by racial/ethnic group and propose a basic measure of healthcare spending disparity that can inform fair spending targets. We then evaluate two approaches to achieve fair spending targets: constrained regression and post-processing. Our analysis presents algorithms for Medicare risk adjustment that promote more equitable payments, maintain current levels of performance, and remain flexible, feasible, transparent, and interpretable.
+
+## Methods
+
+#### Study Design and Data
+
+We analyzed a 20% random sample of Medicare fee-for-service beneficiaries, and included claims occurring between January 1, 2017 and December 31, 2020. [@mbsf_old; @mbsf_new; @carrier_old; @carrier_new; @outpatient_old; @outpatient_new; @medpar_old; @medpar_new] Medicare risk adjustment is prospective, where observed beneficiary demographic characteristics and health conditions from a given year are used to predict spending in the following year. As a result, our analytic cohorts each span two calendar years. These cohorts included beneficiaries who were aged 65 years and older, continuously enrolled in Medicare Parts A and B, not enrolled in Medicare Part C, and not dual eligible for Medicaid. Eligibility criteria were based on the largest of the six community segments that the Centers for Medicare and Medicaid Services (CMS) uses to stratify beneficiaries for risk adjustment. In our study, we included beneficiaries who died in the payment year, but excluded beneficiaries who became ineligible for other reasons, such as transitioning to a Part C plan. Further details are included in the [Supplement](#supp_eligibility).
+
+```{r, echo = FALSE, warning= FALSE, message = FALSE}
+hcc_map <- fread("safe_figures/2020 Midyear_Final ICD-10-CM Mappings.csv")
+hcc_map <- unique(hcc_map[, .(`Diagnosis\nCode`, Description, `CMS-HCC\nModel\nCategory\nV24`)])
+hcc_map <- hcc_map[!is.na(`CMS-HCC\nModel\nCategory\nV24`)]
+setnames(hcc_map, c("CMS-HCC\nModel\nCategory\nV24", "Diagnosis\nCode"), c("hcc", "icd"))
+
+coefs <- fread("safe_figures/2018/coefs_table.csv")
+coefs <- coefs[!HCC %like% "age_sex"]
+interactions <- nrow(coefs[HCC %like% "_"])
+```
+
+For each eligible beneficiary, we extracted demographic characteristics from the Master Beneficiary Summary File and diagnoses from inpatient, outpatient, and carrier claims. Demographic characteristics included age, documented sex, race/ethnicity, county, and original reason for Medicare eligibility. Race/ethnicity was based on the enhanced race/ethnicity code that applies the Research Triangle Institute race imputation algorithm [(eFigure 1 in the Supplement)](#supplement_fig_1). [@eicheldinger2008] We used CMS labels for racial/ethnic groups (American Indian/Alaska Native, Asian/Pacific Islander, Black, Hispanic, non-Hispanic white), although we used "Additional Group" to refer to the group labeled "Other" by CMS. Beneficiaries categorized as American Indian/Alaska Native, Asian/Pacific Islander, Black, or part of an Additional Group are classified as non-Hispanic.
+
+We constructed hierarchical condition categories (HCCs) from International Classification of Diseases Version 10 (ICD-10) diagnoses coded in inpatient, outpatient, and carrier claims files. Diagnoses from outpatient and carrier claims files were included after filtering visits by qualifying Healthcare Common Procedure Coding System codes. [@medicare] We mapped `{r} format(length(unique(hcc_map$icd)), big.mark = ",")` unique ICD-10 diagnosis codes to the `{r} length(unique(hcc_map$hcc))` HCCs included in CMS's version 24 risk adjustment software. [@centersformedicareandmedicaidservices] Finally, we calculated total annual payments by Medicare from inpatient, outpatient, and carrier claims.
+
+The Stanford University Institutional Review Board approved this study (Protocol ID #66714).
+
+#### Fair Spending Targets
+
+We estimated two possible sets of fair spending targets, which are prespecified levels of net compensation for minoritized racial/ethnic groups that incorporate fairness goals. Net compensation is the difference between mean predicted spending (from the payment algorithm) and mean observed spending. The first set of spending targets, referred to as "disparities-based targets," aim to capture the additional spending by beneficiaries in minoritized racial/ethnic groups if they had the same healthcare access and utilization as non-Hispanic white beneficiaries. Specifically, we fit an ordinary least squares regression to predict spending using data from only non-Hispanic white beneficiaries. The regression included fixed effects for age group, documented sex, number of diagnosed payment-eligible HCCs, whether the beneficiary was first eligible for Medicare based on a disabling condition, and county. Using this regression, we predicted spending for all other racial/ethnic groups. Our disparities-based fair spending targets are set as the difference between mean predicted spending, based on the regression using data from only non-Hispanic white beneficiaries, and mean observed spending for American Indian/Alaska Native, Asian/Pacific Islander, Black, and Hispanic racial/ethnic groups.
+
+Our second set of fair spending targets, referred to as "five percent targets," add five percent of mean spending across all eligible beneficiaries to net compensation from the baseline regression for minoritized racial/ethnic groups. The five percent targets are based on the current bonus paid to plans with high quality ratings. [@medicarepaymentadvisorycommission2024]
+
+In this study, the purpose of our two sets of fair spending targets is to examine the effects of algorithmic tools to achieve policy-determined fair spending targets. In practice, implemented spending targets should be determined through broad consultation and further research.
+
+#### Risk Adjustment Algorithms
+
+First, we established a baseline regression that approximates the least squares regression used by CMS to estimate risk scores for Medicare plan payment risk adjustment. The regression included indicators for 11 combinations of age group and documented sex (age categories: 65-69, 70-74, 75-79, 80-84, 85-89, 90+; documented sex categories: female, male; reference category is female aged 65-69 years), indicators for `{r} length(unique(hcc_map$hcc))` HCCs, indicators for `{r} interactions-2` interactions between HCCs, an indicator for documented female beneficiaries originally eligible for Medicare based on a qualifying disabling condition, and an indicator for documented male beneficiaries originally eligible for Medicare based on a qualifying disabling condition. We also included indicators for county of residence because Medicare payment benchmarks are set by county. In the baseline regression, all coefficients for HCCs, including interactions, were constrained to be non-negative.
+
+We evaluated two algorithms to achieve fair spending targets: constrained regression and a post-processing algorithm. Both algorithms built upon the baseline regression. Constrained regression added constraints that ensured net compensation by minoritized racial/ethnic group matches fair spending targets. Net compensation was not constrained for non-Hispanic white, Additional Group, and Unknown racial/ethnic groups. To maintain baseline levels of overall spending, we included a constraint that total predicted spending equals total observed spending.
+
+As an alternative to constrained regression, we demonstrated the effects of using post-processing to achieve fair spending targets. After predicting spending using the baseline regression, we added a constant factor equal to the estimated additional payment required to reach fair spending targets for every beneficiary in minoritized racial/ethnic groups. This algorithm will achieve the same levels of in-sample net compensation as constrained regression for groups receiving additional payments. In this case, we ensured that overall spending remained unchanged by subtracting a constant amount from baseline predicted spending for all non-Hispanic white beneficiaries.
+
+Details on these risk adjustment algorithms are included in the [Supplement.](#supp_algorithm)
+
+#### Statistical Analysis
+
+We used 10-fold cross-validation to generate out-of-sample estimates of overall and group-level algorithm performance. Overall performance was measured by mean absolute error and payment system fit. Payment system fit is equivalent to $R^2$ for the baseline and constrained regressions. Payment system fit for the post-processing algorithm is equal to the residual sum of squares using the post-processed predicted spending, divided by the total sum of squares. We computed net compensation to evaluate group-level algorithm performance. Finally, we evaluated the difference in predicted spending between algorithms by the socioeconomic status domain of the county-level Centers for Disease Control and Prevention and Agency for Toxic Substance and Disease Registry Social Vulnerability Index (SVI). [@cdc/atsd2024] Higher SVI values reflect greater exposure to socioeconomic factors that can adversely affect health outcomes.
+
+Our main analysis focused on the 2018-2019 cohort because it included the most recent payment year prior to the COVID-19 pandemic for which we had access to data. Sensitivity analyses focused on the 2017-2018 and 2019-2020 cohorts. Additionally, we examined the sensitivity of out-of-sample algorithm performance to exclusion of beneficiaries who died in the payment year.
+
+Analyses were conducted using R version 4.0.3 and Python version 3.7.17. We fit all regressions using CVXPY. [@diamond2016cvxpy; @agrawal2018rewriting] Analytic code is available at https://github.com/StanfordHPDS/medicare_fair_risk_adjustment. We followed the Standard for Reporting Diagnostic Accuracy [(STARD)](http://www.equator-network.org/reporting-guidelines/stard/) reporting guideline.
+
+## Results
+
+```{r, echo = FALSE, warning= FALSE, message = FALSE}
+num_df <- fread("safe_figures/2018/number_plugging_df.csv")
+
+pct_race_eth <- fread("safe_figures/2018/table1.csv")
+pct_race_eth <- pct_race_eth[variable == "sample_size"]
+pct_race_eth <- melt(pct_race_eth, id.vars = c("variable", "All"), variable.name = "rti_race")
+pct_race_eth <- pct_race_eth[, pct := value / All]
+
+net_comp_table <- fread("safe_figures/2018/net_comp_table.csv")
+net_comp_table <- net_comp_table[variable == "Baseline Regression"]
+net_comp_table <- net_comp_table[rti_race == "", rti_race := "Unknown"]
+net_comp_table <- net_comp_table[, net_compensation := value - Observed]
+
+table1_race <- fread("safe_figures/2018/table1.csv")
+setnames(table1_race, "Other", "Additional Group")
+table1_race <- melt(table1_race, id.vars = "variable", variable.name = "rti_race")
+table1_race <- dcast(table1_race, rti_race ~ variable, value.var = "value")
+table1_race <- merge(table1_race, net_comp_table[, .(rti_race, net_compensation)], by = "rti_race", all.x = T)
+table1_race <- table1_race[is.na(net_compensation), net_compensation := mean_predicted_cost - mean_observed_cost]
+
+table1_race <- table1_race[, .(
+  rti_race, sample_size, mean_observed_cost, net_compensation,
+  mean_age, pct_male, mean_n_hcc, pct_died, pct_orig_disabled
+)]
+table1_race <- table1_race[, sample_size := format(sample_size, big.mark = ",")]
+table1_race <- table1_race[, mean_observed_cost := dollar(mean_observed_cost, big.mark = ",")]
+table1_race <- table1_race[, net_compensation := dollar(round(net_compensation), big.mark = ",")]
+table1_race <- table1_race[, mean_age := round(mean_age, 1)]
+table1_race <- table1_race[, pct_male := percent(pct_male / 100, accuracy = 0.1)]
+table1_race <- table1_race[, mean_n_hcc := round(mean_n_hcc, 1)]
+table1_race <- table1_race[, pct_died := percent(pct_died / 100, accuracy = 0.1)]
+table1_race <- table1_race[, pct_orig_disabled := percent(pct_orig_disabled / 100, accuracy = 0.1)]
+
+setnames(
+  table1_race, c(
+    "rti_race", "sample_size", "mean_observed_cost", "net_compensation", "mean_age",
+    "pct_male", "mean_n_hcc", "pct_died", "pct_orig_disabled"
+  ),
+  c("Race/Ethnicity", "Sample Size", "Mean Observed Spending", "Baseline Regression Net Compensation", "Mean Age", "Percent Documented Male", "Mean Number of Diagnosed HCCs", "Percent Dying in the Payment Year", "Percent Originally Qualifying by Disabling Condition")
+)
+
+table1_race <- table1_race[, `Race/Ethnicity` := factor(`Race/Ethnicity`,
+  levels = c(
+    "All", "American Indian/Alaska Native",
+    "Asian/Pacific Islander", "Black", "Hispanic",
+    "Non-Hispanic White", "Additional Group", "Unknown"
+  )
+)]
+table1_race <- table1_race[order(`Race/Ethnicity`)]
+
+formatted_table1 <- copy(table1_race)
+```
+
+Our main analysis included `{r} format(round(num_df$number[num_df$label=="num_benes"]), big.mark = ",")` eligible beneficiaries, of whom `{r} percent(pct_race_eth$pct[pct_race_eth$rti_race=="Non-Hispanic White"])` were Non-Hispanic white, `{r} percent(pct_race_eth$pct[pct_race_eth$rti_race=="Black"])` were Black, `{r} percent(pct_race_eth$pct[pct_race_eth$rti_race=="Hispanic"])` were Hispanic, `{r} percent(pct_race_eth$pct[pct_race_eth$rti_race=="Asian/Pacific Islander"])` were Asian/Pacific Islander, `{r} percent(pct_race_eth$pct[pct_race_eth$rti_race=="Other"])` were part of an Additional Group, and less than 1% were American Indian/Alaska Native [(Table 1)](#table_1). The distribution of Medicare spending was right skewed, with mean spending of `{r} dollar(round(num_df$number[num_df$label=="mean_spending"]), big.mark = ",")` and median spending of `{r} dollar(round(num_df$number[num_df$label=="median_spending"]), big.mark = ",")` [(eFigure 2 in the Supplement)](#supplement_fig_2). The mean age of beneficiaries was `{r} round(num_df$number[num_df$label=="mean_age"])` years, `{r} percent(round(num_df$number[num_df$label=="n_male"]/num_df$number[num_df$label=="num_benes"], 2))` were documented as male, and `{r} percent(round(num_df$number[num_df$label=="n_orig_disabled"]/num_df$number[num_df$label=="num_benes"], 2))` originally qualified for Medicare based on a disabling condition. Among beneficiaries, `{r} percent(round(num_df$number[num_df$label=="n_zero_hcc"]/num_df$number[num_df$label=="num_benes"], 2))` had zero diagnosed payment-eligible HCCs, `{r} percent(round(num_df$number[num_df$label=="n_1_hcc"]/num_df$number[num_df$label=="num_benes"], 2))` had one HCC, `{r} percent(round(num_df$number[num_df$label=="n_2_hcc"]/num_df$number[num_df$label=="num_benes"], 2))` had two HCCs, `{r} percent(round(num_df$number[num_df$label=="n_3_4_5_hcc"]/num_df$number[num_df$label=="num_benes"], 2))` had three to five HCCs, and `{r} percent(round(num_df$number[num_df$label=="n_gt6_hcc"]/num_df$number[num_df$label=="num_benes"], 2))` had six or more HCCs [(eFigure 3 in the Supplement)](#supplement_fig_3).
+
+Non-Hispanic white beneficiaries tended to be older than beneficiaries of other racial/ethnic groups [(Table 1)](#table_1). American Indian/Alaska Native beneficiaries had the highest mean observed spending, followed by non-Hispanic white beneficiaries. Asian/Pacific Islander beneficiaries had the lowest mean observed spending, followed by Hispanic beneficiaries. The percent of American Indian/Alaska Native and Black beneficiaries originally qualifying for Medicare based on a disabling condition was more than twice that of non-Hispanic white beneficiaries.
+
+###### Table 1. Sample size, characteristics, observed spending, and predicted spending, overall and by race/ethnicity. {#table_1}
+
+```{r, echo = F}
+kable(formatted_table1)
+
+spending_table <- fread("safe_figures/2018/net_comp_table.csv")
+spending_table <- spending_table[, value := value - Observed]
+spending_table <- spending_table[, Observed := dollar(round(Observed))]
+spending_table <- spending_table[, value := dollar(round(value))]
+spending_table <- dcast(spending_table, rti_race + Observed ~ variable, value.var = "value")
+setnames(spending_table, "rti_race", "Race/Ethnicity")
+spending_table <- spending_table[`Race/Ethnicity` == "", `Race/Ethnicity` := "Unknown"]
+spending_table <- spending_table[, `Race/Ethnicity` := factor(`Race/Ethnicity`,
+  levels = c(
+    "American Indian/Alaska Native",
+    "Asian/Pacific Islander", "Black", "Hispanic",
+    "Non-Hispanic White", "Additional Group", "Unknown"
+  )
+)]
+spending_table <- spending_table[order(`Race/Ethnicity`)]
+
+setnames(spending_table, c("Disparities: Post-Process", "Five Percent: Post-Process"), c("Disparities: Post-Processing", "Five Percent: Post-Processing"))
+
+policy_targets <- fread("safe_figures/2018/policy_targets.csv")
+policy_targets <- policy_targets[, additional_disparities := equity_policy - is_net_compensation_rti]
+policy_targets <- policy_targets[, additional_fivepct := five_pct - is_net_compensation_rti]
+```
+
+```{r, echo = F}
+table2 <- fread("safe_figures/2018/table2.csv")
+
+full_precision <- table2[rti_race == "Hispanic"][, .(spec, mae, r2)]
+
+table2 <- table2[rti_race == "Other", rti_race := "Additional Group"]
+table2 <- table2[, rmse := round(rmse)]
+table2 <- table2[, mae := round(mae)]
+table2 <- table2[, median_abs_error := round(median_abs_error)]
+table2 <- table2[, payment_system_fit := round(r2 * 100, 1)]
+table2 <- table2[, oos_net_compensation_rti := round(oos_net_compensation_rti)]
+table2 <- table2[, pred_ratio := round(pred_ratio, 2)]
+
+overall <- unique(table2[, .(spec, rmse, mae, median_abs_error, payment_system_fit)])
+
+group_text <- table2[, .(spec, rti_race, oos_net_compensation_rti, pred_ratio)]
+```
+
+#### Net Compensation and Fair Spending Targets
+
+The baseline regression resulted in undercompensation for American Indian/Alaska Native (`{r} spending_table$"Baseline Regression"[spending_table$"Race/Ethnicity"=="American Indian/Alaska Native"]`) and Non-Hispanic white (`{r} spending_table$"Baseline Regression"[spending_table$"Race/Ethnicity"=="Non-Hispanic White"]`) beneficiaries, and overcompensation for Asian/Pacific Islander (+`{r} spending_table$"Baseline Regression"[spending_table$"Race/Ethnicity"=="Asian/Pacific Islander"]`), Black (+`{r} spending_table$"Baseline Regression"[spending_table$"Race/Ethnicity"=="Black"]`), Hispanic (+`{r} spending_table$"Baseline Regression"[spending_table$"Race/Ethnicity"=="Hispanic"]`), Additional Group (+`{r} spending_table$"Baseline Regression"[spending_table$"Race/Ethnicity"=="Additional Group"]`), and Unknown (+`{r} spending_table$"Baseline Regression"[spending_table$"Race/Ethnicity"=="Unknown"]`) beneficiaries [(Table 1)](#table_1).
+
+Disparities-based fair spending targets added varying amounts to net compensation from the baseline regression: \$`{r} policy_targets$additional_disparities[policy_targets$rti_race=="American Indian/Alaska Native" & policy_targets$year==2018]` for American Indian/Alaska Native beneficiaries, \$`{r} policy_targets$additional_disparities[policy_targets$rti_race=="Asian/Pacific Islander" & policy_targets$year==2018]` for Asian/Pacific Islander beneficiaries, \$`{r} policy_targets$additional_disparities[policy_targets$rti_race=="Black" & policy_targets$year==2018]` for Black beneficiaries, and \$`{r} policy_targets$additional_disparities[policy_targets$rti_race=="Hispanic" & policy_targets$year==2018]` for Hispanic beneficiaries [(Table 2)](#table_2). These targets reflect additional predicted spending if beneficiaries in minoritized racial/ethnic groups had sufficient healthcare access, such that their spending matched that of non-Hispanic white beneficiaries, conditional on age group, documented sex, number of diagnosed HCCs, originally disabled status, and county of residence.
+
+Fair spending targets based on five percent of overall mean spending increased net compensation by `{r} dollar(policy_targets$additional_fivepct[policy_targets$year==2018 & policy_targets$rti_race=="Black"])` for minoritized racial/ethnic groups.
+
+###### Table 2. Additional payments to reach fair spending targets for minoritized racial/ethnic groups. {#table_2}
+
+```{r, echo = F}
+policy_targets <- policy_targets[rti_race %in% c("American Indian/Alaska Native", "Asian/Pacific Islander", "Black", "Hispanic") & year == 2018]
+policy_targets <- policy_targets[, additional_fivepct := min(additional_fivepct, na.rm = T)]
+policy_targets <- policy_targets[, additional_fivepct := dollar(additional_fivepct)]
+policy_targets <- policy_targets[, additional_disparities := dollar(additional_disparities)]
+policy_targets <- policy_targets[, .(rti_race, additional_disparities, additional_fivepct)]
+setnames(policy_targets, c("rti_race", "additional_disparities", "additional_fivepct"), c("Race/Ethnicity", "Disparities-Based Targets", "Five Percent Targets"))
+kable(policy_targets)
+```
+
+#### Algorithm Performance
+
+The baseline regression achieved an out-of-sample mean absolute error of `{r} dollar(overall$mae[overall$spec=="Baseline"])` and payment system fit of `{r} percent(overall$payment_system_fit[overall$spec=="Baseline"]/100, accuracy = 0.1)` [(Table 3)](#table_3). Achieving fair spending targets using constrained regression or post-processing resulted in only a small reduction in out-of-sample predictive performance. Compared to the baseline regression, payment system fit decreased by less than 0.1 percentage points and mean absolute error increased by at most \$21 across both sets of fair spending targets and both algorithms. Out-of-sample net compensation was similar to in-sample baseline net compensation and net compensation for fair spending targets [(eTable 1 in the Supplement)](#supplement_table_1).
+
+###### Table 3. Out-of-sample algorithm performance measures for baseline regression, constrained regression, and post-processing. {#table_3}
+
+```{r, echo = F}
+overall <- overall[, rmse := dollar(rmse)]
+overall <- overall[, mae := dollar(mae)]
+overall <- overall[, median_abs_error := dollar(median_abs_error)]
+overall <- overall[, payment_system_fit := percent(payment_system_fit / 100, accuracy = 0.1)]
+overall <- overall[, .(spec, payment_system_fit, rmse, mae, median_abs_error)]
+overall <- overall[spec == "Baseline", spec := "Baseline Regression"]
+overall <- overall[spec == "Post-Process Disparities", spec := "Disparities: Post-Processing"]
+overall <- overall[spec == "Post-Process Five Percent", spec := "Five Percent: Post-Processing"]
+overall <- overall[spec == "Constrained Regression Five Percent", spec := "Five Percent: Constrained Regression"]
+overall <- overall[spec == "Constrained Regression Disparities", spec := "Disparities: Constrained Regression"]
+
+overall <- overall[, spec := factor(spec, levels = c(
+  "Baseline Regression",
+  "Disparities: Constrained Regression",
+  "Disparities: Post-Processing",
+  "Five Percent: Constrained Regression",
+  "Five Percent: Post-Processing"
+))]
+
+setnames(
+  overall, c("spec", "rmse", "mae", "median_abs_error", "payment_system_fit"),
+  c("Algorithm and Fair Spending Target", "Root Mean Squared Error", "Mean Absolute Error", "Median Absolute Error", "Payment System Fit")
+)
+overall <- overall[, c("Root Mean Squared Error", "Median Absolute Error") := NULL]
+kable(overall[order(`Algorithm and Fair Spending Target`)])
+```
+
+```{r, echo = F}
+coefs <- fread("safe_figures/2018/coefs_table.csv")
+coefs <- coefs[, lapply(.SD, round), by = c("HCC", "HCC label")]
+setnames(coefs, "beta", "baseline")
+```
+
+The median change in payment for HCCs, comparing the baseline regression with the constrained regression for disparities-based fair spending targets, was `{r} dollar(median(coefs$equity_diff[!coefs$HCC%like%"age_sex"]), accuracy = 1)`. Constrained regression increased payments for HCCs that were overrepresented among American Indian/Alaska Native, Asian/Pacific Islander, Black, and Hispanic beneficiaries, compared to prevalence of the conditions in the overall sample [(Figure 1)](#fig_1). Although we did not include constraints on spending for beneficiaries in the Additional Group, changes in HCC payments with respect to relative prevalence followed a similar pattern to that observed for minoritized racial/ethnic groups.
+
+###### Figure 1. Relationship between hierarchical condition category (HCC) prevalence ratio and change in HCC payment between baseline and constrained regression for disparities-based fair spending targets. {#fig_1}
+
+![Note: The size of the circles reflects group prevalence of the HCC. Open circles denote top-coded values. Prevalence ratios compare group prevalence to overall prevalence, and were top-coded at 2.5. Changes in HCC payments were top-coded at \$350.](safe_figures/2018/coef_change_plot_equity.png)
+
+Across SVI quintiles, the post-processing algorithm increased spending by an equal amount for beneficiaries of the same minoritized racial/ethnic group, and decreased spending by an equal amount for non-Hispanic white beneficiaries. On the other hand, differences between mean spending from the baseline regression and mean spending from the constrained regression varied by racial/ethnic group and county SVI quintile. Predicted spending from the constrained regression, compared to the post-processing algorithm, was generally greater for beneficiaries living in counties with more exposure to adverse socioeconomic factors across racial/ethnic groups [(Figure 2)]($fig_2).
+
+###### Figure 2. Difference in predicted spending between constrained regression and post-processing by racial/ethnic group and county-level Social Vulnerability Index quintile. {#fig_2}
+
+![Note: Percentages denote the share of beneficiaries in each racial/ethnic group living in each Social Vulnerability Index quintile, where quintile 1 has the least exposure to adverse socioeconomic factors.](safe_figures/2018/svi_lines.png)
+
+#### Sensitivity Analyses
+
+```{r, echo = F}
+coefs <- fread("safe_figures/2018/coefs_table.csv")[, .(HCC, equity_diff)]
+coefs <- coefs[, lapply(.SD, round), by = c("HCC")]
+setnames(coefs, "equity_diff", "baseline")
+temp <- fread("safe_figures/2017/coefs_table.csv")[, .(HCC, equity_diff)]
+temp <- temp[, lapply(.SD, round), by = c("HCC")]
+setnames(temp, "equity_diff", "payment_year_2018")
+coefs <- merge(coefs, temp, by = "HCC", all = T)
+temp <- fread("safe_figures/2019/coefs_table.csv")[, .(HCC, equity_diff)]
+temp <- temp[, lapply(.SD, round), by = c("HCC")]
+setnames(temp, "equity_diff", "payment_year_2020")
+coefs <- merge(coefs, temp, by = "HCC", all = T)
+
+table1 <- fread("safe_figures/2018/table1.csv")
+table1 <- table1[, year := "Main Analysis (2019)"]
+temp <- fread("safe_figures/2019/table1.csv")
+temp <- temp[, year := "2020"]
+table1 <- rbind(table1, temp)
+temp <- fread("safe_figures/2017/table1.csv")
+temp <- temp[, year := "2018"]
+table1 <- rbind(table1, temp)
+table1 <- melt(table1, id.vars = c("variable", "year"), variable.name = "rti_race")
+table1 <- table1[variable %in% c("sample_size", "mean_observed_cost", "mean_n_hcc", "pct_died")]
+table1 <- dcast(table1, rti_race + year ~ variable, value.var = "value")
+
+policy <- NULL
+for (y_id in 2017:2019) {
+  temp <- fread(paste0("safe_figures/", y_id, "/policy_targets.csv"))
+  policy <- rbind(policy, temp, fill = T)
+}
+policy <- policy[order(rti_race, year)]
+policy <- policy[, year := paste0(year + 1)]
+policy <- policy[year == "2019", year := "Main Analysis (2019)"]
+
+sens_table <- merge(table1, policy, by = c("rti_race", "year"), all.x = T)
+sens_table <- sens_table[, year := factor(year, levels = c("2018", "Main Analysis (2019)", "2020"))]
+sens_table <- sens_table[order(rti_race, year)]
+sens_table <- sens_table[rti_race == "Other", rti_race := "Additional Group"]
+sens_table <- sens_table[, .(rti_race, year, sample_size, mean_observed_cost, mean_n_hcc, pct_died, is_net_compensation_rti, equity_policy, five_pct)]
+sens_table <- sens_table[, sample_size := format(sample_size, big.mark = ",")]
+sens_table <- sens_table[, mean_observed_cost := dollar(mean_observed_cost)]
+sens_table <- sens_table[, pct_died := percent(pct_died / 100, accuracy = .1)]
+sens_table <- sens_table[, equity_policy := equity_policy - is_net_compensation_rti]
+sens_table <- sens_table[, five_pct := five_pct - is_net_compensation_rti]
+sens_table <- sens_table[, is_net_compensation_rti := dollar(is_net_compensation_rti)]
+sens_table <- sens_table[, equity_policy := dollar(equity_policy)]
+sens_table <- sens_table[, five_pct := dollar(five_pct)]
+setnames(
+  sens_table, c(
+    "rti_race", "year", "sample_size", "mean_observed_cost", "mean_n_hcc",
+    "pct_died", "is_net_compensation_rti", "equity_policy", "five_pct"
+  ),
+  c("Race/Ethnicity", "Payment Year", "Sample Size", "Mean Observed Cost", "Mean Number of Diagnosed HCCs", "Percent Dying in the Payment Year", "Baseline Regression Net Compensation", "Additional Payment (Disparities)", "Additional Payment (Five Percent)")
+)
+```
+
+Sensitivity analyses focusing on the 2017-2018 and 2019-2020 cohorts demonstrate that our algorithmic framework yields largely stable results over time [(eTables 2a, 2b, 3a, and 3b in the Supplement)](#supplement_table_2). Payment system fit differences between the baseline regression, constrained regression, and post-processing algorithm were negligible in alternative cohorts, similar to those observed in the main analysis [(eTable 4 in the Supplement)](#supplement_table_4). Excluding beneficiaries that died in the payment year also resulted in negligible differences between algorithms. Trends in predicted spending by racial/ethnic group and county SVI quintile for alternative cohorts were similar to those documented in the main analysis [(eFigures 4a and 4b in the Supplement)](#supplement_fig_4a).
+
+## Discussion
+
+This study developed two algorithms, constrained regression and post-processing, to achieve fairness goals across multiple minoritized racial/ethnic groups in Medicare risk adjustment. Both algorithms reach fair spending targets without sacrificing overall fit, compared to the baseline regression. Importantly, both algorithms represent feasible extensions of the regression currently used to estimate risk scores, which supports algorithm flexibility, transparency, interpretability, and potential for implementation.
+
+Whereas post-processing directly changes payments for specified groups, constrained regression changes payments for health conditions, which can impact all groups. As a result, for our fair spending targets, we find that constrained regression can achieve more widespread equity enhancing changes in payments compared to post-processing. This is a desirable feature when leveraging payment reform to broadly mitigate health disparities, to the extent that social and structural forces result in the clustering of certain health conditions among marginalized groups.
+
+Consistent with prior literature, we find that the current risk adjustment algorithm undercompensates American Indian/Alaska Native and non-Hispanic white Medicare beneficiaries, and overcompensates Asian/Pacific Islander, Black, and Hispanic beneficiaries. [@mcwilliams2023] Observed spending is lowest among overcompensated racial/ethnic groups, likely as a result of healthcare access barriers leading to lower utilization. Although most minoritized groups are already overcompensated, our disparities-based fair spending targets suggest that resource reallocation through the current risk adjustment algorithm may be insufficient to fully mitigate disparities. From a health equity perspective, increased payments for marginalized groups may be needed to reduce inequalities in access and outcomes.
+
+Both algorithms evaluated in our study achieve fair spending targets for multiple minoritized racial/ethnic groups with negligible reduction in overall payment system fit. This aligns with prior work on fair regression, contributing to a mounting case for payment system reform that aims to achieve dual goals of equity and efficiency. [@bergquist2019; @irvin2020; @zink2020; @mcguire2021; @mcwilliams2023; @andriola2024] The Netherlands has recently applied constrained regression to ensure fair payment for individuals with multiple chronic illnesses. [@cattel2023] Two crucial policy features must be determined before such reform is implemented: the fair spending targets and the system for ensuring that additional payments are effectively used to address drivers of disparities.
+
+#### Limitations
+
+Our fair spending targets serve the purpose of allowing us to demonstrate the impact of algorithmic tools. Fair spending targets included in any payment reform policy should be determined through broad consultation and additional research. Further examination of potential consequences for groups included and not included in fairness objectives is necessary. Additionally, existing payment systems and our analysis both rely heavily on diagnosed health conditions. Underdiagnosis of health conditions among minoritized racial/ethnic groups would result in lower predicted spending compared to what would be expected if all racial/ethnic groups experienced equal rates of diagnosis. As a result, our estimates of disparities are likely smaller than if we were to adjust for beneficiaries' true health status. Future research should focus on evaluating, and mitigating, the effects of differential rates of diagnosis in payment policy.
+
+Strategic responses by insurers, the extent to which additional payments will impact beneficiaries' experiences, and the potential for such payments to mitigate disparities in healthcare access and outcomes were not included in our study. Other policy levers would need to be paired with algorithmic changes to the payment system to increase the likelihood that reform yields desired outcomes. Importantly, health care disparities are the result of many long-standing and interconnected social and structural forces. [@nationalacademiesofsciencesengineeringandmedicine2024] Algorithmic changes alone cannot eliminate disparities, but algorithms can be designed to support a more equitable system. [@pmlr-v248-cusick24a]
+
+We did not have access to self-reported race/ethnicity. Despite the Research Triangle Institute enhanced race/ethnicity variable having better validity than the variable based directly on Social Security Administration documentation, misclassification of race/ethnicity remains a persistent problem. [@jarrín2020] Further, health spending and outcome disparities exist across multiple social and structural dimensions. Although our analysis focuses on increasing spending for minoritized racial/ethnic groups, additional spending may be warranted to mitigate disparities for other groups. Finally, our data include only fee-for-service claims, so we could not evaluate differences in health status, spending, utilization, and outcomes between beneficiaries enrolled in Traditional Medicare versus Medicare Advantage.
+
+#### Conclusions
+
+Feasible changes to the Medicare risk adjustment algorithm can achieve fairness goals for multiple minoritized racial/ethnic groups with negligible impact on overall payment system fit. Payment system reform that incorporates fair spending targets should be considered by policymakers aiming to address health care disparities.
+
+## Acknowledgements
+
+This research was funded by the Laura and John Arnold Foundation. Data for this project were accessed using the Stanford Center for Population Health Sciences Data Core. The PHS Data Core is supported by a National Institutes of Health National Center for Advancing Translational Science Clinical and Translational Science Award (UL1TR003142) and from Internal Stanford funding. The content is solely the responsibility of the authors and does not necessarily represent the official views of the NIH or the Laura and John Arnold Foundation. The authors thank Malcolm Barrett for code review and members of the Health Policy Data Science Lab for feedback on earlier versions of this research.
+
+## Supplemental Online Content {#supplement}
+
+### eMethods
+
+#### Eligibility {#supp_eligibility}
+
+We created three analytic cohorts that span two calendar years: 2017-2018, 2018-2019, and 2019-2020. For each two-year window, we identified eligible beneficiaries using the Master Beneficiary Summary File (MBSF) Base records. Beneficiaries were eligible to be included in our primary analyses if they met the following criteria:
+
+-   Aged 65 years or older by the end of the first calendar year.
+-   Enrolled in Medicare Parts A and B for all 12 months in the first year and did not die in the first year.
+-   Enrolled in Medicare Parts A and B for all 12 months in the second year, or were enrolled in Medicare Parts A and B until their month of death in the second year.
+-   Not enrolled in Medicare Part C at any point in the first or second calendar year.
+-   Not dual eligible for Medicaid at any point in the first or second calendar year.
+
+We were not able to separate community from institutional populations. Based on 2014-2015 sample counts reported in the 2021 CMS Report to Congress, the institutional population accounts for only three percent of the total population of fee-for-service beneficiaries. [@reportt2021]
+
+#### Algorithm Details {#supp_algorithm}
+
+##### Notation
+
+Our risk adjustment algorithms aimed to predict spending $Y$ in year $t+1$ for beneficiary $i$ as a function of demographic characteristics $D$, diagnosed health conditions $H$, and county of residence $C$ in year $t$. The vector $C$ included `{r} format(round(num_df$number[num_df$label=="n_counties_noref"]), big.mark = ",")` county indicators, as a result of grouping counties within states that had fewer than the tenth percentile of eligible beneficiaries.
+
+##### Baseline Regression
+
+First, we approximated the least squares regression approach used by CMS to estimate the risk scores for Medicare Advantage plan payment risk adjustment:
+
+$$Y_{i} = \alpha + \beta D_{i} + \gamma H_{i} + \delta C_{i},$$
+
+where $\gamma$ is constrained to be non-negative. We fit this regression by minimizing the square root of the sum of squared residuals, which yields an equivalent result to minimizing the sum of squared residuals. [@advanced]
+
+We deviated from the CMS Version 24 formula by grouping beneficiaries aged 95+ with beneficiaries aged 90-94 due to the small sample sizes for the 95+ group. We also excluded the indicators capturing the number of HCCs.
+
+##### Constrained Regression and Post-Processing for Fair Spending
+
+We evaluated two approaches to achieve fair spending targets: constrained regression and post-processing. Fairness constrained regression included additional constraints on net compensation by racial/ethnic group. We defined group-level net compensation as the mean difference between predicted spending, $\hat{Y}$, and observed spending for beneficiaries $p$ in racial/ethnic group $j\in \{$American Indian/Alaska Native, Asian/Pacific Islander, Black, Hispanic$\}$:
+
+$$G_j = \frac{1}{n_j}\sum_{p\in j} (\widehat{Y}_{p,j} - Y_{p,j}),$$
+
+where $n_j$ was the number of beneficiaries in group $j$ and the set of sets $j$ is $J$. Similar to the baseline regression, we fit the constrained regression by minimizing the square root of the sum of squared residuals:
+
+$$\underset{\alpha, \beta, \gamma, \delta}{\text{minimize}}\{||Y_{i} - (\alpha + \beta D_{i} + \gamma H_{i} + \delta C_{i})||_2\},$$
+
+subject to: $\gamma \geq 0$, $G_{j} = F_j$, and $\sum_i\widehat{Y}_i = \sum_i{Y}_i$, where $F_j$ is the group-specific fair spending target.
+
+For our post-processing algorithm, after predicting spending in the baseline regression, we added a constant group-specific payment to beneficiaries in minoritized racial/ethnic groups such that net compensation after post-processing equaled fair spending targets: $\widehat{Y}^*_{p,j} = \widehat{Y}_{p,j} + (F_j - G_j)$. To ensure that total spending remained unchanged, we subtracted a constant payment from all $n_w$ beneficiaries in the non-Hispanic white group $w$, indexed by $k$: $\widehat{Y}^*_k = \widehat{Y}_k - \frac{ \sum_{j\in J} \sum_{p\in j}(\widehat{Y}_{p,j}^* - \widehat{Y}_{p,j})}{n_w}$.
+
+#### Supplemental Results
+
+###### eFigure 1. Difference between the Social Security Administration race/ethnicity label and the Research Triangle Institute's enhanced race/ethnicity label. {#supplement_fig_1}
+
+![Note: Numbers are thousands of beneficiaries.](safe_figures/race_eth_dist.svg)
+
+###### eFigure 2. Distribution of spending among the 2018-2019 cohort. {#supplement_fig_2}
+
+![Note: Spending is top-coded at \$100,000 in the figure due to long right tail.](safe_figures/2018/cost_histogram.png)
+
+###### eFigure 3. Distribution of the number of payment-eligible hierarchical condition categories among the 2018-2019 cohort. {#supplement_fig_3}
+
+![Note: Number of Hierarchical Condition Categories is top-coded at 10 in figure due to long right tail.](safe_figures/2018/n_hcc_histogram.png)
+
+###### eTable 1. Out-of-sample net compensation by algorithm, spending target, and racial/ethnic group for the 2018-2019 cohort. {#supplement_table_1}
+
+```{r, echo = F}
+group <- table2[, .(spec, rti_race, oos_net_compensation_rti)]
+group <- group[, oos_net_compensation_rti := dollar(oos_net_compensation_rti)]
+group <- group[order(spec, rti_race)]
+group <- dcast(group, rti_race ~ spec, value.var = "oos_net_compensation_rti")
+setnames(group, "rti_race", "Race/Ethnicity")
+group <- group[, `Race/Ethnicity` := factor(`Race/Ethnicity`,
+  levels = c(
+    "American Indian/Alaska Native",
+    "Asian/Pacific Islander", "Black", "Hispanic",
+    "Non-Hispanic White", "Additional Group", "Unknown"
+  )
+)]
+group <- group[order(`Race/Ethnicity`)]
+setnames(group, c("Baseline", "Constrained Regression Disparities", "Constrained Regression Five Percent", "Post-Process Disparities", "Post-Process Five Percent"), c("Baseline Regression", "Disparities: Constrained Regression", "Five Percent: Constrained Regression", "Disparities: Post-Processing", "Five Percent: Post-Processing"))
+group <- group[, .(`Race/Ethnicity`, `Baseline Regression`, `Disparities: Constrained Regression`, `Disparities: Post-Processing`, `Five Percent: Constrained Regression`, `Five Percent: Post-Processing`)]
+kable(group)
+```
+
+###### eTable 2a. Sample size, characteristics, observed spending, and predicted spending, overall and by race/ethnicity for the 2017-2018 cohort. {#supplement_table_2}
+
+```{r, echo = F}
+table1_race <- fread("safe_figures/2018/table1.csv")
+table1_race <- table1_race[, "Cohort" := "2018-2019"]
+temp <- fread("safe_figures/2019/table1.csv")
+temp <- temp[, "Cohort" := "2019-2020"]
+table1_race <- rbind(table1_race, temp)
+temp <- fread("safe_figures/2017/table1.csv")
+temp <- temp[, "Cohort" := "2017-2018"]
+table1_race <- rbind(table1_race, temp)
+
+setnames(table1_race, "Other", "Additional Group")
+
+## NET COMPENSATION
+net_comp_table <- fread("safe_figures/2018/net_comp_table.csv")
+net_comp_table <- net_comp_table[variable == "Baseline Regression"]
+net_comp_table <- net_comp_table[rti_race == "", rti_race := "Unknown"]
+net_comp_table <- net_comp_table[, net_compensation := value - Observed]
+net_comp_table <- net_comp_table[, "Cohort" := "2018-2019"]
+
+temp <- fread("safe_figures/2019/net_comp_table.csv")
+temp <- temp[variable == "Baseline Regression"]
+temp <- temp[rti_race == "", rti_race := "Unknown"]
+temp <- temp[, net_compensation := value - Observed]
+temp <- temp[, "Cohort" := "2019-2020"]
+net_comp_table <- rbind(net_comp_table, temp)
+
+temp <- fread("safe_figures/2017/net_comp_table.csv")
+temp <- temp[variable == "Baseline Regression"]
+temp <- temp[rti_race == "", rti_race := "Unknown"]
+temp <- temp[, net_compensation := value - Observed]
+temp <- temp[, "Cohort" := "2017-2018"]
+net_comp_table <- rbind(net_comp_table, temp)
+
+table1_race <- melt(table1_race, id.vars = c("variable", "Cohort"), variable.name = "rti_race")
+table1_race <- dcast(table1_race, rti_race + `Cohort` ~ variable, value.var = "value")
+
+table1_race <- merge(table1_race, net_comp_table[, .(rti_race, net_compensation, Cohort)], by = c("rti_race", "Cohort"), all.x = T)
+table1_race <- table1_race[is.na(net_compensation), net_compensation := mean_predicted_cost - mean_observed_cost]
+
+table1_race <- table1_race[, .(
+  rti_race, sample_size, mean_observed_cost, net_compensation,
+  mean_age, pct_male, mean_n_hcc, pct_died, pct_orig_disabled, Cohort
+)]
+table1_race <- table1_race[, sample_size := format(sample_size, big.mark = ",")]
+table1_race <- table1_race[, mean_observed_cost := dollar(mean_observed_cost, big.mark = ",")]
+table1_race <- table1_race[, net_compensation := dollar(round(net_compensation), big.mark = ",")]
+table1_race <- table1_race[, mean_age := round(mean_age, 1)]
+table1_race <- table1_race[, pct_male := percent(pct_male / 100, accuracy = 0.1)]
+table1_race <- table1_race[, mean_n_hcc := round(mean_n_hcc, 1)]
+table1_race <- table1_race[, pct_died := percent(pct_died / 100, accuracy = 0.1)]
+table1_race <- table1_race[, pct_orig_disabled := percent(pct_orig_disabled / 100, accuracy = 0.1)]
+
+setnames(
+  table1_race, c(
+    "rti_race", "sample_size", "mean_observed_cost", "net_compensation", "mean_age",
+    "pct_male", "mean_n_hcc", "pct_died", "pct_orig_disabled"
+  ),
+  c("Race/Ethnicity", "Sample Size", "Mean Observed Spending", "Baseline Regression Net Compensation", "Mean Age", "Percent Documented Male", "Mean Number of Diagnosed HCCs", "Percent Dying in the Payment Year", "Percent Originally Qualifying by Disabling Condition")
+)
+
+table1_race <- table1_race[, `Race/Ethnicity` := factor(`Race/Ethnicity`,
+  levels = c(
+    "All", "American Indian/Alaska Native",
+    "Asian/Pacific Islander", "Black", "Hispanic",
+    "Non-Hispanic White", "Additional Group", "Unknown"
+  )
+)]
+table1_race <- table1_race[order(`Race/Ethnicity`)]
+
+kable(table1_race[`Cohort` == "2017-2018"][, `Cohort` := NULL])
+```
+
+###### eTable 2b. Sample size, characteristics, observed spending, and predicted spending, overall and by race/ethnicity for the 2019-2020 cohort.
+
+```{r, echo = F}
+kable(table1_race[`Cohort` == "2019-2020"][, `Cohort` := NULL])
+```
+
+###### eTable 3a. Observed spending and net compensation by algorithm, spending target, and racial/ethnic group for the 2017-2018 cohort. {#supplement_table_3}
+
+```{r, echo = F}
+spending_table <- fread("safe_figures/2018/net_comp_table.csv")
+spending_table <- spending_table[, "Cohort" := "2018-2019"]
+temp <- fread("safe_figures/2019/net_comp_table.csv")
+temp <- temp[, "Cohort" := "2019-2020"]
+spending_table <- rbind(spending_table, temp)
+temp <- fread("safe_figures/2017/net_comp_table.csv")
+temp <- temp[, "Cohort" := "2017-2018"]
+spending_table <- rbind(spending_table, temp)
+
+spending_table <- spending_table[, value := value - Observed]
+spending_table <- spending_table[, Observed := dollar(round(Observed))]
+spending_table <- spending_table[, value := dollar(round(value))]
+spending_table <- dcast(spending_table, rti_race + Observed + `Cohort` ~ variable, value.var = "value")
+setnames(spending_table, "rti_race", "Race/Ethnicity")
+spending_table <- spending_table[`Race/Ethnicity` == "", `Race/Ethnicity` := "Unknown"]
+spending_table <- spending_table[, `Race/Ethnicity` := factor(`Race/Ethnicity`,
+  levels = c(
+    "American Indian/Alaska Native",
+    "Asian/Pacific Islander", "Black", "Hispanic",
+    "Non-Hispanic White", "Additional Group", "Unknown"
+  )
+)]
+spending_table <- spending_table[, .(`Race/Ethnicity`, `Cohort`, `Observed`, `Baseline Regression`, `Disparities: Constrained Regression`, `Disparities: Post-Process`, `Five Percent: Constrained Regression`, `Five Percent: Post-Process`)]
+setnames(spending_table, c("Disparities: Post-Process", "Five Percent: Post-Process"), c("Disparities: Post-Processing", "Five Percent: Post-Processing"))
+spending_table <- spending_table[, `Cohort` := factor(`Cohort`, levels = c("2017-2018", "2018-2019", "2019-2020"))][order(`Cohort`, `Race/Ethnicity`)]
+kable(spending_table[`Cohort` == "2017-2018"][, `Cohort` := NULL])
+```
+
+###### eTable 3b. Observed spending and net compensation by algorithm, spending target, and racial/ethnic group for the 2019-2020 cohort.
+
+```{r, echo = F}
+kable(spending_table[`Cohort` == "2019-2020"][, `Cohort` := NULL])
+```
+
+###### eTable 4. Payment system fit across algorithms, spending targets, and cohorts. {#supplement_table_4}
+
+```{r, echo = F}
+table2 <- unique(fread("safe_figures/2018/table2.csv")[, .(spec, r2)])
+table2 <- table2[, `2018-2019 Cohort` := percent(r2, accuracy = 0.1)]
+table2 <- table2[, r2 := NULL]
+
+temp <- unique(fread("safe_figures/2017/table2.csv")[, .(spec, r2)])
+temp <- temp[, `2017-2018 Cohort` := percent(r2, accuracy = 0.1)]
+table2 <- merge(table2, temp, by = "spec")
+table2 <- table2[, r2 := NULL]
+
+temp <- unique(fread("safe_figures/2019/table2.csv")[, .(spec, r2)])
+temp <- temp[, `2019-2020 Cohort` := percent(r2, accuracy = 0.1)]
+table2 <- merge(table2, temp, by = "spec")
+table2 <- table2[, r2 := NULL]
+
+table2 <- table2[spec == "Baseline", spec := "Baseline Regression"]
+table2 <- table2[spec == "Post-Process Disparities", spec := "Post-Processing Disparities"]
+table2 <- table2[spec == "Post-Process Five Percent", spec := "Post-Processing Five Percent"]
+
+table2 <- table2[, spec := factor(spec, levels = c(
+  "Baseline Regression",
+  "Constrained Regression Disparities",
+  "Post-Processing Disparities",
+  "Constrained Regression Five Percent",
+  "Post-Processing Five Percent"
+))]
+
+setnames(table2, "spec", "Algorithm and Fair Spending Target")
+table2 <- table2[, .(`Algorithm and Fair Spending Target`, `2017-2018 Cohort`, `2018-2019 Cohort`, `2019-2020 Cohort`)][order(`Algorithm and Fair Spending Target`)]
+kable(table2)
+```
+
+###### eFigure 4a. Difference in predicted spending between constrained regression and post-processing by racial/ethnic group and county-level Social Vulnerability Index quintile for the 2017-2018 cohort. {#supplement_fig_4a}
+
+![Note: Percentages denote the share of beneficiaries in each racial/ethnic group living in each Social Vulnerability Index quintile, where quintile 1 has the least exposure to adverse socioeconomic factors.](safe_figures/2017/svi_lines.png)
+
+###### eFigure 4b. Difference in predicted spending between constrained regression and post-processing by racial/ethnic group and county-level Social Vulnerability Index quintile for the 2019-2020 cohort. {#supplement_fig_4b}
+
+![Note: Percentages denote the share of beneficiaries in each racial/ethnic group living in each Social Vulnerability Index quintile, where quintile 1 has the least exposure to adverse socioeconomic factors.](safe_figures/2019/svi_lines.png)

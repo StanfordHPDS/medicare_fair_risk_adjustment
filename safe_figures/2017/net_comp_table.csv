@@ -1,0 +1,36 @@
+"rti_race","Observed","variable","value"
+"Hispanic",6267.84257448884,"Baseline Regression",7307.5114955908
+"Non-Hispanic White",8180.35860736244,"Baseline Regression",8055.04114361876
+"Black",7305.87818448849,"Baseline Regression",8039.66591273408
+,6182.04544460481,"Baseline Regression",6198.18953751423
+"Asian/Pacific Islander",5590.20616820179,"Baseline Regression",7023.3070394655
+"Additional Group",6932.85110691034,"Baseline Regression",7754.66720895781
+"American Indian/Alaska Native",8657.88795391763,"Baseline Regression",8287.75944259457
+"Hispanic",6267.84257448884,"Disparities: Post-Process",7934.84257448864
+"Non-Hispanic White",8180.35860736244,"Disparities: Post-Process",7983.87844335616
+"Black",7305.87818448849,"Disparities: Post-Process",8540.87818448837
+,6182.04544460481,"Disparities: Post-Process",6198.18953751423
+"Asian/Pacific Islander",5590.20616820179,"Disparities: Post-Process",7622.20616820169
+"Additional Group",6932.85110691034,"Disparities: Post-Process",7754.66720895781
+"American Indian/Alaska Native",8657.88795391763,"Disparities: Post-Process",8511.88795391761
+"Hispanic",6267.84257448884,"Five Percent: Post-Process",7706.36646221028
+"Non-Hispanic White",8180.35860736244,"Five Percent: Post-Process",8003.10895819475
+"Black",7305.87818448849,"Five Percent: Post-Process",8438.52087935388
+,6182.04544460481,"Five Percent: Post-Process",6198.18953751423
+"Asian/Pacific Islander",5590.20616820179,"Five Percent: Post-Process",7422.16200608514
+"Additional Group",6932.85110691034,"Five Percent: Post-Process",7754.66720895781
+"American Indian/Alaska Native",8657.88795391763,"Five Percent: Post-Process",8686.61440921431
+"Hispanic",6267.84257448884,"Disparities: Constrained Regression",7934.84257448883
+"Non-Hispanic White",8180.35860736244,"Disparities: Constrained Regression",7980.58228743268
+"Black",7305.87818448849,"Disparities: Constrained Regression",8540.87818448827
+,6182.04544460481,"Disparities: Constrained Regression",6207.6912462228
+"Asian/Pacific Islander",5590.20616820179,"Disparities: Constrained Regression",7622.20616820187
+"Additional Group",6932.85110691034,"Disparities: Constrained Regression",8106.35169799739
+"American Indian/Alaska Native",8657.88795391763,"Disparities: Constrained Regression",8511.8879539177
+"Hispanic",6267.84257448884,"Five Percent: Constrained Regression",7706.36646221043
+"Non-Hispanic White",8180.35860736244,"Five Percent: Constrained Regression",8000.94583920327
+"Black",7305.87818448849,"Five Percent: Constrained Regression",8438.52087935362
+,6182.04544460481,"Five Percent: Constrained Regression",6200.02242289016
+"Asian/Pacific Islander",5590.20616820179,"Five Percent: Constrained Regression",7422.1620060853
+"Additional Group",6932.85110691034,"Five Percent: Constrained Regression",7995.16318661939
+"American Indian/Alaska Native",8657.88795391763,"Five Percent: Constrained Regression",8686.6144092143

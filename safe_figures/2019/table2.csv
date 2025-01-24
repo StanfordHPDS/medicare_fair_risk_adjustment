@@ -1,0 +1,36 @@
+"rti_race","spec","rmse","mae","median_abs_error","oos_net_compensation_rti","r2","pred_ratio"
+"Hispanic","Baseline",18083,8284,4392,967,0.1147,1.1569
+"Black","Baseline",18083,8284,4392,503,0.1147,1.0672
+"Non-Hispanic White","Baseline",18083,8284,4392,-114,0.1147,0.9858
+"Unknown","Baseline",18083,8284,4392,91,0.1147,1.0147
+"Asian/Pacific Islander","Baseline",18083,8284,4392,1557,0.1147,1.2951
+"Other","Baseline",18083,8284,4392,948,0.1147,1.1439
+"American Indian/Alaska Native","Baseline",18083,8284,4392,-529,0.1147,0.9427
+"Hispanic","Post-Process Disparities",18086,8291,4413,1446,0.1144,1.2345
+"Black","Post-Process Disparities",18086,8291,4413,919,0.1144,1.1227
+"Non-Hispanic White","Post-Process Disparities",18086,8291,4413,-172,0.1144,0.9786
+"Unknown","Post-Process Disparities",18086,8291,4413,91,0.1144,1.0147
+"Asian/Pacific Islander","Post-Process Disparities",18086,8291,4413,2076,0.1144,1.3933
+"Other","Post-Process Disparities",18086,8291,4413,948,0.1144,1.1439
+"American Indian/Alaska Native","Post-Process Disparities",18086,8291,4413,-371,0.1144,0.9604
+"Hispanic","Constrained Regression Disparities",18088,8301,4462,1445,0.1142,1.2343
+"Black","Constrained Regression Disparities",18088,8301,4462,918,0.1142,1.1225
+"Non-Hispanic White","Constrained Regression Disparities",18088,8301,4462,-174,0.1142,0.9783
+"Unknown","Constrained Regression Disparities",18088,8301,4462,84,0.1142,1.0136
+"Asian/Pacific Islander","Constrained Regression Disparities",18088,8301,4462,2075,0.1142,1.3932
+"Other","Constrained Regression Disparities",18088,8301,4462,1277,0.1142,1.1935
+"American Indian/Alaska Native","Constrained Regression Disparities",18088,8301,4462,-374,0.1142,0.9603
+"Hispanic","Post-Process Five Percent",18086,8290,4410,1359,0.1144,1.2204
+"Black","Post-Process Five Percent",18086,8290,4410,895,0.1144,1.1195
+"Non-Hispanic White","Post-Process Five Percent",18086,8290,4410,-165,0.1144,0.9795
+"Unknown","Post-Process Five Percent",18086,8290,4410,91,0.1144,1.0147
+"Asian/Pacific Islander","Post-Process Five Percent",18086,8290,4410,1949,0.1144,1.3692
+"Other","Post-Process Five Percent",18086,8290,4410,948,0.1144,1.1439
+"American Indian/Alaska Native","Post-Process Five Percent",18086,8290,4410,-137,0.1144,0.9868
+"Hispanic","Constrained Regression Five Percent",18087,8298,4447,1358,0.1143,1.2202
+"Black","Constrained Regression Five Percent",18087,8298,4447,894,0.1143,1.1193
+"Non-Hispanic White","Constrained Regression Five Percent",18087,8298,4447,-167,0.1143,0.9792
+"Unknown","Constrained Regression Five Percent",18087,8298,4447,79,0.1143,1.0127
+"Asian/Pacific Islander","Constrained Regression Five Percent",18087,8298,4447,1948,0.1143,1.3692
+"Other","Constrained Regression Five Percent",18087,8298,4447,1205,0.1143,1.1827
+"American Indian/Alaska Native","Constrained Regression Five Percent",18087,8298,4447,-143,0.1143,0.9863

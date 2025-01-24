@@ -1,0 +1,8 @@
+SELECT
+	BENE_ID,
+	CLM_ID,
+	CLM_THRU_DT,
+	CLM_LINE_NUM,
+	HCPCS_CD
+FROM
+	`_source_`

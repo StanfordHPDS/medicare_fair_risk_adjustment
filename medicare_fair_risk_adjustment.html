@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.550">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Marissa B. Reitsma, PhD">
+<meta name="author" content="Thomas G. McGuire, PhD">
+<meta name="author" content="Sherri Rose, PhD">
+
+<title>Algorithms to Improve Fairness in Medicare Risk Adjustment</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="medicare_fair_risk_adjustment_files/libs/clipboard/clipboard.min.js"></script>
+<script src="medicare_fair_risk_adjustment_files/libs/quarto-html/quarto.js"></script>
+<script src="medicare_fair_risk_adjustment_files/libs/quarto-html/popper.min.js"></script>
+<script src="medicare_fair_risk_adjustment_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="medicare_fair_risk_adjustment_files/libs/quarto-html/anchor.min.js"></script>
+<link href="medicare_fair_risk_adjustment_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="medicare_fair_risk_adjustment_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="medicare_fair_risk_adjustment_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="medicare_fair_risk_adjustment_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="medicare_fair_risk_adjustment_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Algorithms to Improve Fairness in Medicare Risk Adjustment</h1>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Authors</div>
+  <div class="quarto-title-meta-heading">Affiliations</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Marissa B. Reitsma, PhD </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Department of Health Policy, School of Medicine, Stanford University
+          </p>
+      </div>
+    <div class="quarto-title-meta-contents">
+    <p class="author">Thomas G. McGuire, PhD </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Department of Health Care Policy, Harvard Medical School
+          </p>
+      </div>
+    <div class="quarto-title-meta-contents">
+    <p class="author">Sherri Rose, PhD </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Department of Health Policy, School of Medicine, Stanford University
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="key-points" class="level2">
+<h2 class="anchored" data-anchor-id="key-points">Key Points</h2>
+<section id="question" class="level5">
+<h5 class="anchored" data-anchor-id="question">Question</h5>
+<p>Can modern algorithms improve group-level fairness while maintaining overall performance in Medicare risk adjustment?</p>
+</section>
+<section id="findings" class="level5">
+<h5 class="anchored" data-anchor-id="findings">Findings</h5>
+<p>In this evaluation of Medicare risk adjustment algorithms, constrained regression and post-processing both achieved fair spending targets for minoritized racial/ethnic groups without sacrificing overall payment system fit.</p>
+</section>
+<section id="meaning" class="level5">
+<h5 class="anchored" data-anchor-id="meaning">Meaning</h5>
+<p>Feasible extensions of the current risk adjustment algorithm can yield additional payments for minoritized racial/ethnic groups in Medicare.</p>
+</section>
+</section>
+<section id="abstract" class="level2">
+<h2 class="anchored" data-anchor-id="abstract">Abstract</h2>
+<section id="importance" class="level5">
+<h5 class="anchored" data-anchor-id="importance">Importance</h5>
+<p>Payment system design creates incentives that impact healthcare spending, access, and outcomes. With Medicare Advantage accounting for more than half of Medicare spending, changes to its risk adjustment algorithm have the potential for broad consequences.</p>
+</section>
+<section id="objective" class="level5">
+<h5 class="anchored" data-anchor-id="objective">Objective</h5>
+<p>To develop risk adjustment algorithms that can achieve fair spending targets, and compare their performance to a baseline that emulates the least squares regression approach used by the Centers for Medicare and Medicaid Services.</p>
+</section>
+<section id="design" class="level5">
+<h5 class="anchored" data-anchor-id="design">Design</h5>
+<p>Retrospective analysis of Traditional Medicare enrollment and claims data between January 2017 and December 2020. Diagnoses in claims were mapped to Hierarchical Condition Categories (HCCs). Algorithms used demographic indicators and HCCs from one calendar year to predict Medicare spending in the subsequent year.</p>
+</section>
+<section id="setting" class="level5">
+<h5 class="anchored" data-anchor-id="setting">Setting</h5>
+<p>Data from Medicare beneficiaries with documented residence in the United States or Puerto Rico.</p>
+</section>
+<section id="participants" class="level5">
+<h5 class="anchored" data-anchor-id="participants">Participants</h5>
+<p>A random 20% sample of beneficiaries enrolled in Traditional Medicare. Included beneficiaries were aged 65 years and older, and did not have Medicaid dual eligibility. Race/ethnicity was assigned using the Research Triangle Institute enhanced indicator.</p>
+</section>
+<section id="main-outcome-and-measures" class="level5">
+<h5 class="anchored" data-anchor-id="main-outcome-and-measures">Main Outcome and Measures</h5>
+<p>Prospective healthcare spending by Medicare. Overall performance was measured by payment system fit and mean absolute error. Net compensation was used to assess group-level fairness.</p>
+</section>
+<section id="results" class="level5">
+<h5 class="anchored" data-anchor-id="results">Results</h5>
+<p>The main analysis included 4,398,035 Medicare beneficiaries with a mean age of 75.2 years and mean annual Medicare spending of $8,345. Out-of-sample payment system fit for the baseline regression was 12.7%. Constrained regression and post-processing both achieved fair spending targets, while maintaining payment system fit values of 12.6% and 12.7%, respectively. Whereas post-processing only increased mean payments for beneficiaries in minoritized racial/ethnic groups, constrained regression increased mean payments for beneficiaries in minoritized racial/ethnic groups and beneficiaries in other groups residing in counties with greater exposure to socioeconomic factors that can adversely affect health outcomes.</p>
+</section>
+<section id="conclusions-and-relevance" class="level5">
+<h5 class="anchored" data-anchor-id="conclusions-and-relevance">Conclusions and Relevance</h5>
+<p>Constrained regression and post-processing can incorporate fairness objectives in the Medicare risk adjustment algorithm with minimal reduction in overall fit.</p>
+</section>
+</section>
+<section id="background" class="level2">
+<h2 class="anchored" data-anchor-id="background">Background</h2>
+<p>Risk adjustment is a core component of capitated payment systems, aiming to mitigate selection incentives that encourage plans to attract profitable enrollees and avoid unprofitable enrollees.<span class="citation" data-cites="pope2004 pope2011 mcwilliams2012 ellis2018 reportt2021"><sup><a href="#ref-pope2004" role="doc-biblioref">1</a>–<a href="#ref-reportt2021" role="doc-biblioref">5</a></sup></span> The algorithms used to risk adjust payments to Medicare Advantage plans predict healthcare spending as a function of beneficiary demographic characteristics and a set of diagnosed health conditions.<span class="citation" data-cites="pope2004 reportt2021 medicarepaymentadvisorycommission2024"><sup><a href="#ref-pope2004" role="doc-biblioref">1</a>,<a href="#ref-reportt2021" role="doc-biblioref">5</a>,<a href="#ref-medicarepaymentadvisorycommission2024" role="doc-biblioref">6</a></sup></span> With Medicare Advantage accounting for more than half of Medicare spending, improvements to Medicare’s risk adjustment system have the potential to lead to substantial changes in healthcare spending, access, and outcomes.</p>
+<p>Currently, Medicare Advantage plan payment risk adjustment is based on least squares regression. Prior studies have proposed approaches to improve risk adjustment by increasing predictive power, mitigating incentives for upcoding, and reducing opportunities for favorable selection.<span class="citation" data-cites="rose2016 rose2017 rose2018 kan2019 bergquist2019 irvin2020 zink2020 zink2021 mcguire2021 andriola2024 skopec"><sup><a href="#ref-rose2016" role="doc-biblioref">7</a>–<a href="#ref-skopec" role="doc-biblioref">17</a></sup></span> These studies employ a range of methods, including constrained regressions, penalized regressions, data transformations, random forests, and other machine learning algorithms. Only a few consider fair regression methods, which optimize for both overall and group-level fit metrics for marginalized groups. These methods do not add marginalized groups as predictors in the regression, which can reinforce inequities from the data.<span class="citation" data-cites="bergquist2019 zink2020"><sup><a href="#ref-bergquist2019" role="doc-biblioref">11</a>,<a href="#ref-zink2020" role="doc-biblioref">13</a></sup></span> Notably, algorithms to achieve fairness goals across multiple minoritized racial/ethnic groups in Medicare have not been examined previously. This gap in the literature is important because a greater percentage of Black, Hispanic, and Asian/Pacific Islander beneficiaries are enrolled in Medicare Advantage plans, compared to white beneficiaries.<span class="citation" data-cites="meyers2021 ochieng2023"><sup><a href="#ref-meyers2021" role="doc-biblioref">18</a>,<a href="#ref-ochieng2023" role="doc-biblioref">19</a></sup></span> Additionally, the population aged 65 years and older is projected to become more racially and ethnically diverse over the coming decades.<span class="citation" data-cites="bureau"><sup><a href="#ref-bureau" role="doc-biblioref">20</a></sup></span></p>
+<p>Although Medicare eligibility reduces racial/ethnic disparities in insurance coverage, disparities in healthcare access, utilization, spending, and outcomes persist.<span class="citation" data-cites="wallace2021 dieleman2021 baik2023 mcwilliams2023 nationalacademiesofsciencesengineeringandmedicine2024"><sup><a href="#ref-wallace2021" role="doc-biblioref">21</a>–<a href="#ref-nationalacademiesofsciencesengineeringandmedicine2024" role="doc-biblioref">25</a></sup></span> Historical fee-for-service spending data, which are used to estimate risk scores and determine payments, embed these longstanding disparities. Recently, risk adjusted payments were documented to exceed observed spending for Black and Hispanic beneficiaries. This suggests that population-based payment systems could promote health equity though resource reallocation towards historically marginalized groups.<span class="citation" data-cites="mcwilliams2023"><sup><a href="#ref-mcwilliams2023" role="doc-biblioref">24</a></sup></span> The existing payment system leaves access and utilization disparities for Medicare Advantage beneficiaries,<span class="citation" data-cites="gangopadhyaya2023 ochieng2023"><sup><a href="#ref-ochieng2023" role="doc-biblioref">19</a>,<a href="#ref-gangopadhyaya2023" role="doc-biblioref">26</a></sup></span> which can lead to the risk adjusted payments exceeding the observed (suboptimal) spending.</p>
+<p>This study demonstrates the potential for algorithmic tools to achieve more equitable plan payment for Medicare. First, we describe existing levels of net compensation by racial/ethnic group and propose a basic measure of healthcare spending disparity that can inform fair spending targets. We then evaluate two approaches to achieve fair spending targets: constrained regression and post-processing. Our analysis presents algorithms for Medicare risk adjustment that promote more equitable payments, maintain current levels of performance, and remain flexible, feasible, transparent, and interpretable.</p>
+</section>
+<section id="methods" class="level2">
+<h2 class="anchored" data-anchor-id="methods">Methods</h2>
+<section id="study-design-and-data" class="level4">
+<h4 class="anchored" data-anchor-id="study-design-and-data">Study Design and Data</h4>
+<p>We analyzed a 20% random sample of Medicare fee-for-service beneficiaries, and included claims occurring between January 1, 2017 and December 31, 2020.<span class="citation" data-cites="mbsf_old mbsf_new carrier_old carrier_new outpatient_old outpatient_new medpar_old medpar_new"><sup><a href="#ref-mbsf_old" role="doc-biblioref">27</a>–<a href="#ref-medpar_new" role="doc-biblioref">34</a></sup></span> Medicare risk adjustment is prospective, where observed beneficiary demographic characteristics and health conditions from a given year are used to predict spending in the following year. As a result, our analytic cohorts each span two calendar years. These cohorts included beneficiaries who were aged 65 years and older, continuously enrolled in Medicare Parts A and B, not enrolled in Medicare Part C, and not dual eligible for Medicaid. Eligibility criteria were based on the largest of the six community segments that the Centers for Medicare and Medicaid Services (CMS) uses to stratify beneficiaries for risk adjustment. In our study, we included beneficiaries who died in the payment year, but excluded beneficiaries who became ineligible for other reasons, such as transitioning to a Part C plan. Further details are included in the <a href="#supp_eligibility">Supplement</a>.</p>
+<p>For each eligible beneficiary, we extracted demographic characteristics from the Master Beneficiary Summary File and diagnoses from inpatient, outpatient, and carrier claims. Demographic characteristics included age, documented sex, race/ethnicity, county, and original reason for Medicare eligibility. Race/ethnicity was based on the enhanced race/ethnicity code that applies the Research Triangle Institute race imputation algorithm <a href="#supplement_fig_1">(eFigure 1 in the Supplement)</a>.<span class="citation" data-cites="eicheldinger2008"><sup><a href="#ref-eicheldinger2008" role="doc-biblioref">35</a></sup></span> We used CMS labels for racial/ethnic groups (American Indian/Alaska Native, Asian/Pacific Islander, Black, Hispanic, non-Hispanic white), although we used “Additional Group” to refer to the group labeled “Other” by CMS. Beneficiaries categorized as American Indian/Alaska Native, Asian/Pacific Islander, Black, or part of an Additional Group are classified as non-Hispanic.</p>
+<p>We constructed hierarchical condition categories (HCCs) from International Classification of Diseases Version 10 (ICD-10) diagnoses coded in inpatient, outpatient, and carrier claims files. Diagnoses from outpatient and carrier claims files were included after filtering visits by qualifying Healthcare Common Procedure Coding System codes.<span class="citation" data-cites="medicare"><sup><a href="#ref-medicare" role="doc-biblioref">36</a></sup></span> We mapped 9,474 unique ICD-10 diagnosis codes to the 86 HCCs included in CMS’s version 24 risk adjustment software.<span class="citation" data-cites="centersformedicareandmedicaidservices"><sup><a href="#ref-centersformedicareandmedicaidservices" role="doc-biblioref">37</a></sup></span> Finally, we calculated total annual payments by Medicare from inpatient, outpatient, and carrier claims.</p>
+<p>The Stanford University Institutional Review Board approved this study (Protocol ID #66714).</p>
+</section>
+<section id="fair-spending-targets" class="level4">
+<h4 class="anchored" data-anchor-id="fair-spending-targets">Fair Spending Targets</h4>
+<p>We estimated two possible sets of fair spending targets, which are prespecified levels of net compensation for minoritized racial/ethnic groups that incorporate fairness goals. Net compensation is the difference between mean predicted spending (from the payment algorithm) and mean observed spending. The first set of spending targets, referred to as “disparities-based targets,” aim to capture the additional spending by beneficiaries in minoritized racial/ethnic groups if they had the same healthcare access and utilization as non-Hispanic white beneficiaries. Specifically, we fit an ordinary least squares regression to predict spending using data from only non-Hispanic white beneficiaries. The regression included fixed effects for age group, documented sex, number of diagnosed payment-eligible HCCs, whether the beneficiary was first eligible for Medicare based on a disabling condition, and county. Using this regression, we predicted spending for all other racial/ethnic groups. Our disparities-based fair spending targets are set as the difference between mean predicted spending, based on the regression using data from only non-Hispanic white beneficiaries, and mean observed spending for American Indian/Alaska Native, Asian/Pacific Islander, Black, and Hispanic racial/ethnic groups.</p>
+<p>Our second set of fair spending targets, referred to as “five percent targets,” add five percent of mean spending across all eligible beneficiaries to net compensation from the baseline regression for minoritized racial/ethnic groups. The five percent targets are based on the current bonus paid to plans with high quality ratings.<span class="citation" data-cites="medicarepaymentadvisorycommission2024"><sup><a href="#ref-medicarepaymentadvisorycommission2024" role="doc-biblioref">6</a></sup></span></p>
+<p>In this study, the purpose of our two sets of fair spending targets is to examine the effects of algorithmic tools to achieve policy-determined fair spending targets. In practice, implemented spending targets should be determined through broad consultation and further research.</p>
+</section>
+<section id="risk-adjustment-algorithms" class="level4">
+<h4 class="anchored" data-anchor-id="risk-adjustment-algorithms">Risk Adjustment Algorithms</h4>
+<p>First, we established a baseline regression that approximates the least squares regression used by CMS to estimate risk scores for Medicare plan payment risk adjustment. The regression included indicators for 11 combinations of age group and documented sex (age categories: 65-69, 70-74, 75-79, 80-84, 85-89, 90+; documented sex categories: female, male; reference category is female aged 65-69 years), indicators for 86 HCCs, indicators for 6 interactions between HCCs, an indicator for documented female beneficiaries originally eligible for Medicare based on a qualifying disabling condition, and an indicator for documented male beneficiaries originally eligible for Medicare based on a qualifying disabling condition. We also included indicators for county of residence because Medicare payment benchmarks are set by county. In the baseline regression, all coefficients for HCCs, including interactions, were constrained to be non-negative.</p>
+<p>We evaluated two algorithms to achieve fair spending targets: constrained regression and a post-processing algorithm. Both algorithms built upon the baseline regression. Constrained regression added constraints that ensured net compensation by minoritized racial/ethnic group matches fair spending targets. Net compensation was not constrained for non-Hispanic white, Additional Group, and Unknown racial/ethnic groups. To maintain baseline levels of overall spending, we included a constraint that total predicted spending equals total observed spending.</p>
+<p>As an alternative to constrained regression, we demonstrated the effects of using post-processing to achieve fair spending targets. After predicting spending using the baseline regression, we added a constant factor equal to the estimated additional payment required to reach fair spending targets for every beneficiary in minoritized racial/ethnic groups. This algorithm will achieve the same levels of in-sample net compensation as constrained regression for groups receiving additional payments. In this case, we ensured that overall spending remained unchanged by subtracting a constant amount from baseline predicted spending for all non-Hispanic white beneficiaries.</p>
+<p>Details on these risk adjustment algorithms are included in the <a href="#supp_algorithm">Supplement.</a></p>
+</section>
+<section id="statistical-analysis" class="level4">
+<h4 class="anchored" data-anchor-id="statistical-analysis">Statistical Analysis</h4>
+<p>We used 10-fold cross-validation to generate out-of-sample estimates of overall and group-level algorithm performance. Overall performance was measured by mean absolute error and payment system fit. Payment system fit is equivalent to <span class="math inline">\(R^2\)</span> for the baseline and constrained regressions. Payment system fit for the post-processing algorithm is equal to the residual sum of squares using the post-processed predicted spending, divided by the total sum of squares. We computed net compensation to evaluate group-level algorithm performance. Finally, we evaluated the difference in predicted spending between algorithms by the socioeconomic status domain of the county-level Centers for Disease Control and Prevention and Agency for Toxic Substance and Disease Registry Social Vulnerability Index (SVI).<span class="citation" data-cites="cdc/atsd2024"><sup><a href="#ref-cdc/atsd2024" role="doc-biblioref">38</a></sup></span> Higher SVI values reflect greater exposure to socioeconomic factors that can adversely affect health outcomes.</p>
+<p>Our main analysis focused on the 2018-2019 cohort because it included the most recent payment year prior to the COVID-19 pandemic for which we had access to data. Sensitivity analyses focused on the 2017-2018 and 2019-2020 cohorts. Additionally, we examined the sensitivity of out-of-sample algorithm performance to exclusion of beneficiaries who died in the payment year.</p>
+<p>Analyses were conducted using R version 4.0.3 and Python version 3.7.17. We fit all regressions using CVXPY.<span class="citation" data-cites="diamond2016cvxpy agrawal2018rewriting"><sup><a href="#ref-diamond2016cvxpy" role="doc-biblioref">39</a>,<a href="#ref-agrawal2018rewriting" role="doc-biblioref">40</a></sup></span> Analytic code is available at https://github.com/StanfordHPDS/medicare_fair_risk_adjustment. We followed the Standard for Reporting Diagnostic Accuracy <a href="http://www.equator-network.org/reporting-guidelines/stard/">(STARD)</a> reporting guideline.</p>
+</section>
+</section>
+<section id="results-1" class="level2">
+<h2 class="anchored" data-anchor-id="results-1">Results</h2>
+<p>Our main analysis included 4,398,035 eligible beneficiaries, of whom 86% were Non-Hispanic white, 6% were Black, 3% were Hispanic, 2% were Asian/Pacific Islander, 1% were part of an Additional Group, and less than 1% were American Indian/Alaska Native <a href="#table_1">(Table 1)</a>. The distribution of Medicare spending was right skewed, with mean spending of $8,345 and median spending of $2,421 <a href="#supplement_fig_2">(eFigure 2 in the Supplement)</a>. The mean age of beneficiaries was 75 years, 44% were documented as male, and 8% originally qualified for Medicare based on a disabling condition. Among beneficiaries, 42% had zero diagnosed payment-eligible HCCs, 26% had one HCC, 14% had two HCCs, 14% had three to five HCCs, and 4% had six or more HCCs <a href="#supplement_fig_3">(eFigure 3 in the Supplement)</a>.</p>
+<p>Non-Hispanic white beneficiaries tended to be older than beneficiaries of other racial/ethnic groups <a href="#table_1">(Table 1)</a>. American Indian/Alaska Native beneficiaries had the highest mean observed spending, followed by non-Hispanic white beneficiaries. Asian/Pacific Islander beneficiaries had the lowest mean observed spending, followed by Hispanic beneficiaries. The percent of American Indian/Alaska Native and Black beneficiaries originally qualifying for Medicare based on a disabling condition was more than twice that of non-Hispanic white beneficiaries.</p>
+<section id="table_1" class="level6">
+<h6 class="anchored" data-anchor-id="table_1">Table 1. Sample size, characteristics, observed spending, and predicted spending, overall and by race/ethnicity.</h6>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 4%">
+<col style="width: 9%">
+<col style="width: 14%">
+<col style="width: 3%">
+<col style="width: 9%">
+<col style="width: 11%">
+<col style="width: 13%">
+<col style="width: 21%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Race/Ethnicity</th>
+<th style="text-align: left;">Sample Size</th>
+<th style="text-align: left;">Mean Observed Spending</th>
+<th style="text-align: left;">Baseline Regression Net Compensation</th>
+<th style="text-align: right;">Mean Age</th>
+<th style="text-align: left;">Percent Documented Male</th>
+<th style="text-align: right;">Mean Number of Diagnosed HCCs</th>
+<th style="text-align: left;">Percent Dying in the Payment Year</th>
+<th style="text-align: left;">Percent Originally Qualifying by Disabling Condition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">All</td>
+<td style="text-align: left;">4,398,035</td>
+<td style="text-align: left;">$8,345</td>
+<td style="text-align: left;">$0</td>
+<td style="text-align: right;">75.2</td>
+<td style="text-align: left;">44.5%</td>
+<td style="text-align: right;">1.3</td>
+<td style="text-align: left;">3.8%</td>
+<td style="text-align: left;">7.6%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">American Indian/Alaska Native</td>
+<td style="text-align: left;">16,332</td>
+<td style="text-align: left;">$9,043</td>
+<td style="text-align: left;">-$448</td>
+<td style="text-align: right;">74.3</td>
+<td style="text-align: left;">42.9%</td>
+<td style="text-align: right;">1.5</td>
+<td style="text-align: left;">3.8%</td>
+<td style="text-align: left;">15.0%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Asian/Pacific Islander</td>
+<td style="text-align: left;">82,367</td>
+<td style="text-align: left;">$5,868</td>
+<td style="text-align: left;">$1,513</td>
+<td style="text-align: right;">74.3</td>
+<td style="text-align: left;">41.5%</td>
+<td style="text-align: right;">0.9</td>
+<td style="text-align: left;">2.3%</td>
+<td style="text-align: left;">4.2%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Black</td>
+<td style="text-align: left;">244,408</td>
+<td style="text-align: left;">$7,734</td>
+<td style="text-align: left;">$691</td>
+<td style="text-align: right;">74.3</td>
+<td style="text-align: left;">43.0%</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: left;">3.5%</td>
+<td style="text-align: left;">14.8%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Hispanic</td>
+<td style="text-align: left;">151,163</td>
+<td style="text-align: left;">$6,550</td>
+<td style="text-align: left;">$1,088</td>
+<td style="text-align: right;">74.2</td>
+<td style="text-align: left;">47.8%</td>
+<td style="text-align: right;">1.1</td>
+<td style="text-align: left;">2.8%</td>
+<td style="text-align: left;">10.8%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Non-Hispanic White</td>
+<td style="text-align: left;">3,785,544</td>
+<td style="text-align: left;">$8,557</td>
+<td style="text-align: left;">-$129</td>
+<td style="text-align: right;">75.4</td>
+<td style="text-align: left;">44.0%</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: left;">4.0%</td>
+<td style="text-align: left;">7.2%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Additional Group</td>
+<td style="text-align: left;">34,572</td>
+<td style="text-align: left;">$7,183</td>
+<td style="text-align: left;">$947</td>
+<td style="text-align: right;">74.6</td>
+<td style="text-align: left;">45.9%</td>
+<td style="text-align: right;">1.2</td>
+<td style="text-align: left;">2.6%</td>
+<td style="text-align: left;">11.2%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Unknown</td>
+<td style="text-align: left;">83,649</td>
+<td style="text-align: left;">$6,564</td>
+<td style="text-align: left;">$67</td>
+<td style="text-align: right;">69.3</td>
+<td style="text-align: left;">65.0%</td>
+<td style="text-align: right;">0.9</td>
+<td style="text-align: left;">1.1%</td>
+<td style="text-align: left;">3.0%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="net-compensation-and-fair-spending-targets" class="level4">
+<h4 class="anchored" data-anchor-id="net-compensation-and-fair-spending-targets">Net Compensation and Fair Spending Targets</h4>
+<p>The baseline regression resulted in undercompensation for American Indian/Alaska Native (-$448) and Non-Hispanic white (-$129) beneficiaries, and overcompensation for Asian/Pacific Islander (+$1,513), Black (+$691), Hispanic (+$1,088), Additional Group (+$947), and Unknown (+$67) beneficiaries <a href="#table_1">(Table 1)</a>.</p>
+<p>Disparities-based fair spending targets added varying amounts to net compensation from the baseline regression: $300 for American Indian/Alaska Native beneficiaries, $604 for Asian/Pacific Islander beneficiaries, $518 for Black beneficiaries, and $513 for Hispanic beneficiaries <a href="#table_2">(Table 2)</a>. These targets reflect additional predicted spending if beneficiaries in minoritized racial/ethnic groups had sufficient healthcare access, such that their spending matched that of non-Hispanic white beneficiaries, conditional on age group, documented sex, number of diagnosed HCCs, originally disabled status, and county of residence.</p>
+<p>Fair spending targets based on five percent of overall mean spending increased net compensation by $417 for minoritized racial/ethnic groups.</p>
+<section id="table_2" class="level6">
+<h6 class="anchored" data-anchor-id="table_2">Table 2. Additional payments to reach fair spending targets for minoritized racial/ethnic groups.</h6>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 38%">
+<col style="width: 33%">
+<col style="width: 27%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Race/Ethnicity</th>
+<th style="text-align: left;">Disparities-Based Targets</th>
+<th style="text-align: left;">Five Percent Targets</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">American Indian/Alaska Native</td>
+<td style="text-align: left;">$300</td>
+<td style="text-align: left;">$417</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Asian/Pacific Islander</td>
+<td style="text-align: left;">$604</td>
+<td style="text-align: left;">$417</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Black</td>
+<td style="text-align: left;">$518</td>
+<td style="text-align: left;">$417</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Hispanic</td>
+<td style="text-align: left;">$513</td>
+<td style="text-align: left;">$417</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</section>
+<section id="algorithm-performance" class="level4">
+<h4 class="anchored" data-anchor-id="algorithm-performance">Algorithm Performance</h4>
+<p>The baseline regression achieved an out-of-sample mean absolute error of $8,359 and payment system fit of 12.7% <a href="#table_3">(Table 3)</a>. Achieving fair spending targets using constrained regression or post-processing resulted in only a small reduction in out-of-sample predictive performance. Compared to the baseline regression, payment system fit decreased by less than 0.1 percentage points and mean absolute error increased by at most $21 across both sets of fair spending targets and both algorithms. Out-of-sample net compensation was similar to in-sample baseline net compensation and net compensation for fair spending targets <a href="#supplement_table_1">(eTable 1 in the Supplement)</a>.</p>
+<section id="table_3" class="level6">
+<h6 class="anchored" data-anchor-id="table_3">Table 3. Out-of-sample algorithm performance measures for baseline regression, constrained regression, and post-processing.</h6>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 48%">
+<col style="width: 25%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Algorithm and Fair Spending Target</th>
+<th style="text-align: left;">Payment System Fit</th>
+<th style="text-align: left;">Mean Absolute Error</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Baseline Regression</td>
+<td style="text-align: left;">12.7%</td>
+<td style="text-align: left;">$8,359</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Disparities: Constrained Regression</td>
+<td style="text-align: left;">12.6%</td>
+<td style="text-align: left;">$8,380</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Disparities: Post-Processing</td>
+<td style="text-align: left;">12.7%</td>
+<td style="text-align: left;">$8,367</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Five Percent: Constrained Regression</td>
+<td style="text-align: left;">12.7%</td>
+<td style="text-align: left;">$8,374</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Five Percent: Post-Processing</td>
+<td style="text-align: left;">12.7%</td>
+<td style="text-align: left;">$8,366</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The median change in payment for HCCs, comparing the baseline regression with the constrained regression for disparities-based fair spending targets, was -$14. Constrained regression increased payments for HCCs that were overrepresented among American Indian/Alaska Native, Asian/Pacific Islander, Black, and Hispanic beneficiaries, compared to prevalence of the conditions in the overall sample <a href="#fig_1">(Figure 1)</a>. Although we did not include constraints on spending for beneficiaries in the Additional Group, changes in HCC payments with respect to relative prevalence followed a similar pattern to that observed for minoritized racial/ethnic groups.</p>
+</section>
+<section id="fig_1" class="level6">
+<h6 class="anchored" data-anchor-id="fig_1">Figure 1. Relationship between hierarchical condition category (HCC) prevalence ratio and change in HCC payment between baseline and constrained regression for disparities-based fair spending targets.</h6>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="safe_figures/2018/coef_change_plot_equity.png" class="img-fluid figure-img"></p>
+<figcaption>Note: The size of the circles reflects group prevalence of the HCC. Open circles denote top-coded values. Prevalence ratios compare group prevalence to overall prevalence, and were top-coded at 2.5. Changes in HCC payments were top-coded at $350.</figcaption>
+</figure>
+</div>
+<p>Across SVI quintiles, the post-processing algorithm increased spending by an equal amount for beneficiaries of the same minoritized racial/ethnic group, and decreased spending by an equal amount for non-Hispanic white beneficiaries. On the other hand, differences between mean spending from the baseline regression and mean spending from the constrained regression varied by racial/ethnic group and county SVI quintile. Predicted spending from the constrained regression, compared to the post-processing algorithm, was generally greater for beneficiaries living in counties with more exposure to adverse socioeconomic factors across racial/ethnic groups <a href="$fig_2">(Figure 2)</a>.</p>
+</section>
+<section id="fig_2" class="level6">
+<h6 class="anchored" data-anchor-id="fig_2">Figure 2. Difference in predicted spending between constrained regression and post-processing by racial/ethnic group and county-level Social Vulnerability Index quintile.</h6>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="safe_figures/2018/svi_lines.png" class="img-fluid figure-img"></p>
+<figcaption>Note: Percentages denote the share of beneficiaries in each racial/ethnic group living in each Social Vulnerability Index quintile, where quintile 1 has the least exposure to adverse socioeconomic factors.</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="sensitivity-analyses" class="level4">
+<h4 class="anchored" data-anchor-id="sensitivity-analyses">Sensitivity Analyses</h4>
+<p>Sensitivity analyses focusing on the 2017-2018 and 2019-2020 cohorts demonstrate that our algorithmic framework yields largely stable results over time <a href="#supplement_table_2">(eTables 2a, 2b, 3a, and 3b in the Supplement)</a>. Payment system fit differences between the baseline regression, constrained regression, and post-processing algorithm were negligible in alternative cohorts, similar to those observed in the main analysis <a href="#supplement_table_4">(eTable 4 in the Supplement)</a>. Excluding beneficiaries that died in the payment year also resulted in negligible differences between algorithms. Trends in predicted spending by racial/ethnic group and county SVI quintile for alternative cohorts were similar to those documented in the main analysis <a href="#supplement_fig_4a">(eFigures 4a and 4b in the Supplement)</a>.</p>
+</section>
+</section>
+<section id="discussion" class="level2">
+<h2 class="anchored" data-anchor-id="discussion">Discussion</h2>
+<p>This study developed two algorithms, constrained regression and post-processing, to achieve fairness goals across multiple minoritized racial/ethnic groups in Medicare risk adjustment. Both algorithms reach fair spending targets without sacrificing overall fit, compared to the baseline regression. Importantly, both algorithms represent feasible extensions of the regression currently used to estimate risk scores, which supports algorithm flexibility, transparency, interpretability, and potential for implementation.</p>
+<p>Whereas post-processing directly changes payments for specified groups, constrained regression changes payments for health conditions, which can impact all groups. As a result, for our fair spending targets, we find that constrained regression can achieve more widespread equity enhancing changes in payments compared to post-processing. This is a desirable feature when leveraging payment reform to broadly mitigate health disparities, to the extent that social and structural forces result in the clustering of certain health conditions among marginalized groups.</p>
+<p>Consistent with prior literature, we find that the current risk adjustment algorithm undercompensates American Indian/Alaska Native and non-Hispanic white Medicare beneficiaries, and overcompensates Asian/Pacific Islander, Black, and Hispanic beneficiaries.<span class="citation" data-cites="mcwilliams2023"><sup><a href="#ref-mcwilliams2023" role="doc-biblioref">24</a></sup></span> Observed spending is lowest among overcompensated racial/ethnic groups, likely as a result of healthcare access barriers leading to lower utilization. Although most minoritized groups are already overcompensated, our disparities-based fair spending targets suggest that resource reallocation through the current risk adjustment algorithm may be insufficient to fully mitigate disparities. From a health equity perspective, increased payments for marginalized groups may be needed to reduce inequalities in access and outcomes.</p>
+<p>Both algorithms evaluated in our study achieve fair spending targets for multiple minoritized racial/ethnic groups with negligible reduction in overall payment system fit. This aligns with prior work on fair regression, contributing to a mounting case for payment system reform that aims to achieve dual goals of equity and efficiency.<span class="citation" data-cites="bergquist2019 irvin2020 zink2020 mcguire2021 mcwilliams2023 andriola2024"><sup><a href="#ref-bergquist2019" role="doc-biblioref">11</a>–<a href="#ref-zink2020" role="doc-biblioref">13</a>,<a href="#ref-mcguire2021" role="doc-biblioref">15</a>,<a href="#ref-andriola2024" role="doc-biblioref">16</a>,<a href="#ref-mcwilliams2023" role="doc-biblioref">24</a></sup></span> The Netherlands has recently applied constrained regression to ensure fair payment for individuals with multiple chronic illnesses.<span class="citation" data-cites="cattel2023"><sup><a href="#ref-cattel2023" role="doc-biblioref">41</a></sup></span> Two crucial policy features must be determined before such reform is implemented: the fair spending targets and the system for ensuring that additional payments are effectively used to address drivers of disparities.</p>
+<section id="limitations" class="level4">
+<h4 class="anchored" data-anchor-id="limitations">Limitations</h4>
+<p>Our fair spending targets serve the purpose of allowing us to demonstrate the impact of algorithmic tools. Fair spending targets included in any payment reform policy should be determined through broad consultation and additional research. Further examination of potential consequences for groups included and not included in fairness objectives is necessary. Additionally, existing payment systems and our analysis both rely heavily on diagnosed health conditions. Underdiagnosis of health conditions among minoritized racial/ethnic groups would result in lower predicted spending compared to what would be expected if all racial/ethnic groups experienced equal rates of diagnosis. As a result, our estimates of disparities are likely smaller than if we were to adjust for beneficiaries’ true health status. Future research should focus on evaluating, and mitigating, the effects of differential rates of diagnosis in payment policy.</p>
+<p>Strategic responses by insurers, the extent to which additional payments will impact beneficiaries’ experiences, and the potential for such payments to mitigate disparities in healthcare access and outcomes were not included in our study. Other policy levers would need to be paired with algorithmic changes to the payment system to increase the likelihood that reform yields desired outcomes. Importantly, health care disparities are the result of many long-standing and interconnected social and structural forces.<span class="citation" data-cites="nationalacademiesofsciencesengineeringandmedicine2024"><sup><a href="#ref-nationalacademiesofsciencesengineeringandmedicine2024" role="doc-biblioref">25</a></sup></span> Algorithmic changes alone cannot eliminate disparities, but algorithms can be designed to support a more equitable system.<span class="citation" data-cites="pmlr-v248-cusick24a"><sup><a href="#ref-pmlr-v248-cusick24a" role="doc-biblioref">42</a></sup></span></p>
+<p>We did not have access to self-reported race/ethnicity. Despite the Research Triangle Institute enhanced race/ethnicity variable having better validity than the variable based directly on Social Security Administration documentation, misclassification of race/ethnicity remains a persistent problem.<span class="citation" data-cites="jarrín2020"><sup><a href="#ref-jarrín2020" role="doc-biblioref">43</a></sup></span> Further, health spending and outcome disparities exist across multiple social and structural dimensions. Although our analysis focuses on increasing spending for minoritized racial/ethnic groups, additional spending may be warranted to mitigate disparities for other groups. Finally, our data include only fee-for-service claims, so we could not evaluate differences in health status, spending, utilization, and outcomes between beneficiaries enrolled in Traditional Medicare versus Medicare Advantage.</p>
+</section>
+<section id="conclusions" class="level4">
+<h4 class="anchored" data-anchor-id="conclusions">Conclusions</h4>
+<p>Feasible changes to the Medicare risk adjustment algorithm can achieve fairness goals for multiple minoritized racial/ethnic groups with negligible impact on overall payment system fit. Payment system reform that incorporates fair spending targets should be considered by policymakers aiming to address health care disparities.</p>
+</section>
+</section>
+<section id="acknowledgements" class="level2">
+<h2 class="anchored" data-anchor-id="acknowledgements">Acknowledgements</h2>
+<p>This research was funded by the Laura and John Arnold Foundation. Data for this project were accessed using the Stanford Center for Population Health Sciences Data Core. The PHS Data Core is supported by a National Institutes of Health National Center for Advancing Translational Science Clinical and Translational Science Award (UL1TR003142) and from Internal Stanford funding. The content is solely the responsibility of the authors and does not necessarily represent the official views of the NIH or the Laura and John Arnold Foundation. The authors thank Malcolm Barrett for code review and members of the Health Policy Data Science Lab for feedback on earlier versions of this research.</p>
+</section>
+<section id="supplement" class="level2">
+<h2 class="anchored" data-anchor-id="supplement">Supplemental Online Content</h2>
+<section id="emethods" class="level3">
+<h3 class="anchored" data-anchor-id="emethods">eMethods</h3>
+<section id="supp_eligibility" class="level4">
+<h4 class="anchored" data-anchor-id="supp_eligibility">Eligibility</h4>
+<p>We created three analytic cohorts that span two calendar years: 2017-2018, 2018-2019, and 2019-2020. For each two-year window, we identified eligible beneficiaries using the Master Beneficiary Summary File (MBSF) Base records. Beneficiaries were eligible to be included in our primary analyses if they met the following criteria:</p>
+<ul>
+<li>Aged 65 years or older by the end of the first calendar year.</li>
+<li>Enrolled in Medicare Parts A and B for all 12 months in the first year and did not die in the first year.</li>
+<li>Enrolled in Medicare Parts A and B for all 12 months in the second year, or were enrolled in Medicare Parts A and B until their month of death in the second year.</li>
+<li>Not enrolled in Medicare Part C at any point in the first or second calendar year.</li>
+<li>Not dual eligible for Medicaid at any point in the first or second calendar year.</li>
+</ul>
+<p>We were not able to separate community from institutional populations. Based on 2014-2015 sample counts reported in the 2021 CMS Report to Congress, the institutional population accounts for only three percent of the total population of fee-for-service beneficiaries.<span class="citation" data-cites="reportt2021"><sup><a href="#ref-reportt2021" role="doc-biblioref">5</a></sup></span></p>
+</section>
+<section id="supp_algorithm" class="level4">
+<h4 class="anchored" data-anchor-id="supp_algorithm">Algorithm Details</h4>
+<section id="notation" class="level5">
+<h5 class="anchored" data-anchor-id="notation">Notation</h5>
+<p>Our risk adjustment algorithms aimed to predict spending <span class="math inline">\(Y\)</span> in year <span class="math inline">\(t+1\)</span> for beneficiary <span class="math inline">\(i\)</span> as a function of demographic characteristics <span class="math inline">\(D\)</span>, diagnosed health conditions <span class="math inline">\(H\)</span>, and county of residence <span class="math inline">\(C\)</span> in year <span class="math inline">\(t\)</span>. The vector <span class="math inline">\(C\)</span> included 2,943 county indicators, as a result of grouping counties within states that had fewer than the tenth percentile of eligible beneficiaries.</p>
+</section>
+<section id="baseline-regression" class="level5">
+<h5 class="anchored" data-anchor-id="baseline-regression">Baseline Regression</h5>
+<p>First, we approximated the least squares regression approach used by CMS to estimate the risk scores for Medicare Advantage plan payment risk adjustment:</p>
+<p><span class="math display">\[Y_{i} = \alpha + \beta D_{i} + \gamma H_{i} + \delta C_{i},\]</span></p>
+<p>where <span class="math inline">\(\gamma\)</span> is constrained to be non-negative. We fit this regression by minimizing the square root of the sum of squared residuals, which yields an equivalent result to minimizing the sum of squared residuals.<span class="citation" data-cites="advanced"><sup><a href="#ref-advanced" role="doc-biblioref">44</a></sup></span></p>
+<p>We deviated from the CMS Version 24 formula by grouping beneficiaries aged 95+ with beneficiaries aged 90-94 due to the small sample sizes for the 95+ group. We also excluded the indicators capturing the number of HCCs.</p>
+</section>
+<section id="constrained-regression-and-post-processing-for-fair-spending" class="level5">
+<h5 class="anchored" data-anchor-id="constrained-regression-and-post-processing-for-fair-spending">Constrained Regression and Post-Processing for Fair Spending</h5>
+<p>We evaluated two approaches to achieve fair spending targets: constrained regression and post-processing. Fairness constrained regression included additional constraints on net compensation by racial/ethnic group. We defined group-level net compensation as the mean difference between predicted spending, <span class="math inline">\(\hat{Y}\)</span>, and observed spending for beneficiaries <span class="math inline">\(p\)</span> in racial/ethnic group <span class="math inline">\(j\in \{\)</span>American Indian/Alaska Native, Asian/Pacific Islander, Black, Hispanic<span class="math inline">\(\}\)</span>:</p>
+<p><span class="math display">\[G_j = \frac{1}{n_j}\sum_{p\in j} (\widehat{Y}_{p,j} - Y_{p,j}),\]</span></p>
+<p>where <span class="math inline">\(n_j\)</span> was the number of beneficiaries in group <span class="math inline">\(j\)</span> and the set of sets <span class="math inline">\(j\)</span> is <span class="math inline">\(J\)</span>. Similar to the baseline regression, we fit the constrained regression by minimizing the square root of the sum of squared residuals:</p>
+<p><span class="math display">\[\underset{\alpha, \beta, \gamma, \delta}{\text{minimize}}\{||Y_{i} - (\alpha + \beta D_{i} + \gamma H_{i} + \delta C_{i})||_2\},\]</span></p>
+<p>subject to: <span class="math inline">\(\gamma \geq 0\)</span>, <span class="math inline">\(G_{j} = F_j\)</span>, and <span class="math inline">\(\sum_i\widehat{Y}_i = \sum_i{Y}_i\)</span>, where <span class="math inline">\(F_j\)</span> is the group-specific fair spending target.</p>
+<p>For our post-processing algorithm, after predicting spending in the baseline regression, we added a constant group-specific payment to beneficiaries in minoritized racial/ethnic groups such that net compensation after post-processing equaled fair spending targets: <span class="math inline">\(\widehat{Y}^*_{p,j} = \widehat{Y}_{p,j} + (F_j - G_j)\)</span>. To ensure that total spending remained unchanged, we subtracted a constant payment from all <span class="math inline">\(n_w\)</span> beneficiaries in the non-Hispanic white group <span class="math inline">\(w\)</span>, indexed by <span class="math inline">\(k\)</span>: <span class="math inline">\(\widehat{Y}^*_k = \widehat{Y}_k - \frac{ \sum_{j\in J} \sum_{p\in j}(\widehat{Y}_{p,j}^* - \widehat{Y}_{p,j})}{n_w}\)</span>.</p>
+</section>
+</section>
+<section id="supplemental-results" class="level4">
+<h4 class="anchored" data-anchor-id="supplemental-results">Supplemental Results</h4>
+<section id="supplement_fig_1" class="level6">
+<h6 class="anchored" data-anchor-id="supplement_fig_1">eFigure 1. Difference between the Social Security Administration race/ethnicity label and the Research Triangle Institute’s enhanced race/ethnicity label.</h6>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="safe_figures/race_eth_dist.svg" class="img-fluid figure-img"></p>
+<figcaption>Note: Numbers are thousands of beneficiaries.</figcaption>
+</figure>
+</div>
+</section>
+<section id="supplement_fig_2" class="level6">
+<h6 class="anchored" data-anchor-id="supplement_fig_2">eFigure 2. Distribution of spending among the 2018-2019 cohort.</h6>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="safe_figures/2018/cost_histogram.png" class="img-fluid figure-img"></p>
+<figcaption>Note: Spending is top-coded at $100,000 in the figure due to long right tail.</figcaption>
+</figure>
+</div>
+</section>
+<section id="supplement_fig_3" class="level6">
+<h6 class="anchored" data-anchor-id="supplement_fig_3">eFigure 3. Distribution of the number of payment-eligible hierarchical condition categories among the 2018-2019 cohort.</h6>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="safe_figures/2018/n_hcc_histogram.png" class="img-fluid figure-img"></p>
+<figcaption>Note: Number of Hierarchical Condition Categories is top-coded at 10 in figure due to long right tail.</figcaption>
+</figure>
+</div>
+</section>
+<section id="supplement_table_1" class="level6">
+<h6 class="anchored" data-anchor-id="supplement_table_1">eTable 1. Out-of-sample net compensation by algorithm, spending target, and racial/ethnic group for the 2018-2019 cohort.</h6>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 10%">
+<col style="width: 19%">
+<col style="width: 15%">
+<col style="width: 20%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Race/Ethnicity</th>
+<th style="text-align: left;">Baseline Regression</th>
+<th style="text-align: left;">Disparities: Constrained Regression</th>
+<th style="text-align: left;">Disparities: Post-Processing</th>
+<th style="text-align: left;">Five Percent: Constrained Regression</th>
+<th style="text-align: left;">Five Percent: Post-Processing</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">American Indian/Alaska Native</td>
+<td style="text-align: left;">-$442</td>
+<td style="text-align: left;">-$148</td>
+<td style="text-align: left;">-$142</td>
+<td style="text-align: left;">-$31</td>
+<td style="text-align: left;">-$25</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Asian/Pacific Islander</td>
+<td style="text-align: left;">$1,513</td>
+<td style="text-align: left;">$2,116</td>
+<td style="text-align: left;">$2,117</td>
+<td style="text-align: left;">$1,929</td>
+<td style="text-align: left;">$1,930</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Black</td>
+<td style="text-align: left;">$692</td>
+<td style="text-align: left;">$1,207</td>
+<td style="text-align: left;">$1,209</td>
+<td style="text-align: left;">$1,107</td>
+<td style="text-align: left;">$1,109</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Hispanic</td>
+<td style="text-align: left;">$1,088</td>
+<td style="text-align: left;">$1,600</td>
+<td style="text-align: left;">$1,602</td>
+<td style="text-align: left;">$1,504</td>
+<td style="text-align: left;">$1,506</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Non-Hispanic White</td>
+<td style="text-align: left;">-$129</td>
+<td style="text-align: left;">-$201</td>
+<td style="text-align: left;">-$198</td>
+<td style="text-align: left;">-$186</td>
+<td style="text-align: left;">-$184</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Additional Group</td>
+<td style="text-align: left;">$947</td>
+<td style="text-align: left;">$1,318</td>
+<td style="text-align: left;">$947</td>
+<td style="text-align: left;">$1,211</td>
+<td style="text-align: left;">$947</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Unknown</td>
+<td style="text-align: left;">$67</td>
+<td style="text-align: left;">$67</td>
+<td style="text-align: left;">$67</td>
+<td style="text-align: left;">$62</td>
+<td style="text-align: left;">$67</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="supplement_table_2" class="level6">
+<h6 class="anchored" data-anchor-id="supplement_table_2">eTable 2a. Sample size, characteristics, observed spending, and predicted spending, overall and by race/ethnicity for the 2017-2018 cohort.</h6>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 4%">
+<col style="width: 9%">
+<col style="width: 14%">
+<col style="width: 3%">
+<col style="width: 9%">
+<col style="width: 11%">
+<col style="width: 13%">
+<col style="width: 21%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Race/Ethnicity</th>
+<th style="text-align: left;">Sample Size</th>
+<th style="text-align: left;">Mean Observed Spending</th>
+<th style="text-align: left;">Baseline Regression Net Compensation</th>
+<th style="text-align: right;">Mean Age</th>
+<th style="text-align: left;">Percent Documented Male</th>
+<th style="text-align: right;">Mean Number of Diagnosed HCCs</th>
+<th style="text-align: left;">Percent Dying in the Payment Year</th>
+<th style="text-align: left;">Percent Originally Qualifying by Disabling Condition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">All</td>
+<td style="text-align: left;">4,364,834</td>
+<td style="text-align: left;">$7,977</td>
+<td style="text-align: left;">$0</td>
+<td style="text-align: right;">75.2</td>
+<td style="text-align: left;">44.5%</td>
+<td style="text-align: right;">1.3</td>
+<td style="text-align: left;">3.9%</td>
+<td style="text-align: left;">7.7%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">American Indian/Alaska Native</td>
+<td style="text-align: left;">15,928</td>
+<td style="text-align: left;">$8,658</td>
+<td style="text-align: left;">-$370</td>
+<td style="text-align: right;">74.3</td>
+<td style="text-align: left;">43.1%</td>
+<td style="text-align: right;">1.5</td>
+<td style="text-align: left;">3.9%</td>
+<td style="text-align: left;">15.0%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Asian/Pacific Islander</td>
+<td style="text-align: left;">79,036</td>
+<td style="text-align: left;">$5,590</td>
+<td style="text-align: left;">$1,433</td>
+<td style="text-align: right;">74.3</td>
+<td style="text-align: left;">42.1%</td>
+<td style="text-align: right;">0.9</td>
+<td style="text-align: left;">2.5%</td>
+<td style="text-align: left;">4.2%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Black</td>
+<td style="text-align: left;">245,457</td>
+<td style="text-align: left;">$7,306</td>
+<td style="text-align: left;">$734</td>
+<td style="text-align: right;">74.3</td>
+<td style="text-align: left;">43.1%</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: left;">3.6%</td>
+<td style="text-align: left;">14.9%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Hispanic</td>
+<td style="text-align: left;">150,123</td>
+<td style="text-align: left;">$6,268</td>
+<td style="text-align: left;">$1,040</td>
+<td style="text-align: right;">74.2</td>
+<td style="text-align: left;">48.0%</td>
+<td style="text-align: right;">1.1</td>
+<td style="text-align: left;">3.0%</td>
+<td style="text-align: left;">10.9%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Non-Hispanic White</td>
+<td style="text-align: left;">3,767,527</td>
+<td style="text-align: left;">$8,180</td>
+<td style="text-align: left;">-$125</td>
+<td style="text-align: right;">75.5</td>
+<td style="text-align: left;">44.0%</td>
+<td style="text-align: right;">1.3</td>
+<td style="text-align: left;">4.1%</td>
+<td style="text-align: left;">7.2%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Additional Group</td>
+<td style="text-align: left;">33,327</td>
+<td style="text-align: left;">$6,933</td>
+<td style="text-align: left;">$822</td>
+<td style="text-align: right;">74.4</td>
+<td style="text-align: left;">46.1%</td>
+<td style="text-align: right;">1.1</td>
+<td style="text-align: left;">2.8%</td>
+<td style="text-align: left;">11.5%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Unknown</td>
+<td style="text-align: left;">73,436</td>
+<td style="text-align: left;">$6,182</td>
+<td style="text-align: left;">$16</td>
+<td style="text-align: right;">68.9</td>
+<td style="text-align: left;">65.7%</td>
+<td style="text-align: right;">0.8</td>
+<td style="text-align: left;">1.2%</td>
+<td style="text-align: left;">3.1%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="etable-2b.-sample-size-characteristics-observed-spending-and-predicted-spending-overall-and-by-raceethnicity-for-the-2019-2020-cohort." class="level6">
+<h6 class="anchored" data-anchor-id="etable-2b.-sample-size-characteristics-observed-spending-and-predicted-spending-overall-and-by-raceethnicity-for-the-2019-2020-cohort.">eTable 2b. Sample size, characteristics, observed spending, and predicted spending, overall and by race/ethnicity for the 2019-2020 cohort.</h6>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 4%">
+<col style="width: 9%">
+<col style="width: 14%">
+<col style="width: 3%">
+<col style="width: 9%">
+<col style="width: 11%">
+<col style="width: 13%">
+<col style="width: 21%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Race/Ethnicity</th>
+<th style="text-align: left;">Sample Size</th>
+<th style="text-align: left;">Mean Observed Spending</th>
+<th style="text-align: left;">Baseline Regression Net Compensation</th>
+<th style="text-align: right;">Mean Age</th>
+<th style="text-align: left;">Percent Documented Male</th>
+<th style="text-align: right;">Mean Number of Diagnosed HCCs</th>
+<th style="text-align: left;">Percent Dying in the Payment Year</th>
+<th style="text-align: left;">Percent Originally Qualifying by Disabling Condition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">All</td>
+<td style="text-align: left;">4,443,148</td>
+<td style="text-align: left;">$7,841</td>
+<td style="text-align: left;">$0</td>
+<td style="text-align: right;">75.2</td>
+<td style="text-align: left;">44.3%</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: left;">4.2%</td>
+<td style="text-align: left;">7.5%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">American Indian/Alaska Native</td>
+<td style="text-align: left;">16,238</td>
+<td style="text-align: left;">$8,907</td>
+<td style="text-align: left;">-$526</td>
+<td style="text-align: right;">74.6</td>
+<td style="text-align: left;">42.3%</td>
+<td style="text-align: right;">1.6</td>
+<td style="text-align: left;">5.1%</td>
+<td style="text-align: left;">15.1%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Asian/Pacific Islander</td>
+<td style="text-align: left;">85,688</td>
+<td style="text-align: left;">$5,296</td>
+<td style="text-align: left;">$1,557</td>
+<td style="text-align: right;">74.3</td>
+<td style="text-align: left;">41.0%</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: left;">2.7%</td>
+<td style="text-align: left;">4.2%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Black</td>
+<td style="text-align: left;">240,205</td>
+<td style="text-align: left;">$7,503</td>
+<td style="text-align: left;">$503</td>
+<td style="text-align: right;">74.4</td>
+<td style="text-align: left;">42.7%</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: left;">4.3%</td>
+<td style="text-align: left;">14.5%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Hispanic</td>
+<td style="text-align: left;">152,745</td>
+<td style="text-align: left;">$6,178</td>
+<td style="text-align: left;">$967</td>
+<td style="text-align: right;">74.3</td>
+<td style="text-align: left;">47.6%</td>
+<td style="text-align: right;">1.1</td>
+<td style="text-align: left;">3.6%</td>
+<td style="text-align: left;">10.6%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Non-Hispanic White</td>
+<td style="text-align: left;">3,819,616</td>
+<td style="text-align: left;">$8,028</td>
+<td style="text-align: left;">-$114</td>
+<td style="text-align: right;">75.4</td>
+<td style="text-align: left;">43.9%</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: left;">4.4%</td>
+<td style="text-align: left;">7.0%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Additional Group</td>
+<td style="text-align: left;">35,453</td>
+<td style="text-align: left;">$6,645</td>
+<td style="text-align: left;">$947</td>
+<td style="text-align: right;">74.9</td>
+<td style="text-align: left;">45.8%</td>
+<td style="text-align: right;">1.2</td>
+<td style="text-align: left;">3.1%</td>
+<td style="text-align: left;">10.8%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Unknown</td>
+<td style="text-align: left;">93,203</td>
+<td style="text-align: left;">$6,354</td>
+<td style="text-align: left;">$91</td>
+<td style="text-align: right;">69.8</td>
+<td style="text-align: left;">64.3%</td>
+<td style="text-align: right;">0.9</td>
+<td style="text-align: left;">1.4%</td>
+<td style="text-align: left;">2.9%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="supplement_table_3" class="level6">
+<h6 class="anchored" data-anchor-id="supplement_table_3">eTable 3a. Observed spending and net compensation by algorithm, spending target, and racial/ethnic group for the 2017-2018 cohort.</h6>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 4%">
+<col style="width: 10%">
+<col style="width: 18%">
+<col style="width: 15%">
+<col style="width: 19%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Race/Ethnicity</th>
+<th style="text-align: left;">Observed</th>
+<th style="text-align: left;">Baseline Regression</th>
+<th style="text-align: left;">Disparities: Constrained Regression</th>
+<th style="text-align: left;">Disparities: Post-Processing</th>
+<th style="text-align: left;">Five Percent: Constrained Regression</th>
+<th style="text-align: left;">Five Percent: Post-Processing</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">American Indian/Alaska Native</td>
+<td style="text-align: left;">$8,658</td>
+<td style="text-align: left;">-$370</td>
+<td style="text-align: left;">-$146</td>
+<td style="text-align: left;">-$146</td>
+<td style="text-align: left;">$29</td>
+<td style="text-align: left;">$29</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Asian/Pacific Islander</td>
+<td style="text-align: left;">$5,590</td>
+<td style="text-align: left;">$1,433</td>
+<td style="text-align: left;">$2,032</td>
+<td style="text-align: left;">$2,032</td>
+<td style="text-align: left;">$1,832</td>
+<td style="text-align: left;">$1,832</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Black</td>
+<td style="text-align: left;">$7,306</td>
+<td style="text-align: left;">$734</td>
+<td style="text-align: left;">$1,235</td>
+<td style="text-align: left;">$1,235</td>
+<td style="text-align: left;">$1,133</td>
+<td style="text-align: left;">$1,133</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Hispanic</td>
+<td style="text-align: left;">$6,268</td>
+<td style="text-align: left;">$1,040</td>
+<td style="text-align: left;">$1,667</td>
+<td style="text-align: left;">$1,667</td>
+<td style="text-align: left;">$1,439</td>
+<td style="text-align: left;">$1,439</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Non-Hispanic White</td>
+<td style="text-align: left;">$8,180</td>
+<td style="text-align: left;">-$125</td>
+<td style="text-align: left;">-$200</td>
+<td style="text-align: left;">-$196</td>
+<td style="text-align: left;">-$179</td>
+<td style="text-align: left;">-$177</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Additional Group</td>
+<td style="text-align: left;">$6,933</td>
+<td style="text-align: left;">$822</td>
+<td style="text-align: left;">$1,174</td>
+<td style="text-align: left;">$822</td>
+<td style="text-align: left;">$1,062</td>
+<td style="text-align: left;">$822</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Unknown</td>
+<td style="text-align: left;">$6,182</td>
+<td style="text-align: left;">$16</td>
+<td style="text-align: left;">$26</td>
+<td style="text-align: left;">$16</td>
+<td style="text-align: left;">$18</td>
+<td style="text-align: left;">$16</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="etable-3b.-observed-spending-and-net-compensation-by-algorithm-spending-target-and-racialethnic-group-for-the-2019-2020-cohort." class="level6">
+<h6 class="anchored" data-anchor-id="etable-3b.-observed-spending-and-net-compensation-by-algorithm-spending-target-and-racialethnic-group-for-the-2019-2020-cohort.">eTable 3b. Observed spending and net compensation by algorithm, spending target, and racial/ethnic group for the 2019-2020 cohort.</h6>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 4%">
+<col style="width: 10%">
+<col style="width: 18%">
+<col style="width: 15%">
+<col style="width: 19%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Race/Ethnicity</th>
+<th style="text-align: left;">Observed</th>
+<th style="text-align: left;">Baseline Regression</th>
+<th style="text-align: left;">Disparities: Constrained Regression</th>
+<th style="text-align: left;">Disparities: Post-Processing</th>
+<th style="text-align: left;">Five Percent: Constrained Regression</th>
+<th style="text-align: left;">Five Percent: Post-Processing</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">American Indian/Alaska Native</td>
+<td style="text-align: left;">$8,907</td>
+<td style="text-align: left;">-$526</td>
+<td style="text-align: left;">-$369</td>
+<td style="text-align: left;">-$369</td>
+<td style="text-align: left;">-$134</td>
+<td style="text-align: left;">-$134</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Asian/Pacific Islander</td>
+<td style="text-align: left;">$5,296</td>
+<td style="text-align: left;">$1,557</td>
+<td style="text-align: left;">$2,076</td>
+<td style="text-align: left;">$2,076</td>
+<td style="text-align: left;">$1,949</td>
+<td style="text-align: left;">$1,949</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Black</td>
+<td style="text-align: left;">$7,503</td>
+<td style="text-align: left;">$503</td>
+<td style="text-align: left;">$919</td>
+<td style="text-align: left;">$919</td>
+<td style="text-align: left;">$895</td>
+<td style="text-align: left;">$895</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Hispanic</td>
+<td style="text-align: left;">$6,178</td>
+<td style="text-align: left;">$967</td>
+<td style="text-align: left;">$1,446</td>
+<td style="text-align: left;">$1,446</td>
+<td style="text-align: left;">$1,359</td>
+<td style="text-align: left;">$1,359</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Non-Hispanic White</td>
+<td style="text-align: left;">$8,028</td>
+<td style="text-align: left;">-$114</td>
+<td style="text-align: left;">-$175</td>
+<td style="text-align: left;">-$172</td>
+<td style="text-align: left;">-$167</td>
+<td style="text-align: left;">-$165</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Additional Group</td>
+<td style="text-align: left;">$6,645</td>
+<td style="text-align: left;">$947</td>
+<td style="text-align: left;">$1,276</td>
+<td style="text-align: left;">$947</td>
+<td style="text-align: left;">$1,204</td>
+<td style="text-align: left;">$947</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Unknown</td>
+<td style="text-align: left;">$6,354</td>
+<td style="text-align: left;">$91</td>
+<td style="text-align: left;">$84</td>
+<td style="text-align: left;">$91</td>
+<td style="text-align: left;">$79</td>
+<td style="text-align: left;">$91</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="supplement_table_4" class="level6">
+<h6 class="anchored" data-anchor-id="supplement_table_4">eTable 4. Payment system fit across algorithms, spending targets, and cohorts.</h6>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 41%">
+<col style="width: 19%">
+<col style="width: 19%">
+<col style="width: 19%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Algorithm and Fair Spending Target</th>
+<th style="text-align: left;">2017-2018 Cohort</th>
+<th style="text-align: left;">2018-2019 Cohort</th>
+<th style="text-align: left;">2019-2020 Cohort</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Baseline Regression</td>
+<td style="text-align: left;">12.3%</td>
+<td style="text-align: left;">12.7%</td>
+<td style="text-align: left;">11.5%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Constrained Regression Disparities</td>
+<td style="text-align: left;">12.2%</td>
+<td style="text-align: left;">12.6%</td>
+<td style="text-align: left;">11.4%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Post-Processing Disparities</td>
+<td style="text-align: left;">12.3%</td>
+<td style="text-align: left;">12.7%</td>
+<td style="text-align: left;">11.4%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Constrained Regression Five Percent</td>
+<td style="text-align: left;">12.3%</td>
+<td style="text-align: left;">12.7%</td>
+<td style="text-align: left;">11.4%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Post-Processing Five Percent</td>
+<td style="text-align: left;">12.3%</td>
+<td style="text-align: left;">12.7%</td>
+<td style="text-align: left;">11.4%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="supplement_fig_4a" class="level6">
+<h6 class="anchored" data-anchor-id="supplement_fig_4a">eFigure 4a. Difference in predicted spending between constrained regression and post-processing by racial/ethnic group and county-level Social Vulnerability Index quintile for the 2017-2018 cohort.</h6>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="safe_figures/2017/svi_lines.png" class="img-fluid figure-img"></p>
+<figcaption>Note: Percentages denote the share of beneficiaries in each racial/ethnic group living in each Social Vulnerability Index quintile, where quintile 1 has the least exposure to adverse socioeconomic factors.</figcaption>
+</figure>
+</div>
+</section>
+<section id="supplement_fig_4b" class="level6">
+<h6 class="anchored" data-anchor-id="supplement_fig_4b">eFigure 4b. Difference in predicted spending between constrained regression and post-processing by racial/ethnic group and county-level Social Vulnerability Index quintile for the 2019-2020 cohort.</h6>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="safe_figures/2019/svi_lines.png" class="img-fluid figure-img"></p>
+<figcaption>Note: Percentages denote the share of beneficiaries in each racial/ethnic group living in each Social Vulnerability Index quintile, where quintile 1 has the least exposure to adverse socioeconomic factors.</figcaption>
+</figure>
+</div>
+
+</section>
+</section>
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body" role="list">
+<div id="ref-pope2004" class="csl-entry" role="listitem">
+<div class="csl-left-margin">1. </div><div class="csl-right-inline">Pope GC, Kautter J, Ellis RP, et al. Risk adjustment of medicare capitation payments using the CMS-HCC model. <em>Health Care Financing Review</em>. 2004;25(4):119-141.</div>
+</div>
+<div id="ref-pope2011" class="csl-entry" role="listitem">
+<div class="csl-left-margin">2. </div><div class="csl-right-inline">Pope G, Kautter J, Ingber M, Freeman S, Sekar R, Newhart C. <em>Evaluation of the CMS-HCC Risk Adjustment Model</em>.; 2011. <a href="https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/downloads/evaluation_risk_adj_model_2011.pdf">https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/downloads/evaluation_risk_adj_model_2011.pdf</a></div>
+</div>
+<div id="ref-mcwilliams2012" class="csl-entry" role="listitem">
+<div class="csl-left-margin">3. </div><div class="csl-right-inline">McWilliams JM, Hsu J, Newhouse JP. New risk-adjustment system was associated with reduced favorable selection in medicare advantage. <em>Health Affairs (Project Hope)</em>. 2012;31(12):2630-2640. doi:<a href="https://doi.org/10.1377/hlthaff.2011.1344">10.1377/hlthaff.2011.1344</a></div>
+</div>
+<div id="ref-ellis2018" class="csl-entry" role="listitem">
+<div class="csl-left-margin">4. </div><div class="csl-right-inline">Ellis RP, Martins B, Rose S. Chapter 3 - Risk Adjustment for Health Plan Payment. In: McGuire TG, Kleef RC van, eds. Academic Press; 2018:55-104. doi:<a href="https://doi.org/10.1016/B978-0-12-811325-7.00003-8">10.1016/B978-0-12-811325-7.00003-8</a></div>
+</div>
+<div id="ref-reportt2021" class="csl-entry" role="listitem">
+<div class="csl-left-margin">5. </div><div class="csl-right-inline"><em>Report to Congress: Risk Adjustment in Medicare Advantage</em>.; 2021. <a href="https://www.cms.gov/files/document/report-congress-risk-adjustment-medicare-advantage-december-2021.pdf">https://www.cms.gov/files/document/report-congress-risk-adjustment-medicare-advantage-december-2021.pdf</a></div>
+</div>
+<div id="ref-medicarepaymentadvisorycommission2024" class="csl-entry" role="listitem">
+<div class="csl-left-margin">6. </div><div class="csl-right-inline">Medicare Payment Advisory Commission. Chapter 12: The medicare advantage program: Status report. Published online March 2024. <a href="https://www.medpac.gov/wp-content/uploads/2024/03/Mar24_Ch12_MedPAC_Report_To_Congress_SEC.pdf">https://www.medpac.gov/wp-content/uploads/2024/03/Mar24_Ch12_MedPAC_Report_To_Congress_SEC.pdf</a></div>
+</div>
+<div id="ref-rose2016" class="csl-entry" role="listitem">
+<div class="csl-left-margin">7. </div><div class="csl-right-inline">Rose S. A machine learning framework for plan payment risk adjustment. <em>Health Services Research</em>. 2016;51(6):2358-2374. doi:<a href="https://doi.org/10.1111/1475-6773.12464">10.1111/1475-6773.12464</a></div>
+</div>
+<div id="ref-rose2017" class="csl-entry" role="listitem">
+<div class="csl-left-margin">8. </div><div class="csl-right-inline">Rose S, Bergquist SL, Layton TJ. Computational health economics for identification of unprofitable health care enrollees. <em>Biostatistics (Oxford, England)</em>. 2017;18(4):682-694. doi:<a href="https://doi.org/10.1093/biostatistics/kxx012">10.1093/biostatistics/kxx012</a></div>
+</div>
+<div id="ref-rose2018" class="csl-entry" role="listitem">
+<div class="csl-left-margin">9. </div><div class="csl-right-inline">Rose S. Robust machine learning variable importance analyses of medical conditions for health care spending. <em>Health Services Research</em>. 2018;53(5):3836-3854. doi:<a href="https://doi.org/10.1111/1475-6773.12848">10.1111/1475-6773.12848</a></div>
+</div>
+<div id="ref-kan2019" class="csl-entry" role="listitem">
+<div class="csl-left-margin">10. </div><div class="csl-right-inline">Kan HJ, Kharrazi H, Chang HY, Bodycombe D, Lemke K, Weiner JP. Exploring the use of machine learning for risk adjustment: A comparison of standard and penalized linear regression models in predicting health care costs in older adults. <em>PloS One</em>. 2019;14(3):e0213258. doi:<a href="https://doi.org/10.1371/journal.pone.0213258">10.1371/journal.pone.0213258</a></div>
+</div>
+<div id="ref-bergquist2019" class="csl-entry" role="listitem">
+<div class="csl-left-margin">11. </div><div class="csl-right-inline">Bergquist SL, Layton TJ, McGuire TG, Rose S. Data transformations to improve the performance of health plan payment methods. <em>Journal of Health Economics</em>. 2019;66:195-207. doi:<a href="https://doi.org/10.1016/j.jhealeco.2019.05.005">10.1016/j.jhealeco.2019.05.005</a></div>
+</div>
+<div id="ref-irvin2020" class="csl-entry" role="listitem">
+<div class="csl-left-margin">12. </div><div class="csl-right-inline">Irvin JA, Kondrich AA, Ko M, et al. Incorporating machine learning and social determinants of health indicators into prospective risk adjustment for health plan payments. <em>BMC Public Health</em>. 2020;20(1):608. doi:<a href="https://doi.org/10.1186/s12889-020-08735-0">10.1186/s12889-020-08735-0</a></div>
+</div>
+<div id="ref-zink2020" class="csl-entry" role="listitem">
+<div class="csl-left-margin">13. </div><div class="csl-right-inline">Zink A, Rose S. Fair regression for health care spending. <em>Biometrics</em>. 2020;76(3):973-982. doi:<a href="https://doi.org/10.1111/biom.13206">10.1111/biom.13206</a></div>
+</div>
+<div id="ref-zink2021" class="csl-entry" role="listitem">
+<div class="csl-left-margin">14. </div><div class="csl-right-inline">Zink A, Rose S. Identifying undercompensated groups defined by multiple attributes in risk adjustment. <em>BMJ Health &amp; Care Informatics</em>. 2021;28(1):e100414. doi:<a href="https://doi.org/10.1136/bmjhci-2021-100414">10.1136/bmjhci-2021-100414</a></div>
+</div>
+<div id="ref-mcguire2021" class="csl-entry" role="listitem">
+<div class="csl-left-margin">15. </div><div class="csl-right-inline">McGuire TG, Zink AL, Rose S. Improving the performance of risk adjustment systems: Constrained regressions, reinsurance, and variable selection. <em>American Journal of Health Economics</em>. 2021;7(4):497-521. doi:<a href="https://doi.org/10.1086/716199">10.1086/716199</a></div>
+</div>
+<div id="ref-andriola2024" class="csl-entry" role="listitem">
+<div class="csl-left-margin">16. </div><div class="csl-right-inline">Andriola C, Ellis RP, Siracuse JJ, et al. A novel machine learning algorithm for creating risk-adjusted payment formulas. <em>JAMA Health Forum</em>. 2024;5(4):e240625. doi:<a href="https://doi.org/10.1001/jamahealthforum.2024.0625">10.1001/jamahealthforum.2024.0625</a></div>
+</div>
+<div id="ref-skopec" class="csl-entry" role="listitem">
+<div class="csl-left-margin">17. </div><div class="csl-right-inline">Skopec L, Garrett B, Gangopadhyaya A. Reimagining the medicare advantage risk adjustment program.</div>
+</div>
+<div id="ref-meyers2021" class="csl-entry" role="listitem">
+<div class="csl-left-margin">18. </div><div class="csl-right-inline">Meyers DJ, Mor V, Rahman M, Trivedi AN. Growth in medicare advantage greatest among black and hispanic enrollees. <em>Health affairs (Project Hope)</em>. 2021;40(6):945-950. doi:<a href="https://doi.org/10.1377/hlthaff.2021.00118">10.1377/hlthaff.2021.00118</a></div>
+</div>
+<div id="ref-ochieng2023" class="csl-entry" role="listitem">
+<div class="csl-left-margin">19. </div><div class="csl-right-inline">Ochieng N, Biniek JF, Cubanski J, Published TN. Disparities in health measures by race and ethnicity among beneficiaries in medicare advantage: A review of the literature. Published online December 13, 2023. <a href="https://www.kff.org/medicare/report/disparities-in-health-measures-by-race-and-ethnicity-among-beneficiaries-in-medicare-advantage-a-review-of-the-literature/">https://www.kff.org/medicare/report/disparities-in-health-measures-by-race-and-ethnicity-among-beneficiaries-in-medicare-advantage-a-review-of-the-literature/</a></div>
+</div>
+<div id="ref-bureau" class="csl-entry" role="listitem">
+<div class="csl-left-margin">20. </div><div class="csl-right-inline">Bureau UC. 2023 national population projections datasets. <a href="https://www.census.gov/data/datasets/2023/demo/popproj/2023-popproj.html">https://www.census.gov/data/datasets/2023/demo/popproj/2023-popproj.html</a></div>
+</div>
+<div id="ref-wallace2021" class="csl-entry" role="listitem">
+<div class="csl-left-margin">21. </div><div class="csl-right-inline">Wallace J, Jiang K, Goldsmith-Pinkham P, Song Z. Changes in racial and ethnic disparities in access to care and health among US adults at age 65 years. <em>JAMA Internal Medicine</em>. 2021;181(9):1207-1215. doi:<a href="https://doi.org/10.1001/jamainternmed.2021.3922">10.1001/jamainternmed.2021.3922</a></div>
+</div>
+<div id="ref-dieleman2021" class="csl-entry" role="listitem">
+<div class="csl-left-margin">22. </div><div class="csl-right-inline">Dieleman JL, Chen C, Crosby SW, et al. US health care spending by race and ethnicity, 2002-2016. <em>JAMA</em>. 2021;326(7):649-659. doi:<a href="https://doi.org/10.1001/jama.2021.9937">10.1001/jama.2021.9937</a></div>
+</div>
+<div id="ref-baik2023" class="csl-entry" role="listitem">
+<div class="csl-left-margin">23. </div><div class="csl-right-inline">Baik SH, Baye F, McDonald CJ. Trends in racial disparities in healthcare expenditures among senior medicare fee-for-service enrollees in 2007 - 2020. <em>Journal of Racial and Ethnic Health Disparities</em>. Published online November 13, 2023. doi:<a href="https://doi.org/10.1007/s40615-023-01832-x">10.1007/s40615-023-01832-x</a></div>
+</div>
+<div id="ref-mcwilliams2023" class="csl-entry" role="listitem">
+<div class="csl-left-margin">24. </div><div class="csl-right-inline">McWilliams JM, Weinreb G, Ding L, Ndumele CD, Wallace J. Risk adjustment and promoting health equity in population-based payment: Concepts and evidence. <em>Health Affairs</em>. 2023;42(1):105-114. doi:<a href="https://doi.org/10.1377/hlthaff.2022.00916">10.1377/hlthaff.2022.00916</a></div>
+</div>
+<div id="ref-nationalacademiesofsciencesengineeringandmedicine2024" class="csl-entry" role="listitem">
+<div class="csl-left-margin">25. </div><div class="csl-right-inline">National Academies of Sciences, Engineering, and Medicine. Ending Unequal Treatment: Strategies to Achieve Equitable Health Care and Optimal Health for All. Published online 2024. <a href="https://doi.org/10.17226/27820">https://doi.org/10.17226/27820</a></div>
+</div>
+<div id="ref-gangopadhyaya2023" class="csl-entry" role="listitem">
+<div class="csl-left-margin">26. </div><div class="csl-right-inline">Gangopadhyaya A, Zuckerman S, Rao N. Assessing the difference in racial and ethnic disparities in access to and use of care between traditional medicare and medicare advantage. <em>Health Services Research</em>. 2023;58(4):914-923. doi:<a href="https://doi.org/10.1111/1475-6773.14150">10.1111/1475-6773.14150</a></div>
+</div>
+<div id="ref-mbsf_old" class="csl-entry" role="listitem">
+<div class="csl-left-margin">27. </div><div class="csl-right-inline">Stanford Center for Population Health Sciences. <span class="nocase">Medicare 20% [2006-2018] Enrollment/Summary (MBSF) (Version 1.0) [Data set]</span>. <em><span>Redivis (RRID:SCR_023111)</span></em>. Published online 2021. doi:<a href="https://doi.org/10.57761/wnn9-b060">10.57761/wnn9-b060</a></div>
+</div>
+<div id="ref-mbsf_new" class="csl-entry" role="listitem">
+<div class="csl-left-margin">28. </div><div class="csl-right-inline">Stanford Center for Population Health Sciences. <span class="nocase">Medicare 20% [2019-2020] Enrollment/Summary (MBSF) (Version 1.0) [Data set]</span>. <em><span>Redivis (RRID:SCR_023111)</span></em>. Published online 2023. doi:<a href="https://doi.org/10.57761/xg2t-1343">10.57761/xg2t-1343</a></div>
+</div>
+<div id="ref-carrier_old" class="csl-entry" role="listitem">
+<div class="csl-left-margin">29. </div><div class="csl-right-inline">Stanford Center for Population Health Sciences. <span class="nocase">Medicare 20% [2006-2018] Carrier (Version 1.0) [Data set]</span>. <em><span>Redivis (RRID:SCR_023111)</span></em>. Published online 2021. doi:<a href="https://doi.org/10.57761/d1kp-xa44">10.57761/d1kp-xa44</a></div>
+</div>
+<div id="ref-carrier_new" class="csl-entry" role="listitem">
+<div class="csl-left-margin">30. </div><div class="csl-right-inline">Stanford Center for Population Health Sciences. <span class="nocase">Medicare 20% [2019-2020] Carrier (Version 1.0) [Data set]</span>. <em><span>Redivis (RRID:SCR_023111)</span></em>. Published online 2023. doi:<a href="https://doi.org/10.57761/w5a5-yb97">10.57761/w5a5-yb97</a></div>
+</div>
+<div id="ref-outpatient_old" class="csl-entry" role="listitem">
+<div class="csl-left-margin">31. </div><div class="csl-right-inline">Stanford Center for Population Health Sciences. <span class="nocase">Medicare 20% [2006-2018] Outpatient (Version 1.0) [Data set]</span>. <em><span>Redivis (RRID:SCR_023111)</span></em>. Published online 2021. doi:<a href="https://doi.org/10.57761/qgsq-tj66">10.57761/qgsq-tj66</a></div>
+</div>
+<div id="ref-outpatient_new" class="csl-entry" role="listitem">
+<div class="csl-left-margin">32. </div><div class="csl-right-inline">Stanford Center for Population Health Sciences. <span class="nocase">Medicare 20% [2019-2020] Outpatient (Version 1.0) [Data set]</span>. <em><span>Redivis (RRID:SCR_023111)</span></em>. Published online 2023. doi:<a href="https://doi.org/10.57761/9ct0-kf53">10.57761/9ct0-kf53</a></div>
+</div>
+<div id="ref-medpar_old" class="csl-entry" role="listitem">
+<div class="csl-left-margin">33. </div><div class="csl-right-inline">Stanford Center for Population Health Sciences. <span class="nocase">Medicare 20% [2006-2018] MedPAR (Version 1.0) [Data set]</span>. <em><span>Redivis (RRID:SCR_023111)</span></em>. Published online 2021. doi:<a href="https://doi.org/10.57761/nc92-5272">10.57761/nc92-5272</a></div>
+</div>
+<div id="ref-medpar_new" class="csl-entry" role="listitem">
+<div class="csl-left-margin">34. </div><div class="csl-right-inline">Stanford Center for Population Health Sciences. <span class="nocase">Medicare 20% [2019-2020] MedPAR (Version 1.0) [Data set]</span>. <em><span>Redivis (RRID:SCR_023111)</span></em>. Published online 2023. doi:<a href="https://doi.org/10.57761/67t8-9d86">10.57761/67t8-9d86</a></div>
+</div>
+<div id="ref-eicheldinger2008" class="csl-entry" role="listitem">
+<div class="csl-left-margin">35. </div><div class="csl-right-inline">Eicheldinger C, Bonito A. More accurate racial and ethnic codes for medicare administrative data. <em>Health Care Financing Review</em>. 2008;29(3):27-42.</div>
+</div>
+<div id="ref-medicare" class="csl-entry" role="listitem">
+<div class="csl-left-margin">36. </div><div class="csl-right-inline">Medicare risk adjustment eligible CPT/HCPCS codes | CMS. <a href="https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/Risk-Adjustors-Items/CPT-HCPCS">https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/Risk-Adjustors-Items/CPT-HCPCS</a></div>
+</div>
+<div id="ref-centersformedicareandmedicaidservices" class="csl-entry" role="listitem">
+<div class="csl-left-margin">37. </div><div class="csl-right-inline">Medicare C for, Medicaid Services. 2020 model software/ICD-10 mappings | CMS. <a href="https://www.cms.gov/medicare/health-plans/medicareadvtgspecratestats/risk-adjustors-items/risk2020">https://www.cms.gov/medicare/health-plans/medicareadvtgspecratestats/risk-adjustors-items/risk2020</a></div>
+</div>
+<div id="ref-cdc/atsd2024" class="csl-entry" role="listitem">
+<div class="csl-left-margin">38. </div><div class="csl-right-inline">CDC/ATSDR social vulnerability index (CDC/ATSDR SVI). Published online June 14, 2024. <a href="https://www.atsdr.cdc.gov/placeandhealth/svi/index.html">https://www.atsdr.cdc.gov/placeandhealth/svi/index.html</a></div>
+</div>
+<div id="ref-diamond2016cvxpy" class="csl-entry" role="listitem">
+<div class="csl-left-margin">39. </div><div class="csl-right-inline">Diamond S, Boyd S. <span>CVXPY</span>: <span>A</span> <span>P</span>ython-embedded modeling language for convex optimization. <em>Journal of Machine Learning Research</em>. 2016;17(83):1-5.</div>
+</div>
+<div id="ref-agrawal2018rewriting" class="csl-entry" role="listitem">
+<div class="csl-left-margin">40. </div><div class="csl-right-inline">Agrawal A, Verschueren R, Diamond S, Boyd S. A rewriting system for convex optimization problems. <em>Journal of Control and Decision</em>. 2018;5(1):42-60.</div>
+</div>
+<div id="ref-cattel2023" class="csl-entry" role="listitem">
+<div class="csl-left-margin">41. </div><div class="csl-right-inline">Cattel FE D., Vliet RCJA van. Onderzoek risicoverevening 2024: Berekening normbedragen" rapport ESHPM, rotterdam: Erasmus universiteit. English: "Research for dutch risk equalization model 2024: Calibration of payment weights. <em>Rotterdam: Erasmus Universiteit Rotterdam</em>. Published online 2023.</div>
+</div>
+<div id="ref-pmlr-v248-cusick24a" class="csl-entry" role="listitem">
+<div class="csl-left-margin">42. </div><div class="csl-right-inline">Cusick MM, Chertow GM, Owens DK, Williams MY, Rose S. Algorithmic changes are not enough: Evaluating the removal of race adjustment from the eGFR equation. In: Pollard T, Choi E, Singhal P, et al., eds. <em>Proceedings of the Fifth Conference on Health, Inference, and Learning</em>. Vol 248. Proceedings of machine learning research. PMLR; 2024:619-643. <a href="https://proceedings.mlr.press/v248/cusick24a.html">https://proceedings.mlr.press/v248/cusick24a.html</a></div>
+</div>
+<div id="ref-jarrín2020" class="csl-entry" role="listitem">
+<div class="csl-left-margin">43. </div><div class="csl-right-inline">Jarrín OF, Nyandege AN, Grafova IB, Dong X, Lin H. Validity of race and ethnicity codes in medicare administrative data compared with gold-standard self-reported race collected during routine home health care visits. <em>Medical Care</em>. 2020;58(1):e1. doi:<a href="https://doi.org/10.1097/MLR.0000000000001216">10.1097/MLR.0000000000001216</a></div>
+</div>
+<div id="ref-advanced" class="csl-entry" role="listitem">
+<div class="csl-left-margin">44. </div><div class="csl-right-inline">Advanced topics <span></span> CVX users’ guide. <a href="https://cvxr.com/cvx/doc/advanced.html#eliminating-quadratic-forms">https://cvxr.com/cvx/doc/advanced.html#eliminating-quadratic-forms</a></div>
+</div>
+</div></section></div></main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,17 @@
+"label","number"
+"num_benes",4443148
+"num_died",188073
+"mean_spending",7840.54256219239
+"median_spending",1933.27
+"iqr_lower_spending",602.27
+"iqr_upper_spending",6209.6725
+"n_cost_exceed_250K",2220
+"n_male",1970029
+"n_orig_disabled",332297
+"mean_age",75.1713510330964
+"n_zero_hcc",1857656
+"n_1_hcc",1169439
+"n_2_hcc",614401
+"n_3_4_5_hcc",617513
+"n_gt6_hcc",184139
+"n_counties_noref",2945

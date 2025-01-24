@@ -1,0 +1,8 @@
+"rti_race","num_hcc","cost","orig_dis","pred_county","year"
+"American Indian/Alaska Native",1.5,9043,15,8895,2018
+"Asian/Pacific Islander",0.9,5868,4,7985,2018
+"Black",1.4,7734,15,8943,2018
+"Hispanic",1.1,6550,11,8151,2018
+"Non-Hispanic White",1.4,8557,7,8557,2018
+"Other",1.2,7183,11,8604,2018
+"Unknown",0.9,6564,3,6791,2018

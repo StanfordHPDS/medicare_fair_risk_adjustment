@@ -1,0 +1,9 @@
+"variable","All","American Indian/Alaska Native","Asian/Pacific Islander","Black","Hispanic","Non-Hispanic White","Other","Unknown"
+"sample_size",4364834,15928,79036,245457,150123,3767527,33327,73436
+"mean_observed_cost",7977,8658,5590,7306,6268,8180,6933,6182
+"mean_predicted_cost",7977,8288,7023,8040,7308,8055,7755,6198
+"mean_age",75.2,74.3,74.3,74.3,74.2,75.5,74.4,68.9
+"pct_male",44.5,43.1,42.1,43.1,48,44,46.1,65.7
+"mean_n_hcc",1.3,1.5,0.9,1.4,1.1,1.3,1.1,0.8
+"pct_died",3.9,3.9,2.5,3.6,3,4.1,2.8,1.2
+"pct_orig_disabled",7.7,15,4.2,14.9,10.9,7.2,11.5,3.1
