@@ -1,6 +1,6 @@
 # Algorithms to Improve Fairness in Medicare Risk Adjustment
 
-This repository contains analytic code for a project examining the potential for modern algorithms to improve fairness for multiple minoritized racial/ethnic groups while maintaining overall performance in Medicare risk adjustment. In this analysis, we established a baseline regression that approximates the least squares regression used by CMS to estimate risk scores for Medicare plan payment risk adjustment. We evaluated two algorithms to achieve fair spending targets: constrained regression and post-processing. We found that constrained regression and post-processing can incorporate fairness objectives in the Medicare risk adjustment algorithm with minimal reduction in overall fit.
+This repository contains analytic code for the paper "Algorithms to Improve Fairness in Medicare Risk Adjustment" by Marissa Reitsma, Thomas McGuire, and Sherri Rose (2025), [medRxiv:10.1101/2025.01.25.25321057](https://www.medrxiv.org/content/10.1101/2025.01.25.25321057v1).
 
 Medicare data contain protected health information and cannot be accessed without IRB approval and a Research Identifiable File (RIF) Data Use Agreement with CMS. As a result, no data are made available in this repository, but the code should allow for replication by reserachers with access to the Medicare RIF data.
 
