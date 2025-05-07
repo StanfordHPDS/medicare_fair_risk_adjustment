@@ -48,7 +48,7 @@ Payment system design creates incentives that impact healthcare spending, access
 
 ##### Objective
 
-To develop risk adjustment algorithms that can achieve fair spending targets, and compare their performance to a baseline that emulates the least squares regression approach used by the Centers for Medicare and Medicaid Services.
+To develop risk adjustment algorithms that can achieve fair spending targets and compare their performance to a baseline that emulates the least squares regression approach used by the Centers for Medicare and Medicaid Services.
 
 ##### Design
 
@@ -60,7 +60,7 @@ Data from Medicare beneficiaries with documented residence in the United States 
 
 ##### Participants
 
-A random 20% sample of beneficiaries enrolled in Traditional Medicare. Included beneficiaries were aged 65 years and older, and did not have Medicaid dual eligibility. Race/ethnicity was assigned using the Research Triangle Institute enhanced indicator.
+A random 20% sample of beneficiaries enrolled in Traditional Medicare. Included beneficiaries were aged 65 years and older and did not have Medicaid dual eligibility. Race/ethnicity was assigned using the Research Triangle Institute enhanced indicator.
 
 ##### Main Outcome and Measures
 
@@ -81,11 +81,11 @@ Constrained regression and post-processing can incorporate fairness objectives i
 
 ## Background
 
-Risk adjustment is a core component of capitated payment systems, aiming to mitigate selection incentives that encourage plans to attract profitable enrollees and avoid unprofitable enrollees. [@pope2004; @pope2011; @mcwilliams2012; @ellis2018; @reportt2021] The algorithms used to risk adjust payments to Medicare Advantage plans predict healthcare spending as a function of beneficiary demographic characteristics and a set of diagnosed health conditions. [@pope2004; @reportt2021; @medicarepaymentadvisorycommission2024] With Medicare Advantage accounting for more than half of Medicare spending, improvements to Medicare's risk adjustment system have the potential to lead to substantial changes in healthcare spending, access, and outcomes.
+Risk adjustment is a core component of capitated payment systems aiming to mitigate selection incentives that encourage plans to attract profitable enrollees and avoid unprofitable enrollees. [@pope2004; @pope2011; @mcwilliams2012; @ellis2018; @reportt2021; @mcwilliams1; @mcwilliams2] The algorithms used to risk adjust payments to Medicare Advantage plans predict healthcare spending as a function of beneficiary demographic characteristics and a set of diagnosed health conditions. [@pope2004; @reportt2021; @medicarepaymentadvisorycommission2024] With Medicare Advantage accounting for more than half of Medicare spending, improvements to Medicare's risk adjustment system have the potential to lead to substantial changes in healthcare spending, access, and outcomes.
 
-Currently, Medicare Advantage plan payment risk adjustment is based on least squares regression. Prior studies have proposed approaches to improve risk adjustment by increasing predictive power, mitigating incentives for upcoding, and reducing opportunities for favorable selection. [@rose2016; @rose2017; @rose2018; @kan2019; @bergquist2019; @irvin2020; @zink2020; @zink2021; @mcguire2021; @andriola2024; @skopec] These studies employ a range of methods, including constrained regressions, penalized regressions, data transformations, random forests, and other machine learning algorithms. Only a few consider fair regression methods, which optimize for both overall and group-level fit metrics for marginalized groups. These methods do not add marginalized groups as predictors in the regression, which can reinforce inequities from the data. [@bergquist2019; @zink2020] Notably, algorithms to achieve fairness goals across multiple minoritized racial/ethnic groups in Medicare have not been examined previously. This gap in the literature is important because a greater percentage of Black, Hispanic, and Asian/Pacific Islander beneficiaries are enrolled in Medicare Advantage plans, compared to white beneficiaries. [@meyers2021; @ochieng2023] Additionally, the population aged 65 years and older is projected to become more racially and ethnically diverse over the coming decades. [@bureau]
+Currently, Medicare Advantage plan payment risk adjustment is based on least squares regression. Prior studies have proposed approaches to improve risk adjustment by increasing predictive power, mitigating incentives for upcoding, and reducing opportunities for favorable selection. [@rose2016; @rose2017; @vankleef2017 ; @rose2018; @kan2019; @bergquist2019; @irvin2020; @zink2020; @zink2021; @mcguire2021; @andriola2024; @skopec] These studies employ a range of methods, including constrained regressions, penalized regressions, data transformations, random forests, and other machine learning algorithms. Only a few consider fair regression methods, which optimize for both overall and group-level fit metrics for marginalized groups. These methods do not add marginalized groups as predictors in the regression, which can reinforce inequities from the data. [@bergquist2019; @zink2020] Notably, algorithms to achieve fairness goals across multiple minoritized racial/ethnic groups in Medicare have not been examined previously. This gap in the literature is important because a greater percentage of Black, Hispanic, and Asian/Pacific Islander beneficiaries are enrolled in Medicare Advantage plans, compared to white beneficiaries. [@meyers2021; @ochieng2023] Additionally, the population aged 65 years and older is projected to become more racially and ethnically diverse over the coming decades. [@bureau]
 
-Although Medicare eligibility reduces racial/ethnic disparities in insurance coverage, disparities in healthcare access, utilization, spending, and outcomes persist. [@wallace2021; @dieleman2021; @baik2023; @mcwilliams2023; @nationalacademiesofsciencesengineeringandmedicine2024] Historical fee-for-service spending data, which are used to estimate risk scores and determine payments, embed these longstanding disparities. Recently, risk adjusted payments were documented to exceed observed spending for Black and Hispanic beneficiaries. This suggests that population-based payment systems could promote health equity though resource reallocation towards historically marginalized groups. [@mcwilliams2023] The existing payment system leaves access and utilization disparities for Medicare Advantage beneficiaries, [@gangopadhyaya2023; @ochieng2023] which can lead to the risk adjusted payments exceeding the observed (suboptimal) spending.
+Although Medicare eligibility reduces racial/ethnic disparities in insurance coverage, disparities in healthcare access, utilization, spending, and outcomes persist. [@obermeyer2019; @wallace2021; @dieleman2021; @baik2023; @mcwilliams2023; @nationalacademiesofsciencesengineeringandmedicine2024] Historical fee-for-service spending data, which are used by the Centers for Medicare and Medicaid Services (CMS) to estimate risk scores and determine payments, embed these longstanding disparities. Recently, risk adjusted payments were documented to exceed observed spending for Black and Hispanic beneficiaries. This suggests that population-based payment systems could promote health equity though resource reallocation towards historically marginalized groups. [@mcwilliams2023] The existing payment system leaves access and utilization disparities for Medicare Advantage beneficiaries, [@gangopadhyaya2023; @ochieng2023] which can lead to the risk adjusted payments exceeding the observed (suboptimal) spending.
 
 This study demonstrates the potential for algorithmic tools to achieve more equitable plan payment for Medicare. First, we describe existing levels of net compensation by racial/ethnic group and propose a basic measure of healthcare spending disparity that can inform fair spending targets. We then evaluate two approaches to achieve fair spending targets: constrained regression and post-processing. Our analysis presents algorithms for Medicare risk adjustment that promote more equitable payments, maintain current levels of performance, and remain flexible, feasible, transparent, and interpretable.
 
@@ -93,7 +93,7 @@ This study demonstrates the potential for algorithmic tools to achieve more equi
 
 #### Study Design and Data
 
-We analyzed a 20% random sample of Medicare fee-for-service beneficiaries, and included claims occurring between January 1, 2017 and December 31, 2020. [@mbsf_old; @mbsf_new; @carrier_old; @carrier_new; @outpatient_old; @outpatient_new; @medpar_old; @medpar_new] Medicare risk adjustment is prospective, where observed beneficiary demographic characteristics and health conditions from a given year are used to predict spending in the following year. As a result, our analytic cohorts each span two calendar years. These cohorts included beneficiaries who were aged 65 years and older, continuously enrolled in Medicare Parts A and B, not enrolled in Medicare Part C, and not dual eligible for Medicaid. Eligibility criteria were based on the largest of the six community segments that the Centers for Medicare and Medicaid Services (CMS) uses to stratify beneficiaries for risk adjustment. In our study, we included beneficiaries who died in the payment year, but excluded beneficiaries who became ineligible for other reasons, such as transitioning to a Part C plan. Further details are included in the [Supplement](#supp_eligibility).
+We analyzed a 20% random sample of Medicare fee-for-service beneficiaries and included claims occurring between January 1, 2017 and December 31, 2020. [@mbsf_old; @mbsf_new; @carrier_old; @carrier_new; @outpatient_old; @outpatient_new; @medpar_old; @medpar_new] Medicare risk adjustment is prospective, where observed beneficiary demographic characteristics and health conditions from a given year are used to predict spending in the following year. As a result, our analytic cohorts each span two calendar years. These cohorts included beneficiaries who were aged 65 years and older, continuously enrolled in Medicare Parts A and B, not enrolled in Medicare Part C, and not dual eligible for Medicaid. Eligibility criteria were based on the largest of the six community segments that CMS uses to stratify beneficiaries for risk adjustment. In our study, we included beneficiaries who died in the payment year, but excluded beneficiaries who became ineligible for other reasons, such as transitioning to a Part C plan. Further details are included in the [Supplement](#supp_eligibility).
 
 ```{r, echo = FALSE, warning= FALSE, message = FALSE}
 hcc_map <- fread("safe_figures/2020 Midyear_Final ICD-10-CM Mappings.csv")
@@ -132,7 +132,7 @@ Details on these risk adjustment algorithms are included in the [Supplement.](#s
 
 #### Statistical Analysis
 
-We used 10-fold cross-validation to generate out-of-sample estimates of overall and group-level algorithm performance. Overall performance was measured by mean absolute error and payment system fit. Payment system fit is equivalent to $R^2$ for the baseline and constrained regressions. Payment system fit for the post-processing algorithm is equal to the residual sum of squares using the post-processed predicted spending, divided by the total sum of squares. We computed net compensation to evaluate group-level algorithm performance. Finally, we evaluated the difference in predicted spending between algorithms by the socioeconomic status domain of the county-level Centers for Disease Control and Prevention and Agency for Toxic Substance and Disease Registry Social Vulnerability Index (SVI). [@cdc/atsd2024] Higher SVI values reflect greater exposure to socioeconomic factors that can adversely affect health outcomes.
+We used 10-fold cross-validation to generate out-of-sample estimates of overall and group-level algorithm performance. Overall performance was measured by mean absolute error and payment system fit. Payment system fit is equivalent to $R^2$ for the baseline and constrained regressions. Payment system fit for the post-processing algorithm is equal to one minus the residual sum of squares using the post-processed predicted spending, divided by the total sum of squares. We computed net compensation to evaluate group-level algorithm performance. Finally, since the Medicare data do not include individual-level indicators of socioeconomic status, we evaluated the difference in predicted spending between algorithms by the socioeconomic status domain of the county-level Centers for Disease Control and Prevention and Agency for Toxic Substance and Disease Registry Social Vulnerability Index (SVI). [@cdc/atsd2024] Higher SVI values reflect greater exposure to socioeconomic factors that can adversely affect health outcomes.
 
 Our main analysis focused on the 2018-2019 cohort because it included the most recent payment year prior to the COVID-19 pandemic for which we had access to data. Sensitivity analyses focused on the 2017-2018 and 2019-2020 cohorts. Additionally, we examined the sensitivity of out-of-sample algorithm performance to exclusion of beneficiaries who died in the payment year.
 
@@ -247,7 +247,7 @@ group_text <- table2[, .(spec, rti_race, oos_net_compensation_rti, pred_ratio)]
 
 The baseline regression resulted in undercompensation for American Indian/Alaska Native (`{r} spending_table$"Baseline Regression"[spending_table$"Race/Ethnicity"=="American Indian/Alaska Native"]`) and Non-Hispanic white (`{r} spending_table$"Baseline Regression"[spending_table$"Race/Ethnicity"=="Non-Hispanic White"]`) beneficiaries, and overcompensation for Asian/Pacific Islander (+`{r} spending_table$"Baseline Regression"[spending_table$"Race/Ethnicity"=="Asian/Pacific Islander"]`), Black (+`{r} spending_table$"Baseline Regression"[spending_table$"Race/Ethnicity"=="Black"]`), Hispanic (+`{r} spending_table$"Baseline Regression"[spending_table$"Race/Ethnicity"=="Hispanic"]`), Additional Group (+`{r} spending_table$"Baseline Regression"[spending_table$"Race/Ethnicity"=="Additional Group"]`), and Unknown (+`{r} spending_table$"Baseline Regression"[spending_table$"Race/Ethnicity"=="Unknown"]`) beneficiaries [(Table 1)](#table_1).
 
-Disparities-based fair spending targets added varying amounts to net compensation from the baseline regression: \$`{r} policy_targets$additional_disparities[policy_targets$rti_race=="American Indian/Alaska Native" & policy_targets$year==2018]` for American Indian/Alaska Native beneficiaries, \$`{r} policy_targets$additional_disparities[policy_targets$rti_race=="Asian/Pacific Islander" & policy_targets$year==2018]` for Asian/Pacific Islander beneficiaries, \$`{r} policy_targets$additional_disparities[policy_targets$rti_race=="Black" & policy_targets$year==2018]` for Black beneficiaries, and \$`{r} policy_targets$additional_disparities[policy_targets$rti_race=="Hispanic" & policy_targets$year==2018]` for Hispanic beneficiaries [(Table 2)](#table_2). These targets reflect additional predicted spending if beneficiaries in minoritized racial/ethnic groups had sufficient healthcare access, such that their spending matched that of non-Hispanic white beneficiaries, conditional on age group, documented sex, number of diagnosed HCCs, originally disabled status, and county of residence.
+Disparities-based fair spending targets added varying amounts to net compensation from the baseline regression: \$`{r} policy_targets$additional_disparities[policy_targets$rti_race=="American Indian/Alaska Native" & policy_targets$year==2018]` for American Indian/Alaska Native beneficiaries, \$`{r} policy_targets$additional_disparities[policy_targets$rti_race=="Asian/Pacific Islander" & policy_targets$year==2018]` for Asian/Pacific Islander beneficiaries, \$`{r} policy_targets$additional_disparities[policy_targets$rti_race=="Black" & policy_targets$year==2018]` for Black beneficiaries, and \$`{r} policy_targets$additional_disparities[policy_targets$rti_race=="Hispanic" & policy_targets$year==2018]` for Hispanic beneficiaries [(Table 2)](#table_2). These targets reflect additional predicted spending if beneficiaries in minoritized racial/ethnic groups had sufficient healthcare access, such that their spending matched that of non-Hispanic white beneficiaries, conditional on age group, documented sex, number of diagnosed HCCs, originally disabled status, and county of residence [(eTable 1 in the Supplement)](#supplement_table_1).
 
 Fair spending targets based on five percent of overall mean spending increased net compensation by `{r} dollar(policy_targets$additional_fivepct[policy_targets$year==2018 & policy_targets$rti_race=="Black"])` for minoritized racial/ethnic groups.
 
@@ -265,7 +265,7 @@ kable(policy_targets)
 
 #### Algorithm Performance
 
-The baseline regression achieved an out-of-sample mean absolute error of `{r} dollar(overall$mae[overall$spec=="Baseline"])` and payment system fit of `{r} percent(overall$payment_system_fit[overall$spec=="Baseline"]/100, accuracy = 0.1)` [(Table 3)](#table_3). Achieving fair spending targets using constrained regression or post-processing resulted in only a small reduction in out-of-sample predictive performance. Compared to the baseline regression, payment system fit decreased by less than 0.1 percentage points and mean absolute error increased by at most \$21 across both sets of fair spending targets and both algorithms. Out-of-sample net compensation was similar to in-sample baseline net compensation and net compensation for fair spending targets [(eTable 1 in the Supplement)](#supplement_table_1).
+The baseline regression achieved an out-of-sample mean absolute error of `{r} dollar(overall$mae[overall$spec=="Baseline"])` and payment system fit of `{r} percent(overall$payment_system_fit[overall$spec=="Baseline"]/100, accuracy = 0.1)` [(Table 3)](#table_3). Achieving fair spending targets using constrained regression or post-processing resulted in only a small reduction in out-of-sample predictive performance. Compared to the baseline regression, payment system fit decreased by less than 0.1 percentage points and mean absolute error increased by at most \$21 across both sets of fair spending targets and both algorithms. Out-of-sample net compensation was similar to in-sample baseline net compensation and net compensation for fair spending targets [(eTable 2 in the Supplement)](#supplement_table_2).
 
 ###### Table 3. Out-of-sample algorithm performance measures for baseline regression, constrained regression, and post-processing. {#table_3}
 
@@ -373,23 +373,23 @@ setnames(
 )
 ```
 
-Sensitivity analyses focusing on the 2017-2018 and 2019-2020 cohorts demonstrate that our algorithmic framework yields largely stable results over time [(eTables 2a, 2b, 3a, and 3b in the Supplement)](#supplement_table_2). Payment system fit differences between the baseline regression, constrained regression, and post-processing algorithm were negligible in alternative cohorts, similar to those observed in the main analysis [(eTable 4 in the Supplement)](#supplement_table_4). Excluding beneficiaries that died in the payment year also resulted in negligible differences between algorithms. Trends in predicted spending by racial/ethnic group and county SVI quintile for alternative cohorts were similar to those documented in the main analysis [(eFigures 4a and 4b in the Supplement)](#supplement_fig_4a).
+Sensitivity analyses focusing on the 2017-2018 and 2019-2020 cohorts demonstrate that our algorithmic framework yields largely stable results over time [(eTables 3a, 3b, 4a, and 4b in the Supplement)](#supplement_table_3). Payment system fit differences between the baseline regression, constrained regression, and post-processing algorithm were negligible in alternative cohorts, similar to those observed in the main analysis [(eTable 5 in the Supplement)](#supplement_table_5). Excluding beneficiaries that died in the payment year also resulted in negligible differences between algorithms. Trends in predicted spending by racial/ethnic group and county SVI quintile for alternative cohorts were similar to those documented in the main analysis [(eFigures 4a and 4b in the Supplement)](#supplement_fig_4a).
 
 ## Discussion
 
-This study developed two algorithms, constrained regression and post-processing, to achieve fairness goals across multiple minoritized racial/ethnic groups in Medicare risk adjustment. Both algorithms reach fair spending targets without sacrificing overall fit, compared to the baseline regression. Importantly, both algorithms represent feasible extensions of the regression currently used to estimate risk scores, which supports algorithm flexibility, transparency, interpretability, and potential for implementation.
+This study developed two algorithms, constrained regression and post-processing, to achieve fairness goals across multiple minoritized racial/ethnic groups in Medicare risk adjustment. Both algorithms reach fair spending targets without sacrificing overall fit compared to the baseline regression. Importantly, both algorithms represent feasible extensions of the regression currently used to estimate risk scores, which supports algorithm flexibility, transparency, interpretability, and potential for implementation.
 
 Whereas post-processing directly changes payments for specified groups, constrained regression changes payments for health conditions, which can impact all groups. As a result, for our fair spending targets, we find that constrained regression can achieve more widespread equity enhancing changes in payments compared to post-processing. This is a desirable feature when leveraging payment reform to broadly mitigate health disparities, to the extent that social and structural forces result in the clustering of certain health conditions among marginalized groups.
 
-Consistent with prior literature, we find that the current risk adjustment algorithm undercompensates American Indian/Alaska Native and non-Hispanic white Medicare beneficiaries, and overcompensates Asian/Pacific Islander, Black, and Hispanic beneficiaries. [@mcwilliams2023] Observed spending is lowest among overcompensated racial/ethnic groups, likely as a result of healthcare access barriers leading to lower utilization. Although most minoritized groups are already overcompensated, our disparities-based fair spending targets suggest that resource reallocation through the current risk adjustment algorithm may be insufficient to fully mitigate disparities. From a health equity perspective, increased payments for marginalized groups may be needed to reduce inequalities in access and outcomes.
+Consistent with prior literature, we find that the current risk adjustment algorithm undercompensates American Indian/Alaska Native and non-Hispanic white Medicare beneficiaries and overcompensates Asian/Pacific Islander, Black, and Hispanic beneficiaries. [@mcwilliams2023] Observed spending is lowest among overcompensated racial/ethnic groups, likely as a result of healthcare access barriers leading to lower utilization. [@obermeyer2019] Although most minoritized groups are already overcompensated, our disparities-based fair spending targets suggest that resource reallocation through the current risk adjustment algorithm may be insufficient to fully mitigate disparities. From a health equity perspective, increased payments for marginalized groups may be needed to reduce inequalities in access and outcomes. If budget neutrality were not required to implement fair spending targets, estimated total Medicare Advantage spending would increase by less than two percent.
 
-Both algorithms evaluated in our study achieve fair spending targets for multiple minoritized racial/ethnic groups with negligible reduction in overall payment system fit. This aligns with prior work on fair regression, contributing to a mounting case for payment system reform that aims to achieve dual goals of equity and efficiency. [@bergquist2019; @irvin2020; @zink2020; @mcguire2021; @mcwilliams2023; @andriola2024] The Netherlands has recently applied constrained regression to ensure fair payment for individuals with multiple chronic illnesses. [@cattel2023] Two crucial policy features must be determined before such reform is implemented: the fair spending targets and the system for ensuring that additional payments are effectively used to address drivers of disparities.
+Both algorithms evaluated in our study achieve fair spending targets for multiple minoritized racial/ethnic groups with negligible reduction in overall payment system fit. This aligns with prior work on fair regression, contributing to a mounting case for payment system reform that aims to achieve dual goals of equity and efficiency. [@vankleef2017; @bergquist2019; @irvin2020; @zink2020; @mcguire2021; @mcwilliams2023; @andriola2024] The Netherlands has recently applied constrained regression to ensure fair payment for individuals with multiple chronic illnesses. [@cattel2023] Two crucial policy features must be determined before such reform is implemented: the fair spending targets and the system for ensuring that additional payments are effectively used to address drivers of disparities.
 
 #### Limitations
 
-Our fair spending targets serve the purpose of allowing us to demonstrate the impact of algorithmic tools. Fair spending targets included in any payment reform policy should be determined through broad consultation and additional research. Further examination of potential consequences for groups included and not included in fairness objectives is necessary. Additionally, existing payment systems and our analysis both rely heavily on diagnosed health conditions. Underdiagnosis of health conditions among minoritized racial/ethnic groups would result in lower predicted spending compared to what would be expected if all racial/ethnic groups experienced equal rates of diagnosis. As a result, our estimates of disparities are likely smaller than if we were to adjust for beneficiaries' true health status. Future research should focus on evaluating, and mitigating, the effects of differential rates of diagnosis in payment policy.
+Our fair spending targets serve the purpose of allowing us to demonstrate the impact of algorithmic tools. Fair spending targets included in any payment reform policy should be determined through broad consultation and additional research. Further examination of potential consequences for groups included and not included in fairness objectives is necessary. Additionally, existing payment systems and our analysis both rely heavily on diagnosed health conditions. Underdiagnosis of health conditions among minoritized racial/ethnic groups would result in lower predicted spending compared to what would be expected if all racial/ethnic groups experienced equal rates of diagnosis. As a result, our estimates of disparities are likely smaller than if we were to adjust for beneficiaries' true health status. Future research should focus on evaluating and mitigating the effects of differential rates of diagnosis in payment policy.
 
-Strategic responses by insurers, the extent to which additional payments will impact beneficiaries' experiences, and the potential for such payments to mitigate disparities in healthcare access and outcomes were not included in our study. Other policy levers would need to be paired with algorithmic changes to the payment system to increase the likelihood that reform yields desired outcomes. Importantly, health care disparities are the result of many long-standing and interconnected social and structural forces. [@nationalacademiesofsciencesengineeringandmedicine2024] Algorithmic changes alone cannot eliminate disparities, but algorithms can be designed to support a more equitable system. [@pmlr-v248-cusick24a]
+Strategic responses by insurers, the extent to which additional payments will impact beneficiaries' experiences, and the potential for such payments to mitigate disparities in healthcare access and outcomes were not included in our study. Other policy levers would need to be paired with algorithmic changes to the payment system to increase the likelihood that reform yields desired outcomes. Importantly, health care disparities are the result of many long-standing and interconnected social and structural forces. [@nationalacademiesofsciencesengineeringandmedicine2024] Algorithmic changes and market forces alone cannot eliminate disparities, but algorithms can be designed to support and contribute to a more equitable system. [@pmlr-v248-cusick24a]
 
 We did not have access to self-reported race/ethnicity. Despite the Research Triangle Institute enhanced race/ethnicity variable having better validity than the variable based directly on Social Security Administration documentation, misclassification of race/ethnicity remains a persistent problem. [@jarrín2020] Further, health spending and outcome disparities exist across multiple social and structural dimensions. Although our analysis focuses on increasing spending for minoritized racial/ethnic groups, additional spending may be warranted to mitigate disparities for other groups. Finally, our data include only fee-for-service claims, so we could not evaluate differences in health status, spending, utilization, and outcomes between beneficiaries enrolled in Traditional Medicare versus Medicare Advantage.
 
@@ -460,8 +460,34 @@ For our post-processing algorithm, after predicting spending in the baseline reg
 ###### eFigure 3. Distribution of the number of payment-eligible hierarchical condition categories among the 2018-2019 cohort. {#supplement_fig_3}
 
 ![Note: Number of Hierarchical Condition Categories is top-coded at 10 in figure due to long right tail.](safe_figures/2018/n_hcc_histogram.png)
+###### eTable 1. Regression coefficients for the disparities-based targets (coefficients for counties not included). {#supplement_table_1}
 
-###### eTable 1. Out-of-sample net compensation by algorithm, spending target, and racial/ethnic group for the 2018-2019 cohort. {#supplement_table_1}
+```{r, echo = F}
+reg_coefs <- fread("safe_figures/2018/disparities_targets_regression_coefficients.csv")
+reg_coefs <- reg_coefs[HCC!="(Intercept)"]
+reg_coefs <- reg_coefs[, HCC := fcase(
+      HCC == "orig_dis", "First Eligible for Medicare Based on a Disabling Condition",
+      HCC == "num_hcc", "Number of Diagnosed Payment-Eligible HCCs",
+      HCC == "age_sexFemale_70-74", "Female 70-74",
+      HCC == "age_sexFemale_70-74", "Female 70-74",
+      HCC == "age_sexFemale_75-79", "Female 75-79",
+      HCC == "age_sexFemale_80-84", "Female 80-84",
+      HCC == "age_sexFemale_85-89", "Female 85-89",
+      HCC == "age_sexFemale_90+", "Female 90+",
+      HCC == "age_sexMale_65-69", "Male 65-69",
+      HCC == "age_sexMale_70-74", "Male 70-74",
+      HCC == "age_sexMale_75-79", "Male 75-79",
+      HCC == "age_sexMale_80-84", "Male 80-84",
+      HCC == "age_sexMale_85-89", "Male 85-89",
+      HCC == "age_sexMale_90+", "Male 90+")]
+reg_coefs <- rbind(reg_coefs, data.table(HCC = "Female 65-69", beta = 0, V1 = 3.5), fill = TRUE)
+reg_coefs <- reg_coefs[, beta:=dollar(round(beta), big.mark = ",")]
+reg_coefs <- reg_coefs[order(V1)]
+setnames(reg_coefs, c("HCC", "beta"), c("Variable", "Coefficient"))
+kable(reg_coefs[, .(Variable, Coefficient)])
+```
+
+###### eTable 2. Out-of-sample net compensation by algorithm, spending target, and racial/ethnic group for the 2018-2019 cohort. {#supplement_table_2}
 
 ```{r, echo = F}
 group <- table2[, .(spec, rti_race, oos_net_compensation_rti)]
@@ -482,7 +508,7 @@ group <- group[, .(`Race/Ethnicity`, `Baseline Regression`, `Disparities: Constr
 kable(group)
 ```
 
-###### eTable 2a. Sample size, characteristics, observed spending, and predicted spending, overall and by race/ethnicity for the 2017-2018 cohort. {#supplement_table_2}
+###### eTable 3a. Sample size, characteristics, observed spending, and predicted spending, overall and by race/ethnicity for the 2017-2018 cohort. {#supplement_table_3}
 
 ```{r, echo = F}
 table1_race <- fread("safe_figures/2018/table1.csv")
@@ -556,13 +582,13 @@ table1_race <- table1_race[order(`Race/Ethnicity`)]
 kable(table1_race[`Cohort` == "2017-2018"][, `Cohort` := NULL])
 ```
 
-###### eTable 2b. Sample size, characteristics, observed spending, and predicted spending, overall and by race/ethnicity for the 2019-2020 cohort.
+###### eTable 3b. Sample size, characteristics, observed spending, and predicted spending, overall and by race/ethnicity for the 2019-2020 cohort.
 
 ```{r, echo = F}
 kable(table1_race[`Cohort` == "2019-2020"][, `Cohort` := NULL])
 ```
 
-###### eTable 3a. Observed spending and net compensation by algorithm, spending target, and racial/ethnic group for the 2017-2018 cohort. {#supplement_table_3}
+###### eTable 4a. Observed spending and net compensation by algorithm, spending target, and racial/ethnic group for the 2017-2018 cohort. {#supplement_table_4}
 
 ```{r, echo = F}
 spending_table <- fread("safe_figures/2018/net_comp_table.csv")
@@ -593,13 +619,13 @@ spending_table <- spending_table[, `Cohort` := factor(`Cohort`, levels = c("2017
 kable(spending_table[`Cohort` == "2017-2018"][, `Cohort` := NULL])
 ```
 
-###### eTable 3b. Observed spending and net compensation by algorithm, spending target, and racial/ethnic group for the 2019-2020 cohort.
+###### eTable 4b. Observed spending and net compensation by algorithm, spending target, and racial/ethnic group for the 2019-2020 cohort.
 
 ```{r, echo = F}
 kable(spending_table[`Cohort` == "2019-2020"][, `Cohort` := NULL])
 ```
 
-###### eTable 4. Payment system fit across algorithms, spending targets, and cohorts. {#supplement_table_4}
+###### eTable 5. Payment system fit across algorithms, spending targets, and cohorts. {#supplement_table_5}
 
 ```{r, echo = F}
 table2 <- unique(fread("safe_figures/2018/table2.csv")[, .(spec, r2)])

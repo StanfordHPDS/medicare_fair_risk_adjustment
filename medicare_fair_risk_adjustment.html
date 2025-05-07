@@ -165,7 +165,7 @@ window.Quarto = {
 </section>
 <section id="objective" class="level5">
 <h5 class="anchored" data-anchor-id="objective">Objective</h5>
-<p>To develop risk adjustment algorithms that can achieve fair spending targets, and compare their performance to a baseline that emulates the least squares regression approach used by the Centers for Medicare and Medicaid Services.</p>
+<p>To develop risk adjustment algorithms that can achieve fair spending targets and compare their performance to a baseline that emulates the least squares regression approach used by the Centers for Medicare and Medicaid Services.</p>
 </section>
 <section id="design" class="level5">
 <h5 class="anchored" data-anchor-id="design">Design</h5>
@@ -177,7 +177,7 @@ window.Quarto = {
 </section>
 <section id="participants" class="level5">
 <h5 class="anchored" data-anchor-id="participants">Participants</h5>
-<p>A random 20% sample of beneficiaries enrolled in Traditional Medicare. Included beneficiaries were aged 65 years and older, and did not have Medicaid dual eligibility. Race/ethnicity was assigned using the Research Triangle Institute enhanced indicator.</p>
+<p>A random 20% sample of beneficiaries enrolled in Traditional Medicare. Included beneficiaries were aged 65 years and older and did not have Medicaid dual eligibility. Race/ethnicity was assigned using the Research Triangle Institute enhanced indicator.</p>
 </section>
 <section id="main-outcome-and-measures" class="level5">
 <h5 class="anchored" data-anchor-id="main-outcome-and-measures">Main Outcome and Measures</h5>
@@ -194,24 +194,24 @@ window.Quarto = {
 </section>
 <section id="background" class="level2">
 <h2 class="anchored" data-anchor-id="background">Background</h2>
-<p>Risk adjustment is a core component of capitated payment systems, aiming to mitigate selection incentives that encourage plans to attract profitable enrollees and avoid unprofitable enrollees.<span class="citation" data-cites="pope2004 pope2011 mcwilliams2012 ellis2018 reportt2021"><sup><a href="#ref-pope2004" role="doc-biblioref">1</a>–<a href="#ref-reportt2021" role="doc-biblioref">5</a></sup></span> The algorithms used to risk adjust payments to Medicare Advantage plans predict healthcare spending as a function of beneficiary demographic characteristics and a set of diagnosed health conditions.<span class="citation" data-cites="pope2004 reportt2021 medicarepaymentadvisorycommission2024"><sup><a href="#ref-pope2004" role="doc-biblioref">1</a>,<a href="#ref-reportt2021" role="doc-biblioref">5</a>,<a href="#ref-medicarepaymentadvisorycommission2024" role="doc-biblioref">6</a></sup></span> With Medicare Advantage accounting for more than half of Medicare spending, improvements to Medicare’s risk adjustment system have the potential to lead to substantial changes in healthcare spending, access, and outcomes.</p>
-<p>Currently, Medicare Advantage plan payment risk adjustment is based on least squares regression. Prior studies have proposed approaches to improve risk adjustment by increasing predictive power, mitigating incentives for upcoding, and reducing opportunities for favorable selection.<span class="citation" data-cites="rose2016 rose2017 rose2018 kan2019 bergquist2019 irvin2020 zink2020 zink2021 mcguire2021 andriola2024 skopec"><sup><a href="#ref-rose2016" role="doc-biblioref">7</a>–<a href="#ref-skopec" role="doc-biblioref">17</a></sup></span> These studies employ a range of methods, including constrained regressions, penalized regressions, data transformations, random forests, and other machine learning algorithms. Only a few consider fair regression methods, which optimize for both overall and group-level fit metrics for marginalized groups. These methods do not add marginalized groups as predictors in the regression, which can reinforce inequities from the data.<span class="citation" data-cites="bergquist2019 zink2020"><sup><a href="#ref-bergquist2019" role="doc-biblioref">11</a>,<a href="#ref-zink2020" role="doc-biblioref">13</a></sup></span> Notably, algorithms to achieve fairness goals across multiple minoritized racial/ethnic groups in Medicare have not been examined previously. This gap in the literature is important because a greater percentage of Black, Hispanic, and Asian/Pacific Islander beneficiaries are enrolled in Medicare Advantage plans, compared to white beneficiaries.<span class="citation" data-cites="meyers2021 ochieng2023"><sup><a href="#ref-meyers2021" role="doc-biblioref">18</a>,<a href="#ref-ochieng2023" role="doc-biblioref">19</a></sup></span> Additionally, the population aged 65 years and older is projected to become more racially and ethnically diverse over the coming decades.<span class="citation" data-cites="bureau"><sup><a href="#ref-bureau" role="doc-biblioref">20</a></sup></span></p>
-<p>Although Medicare eligibility reduces racial/ethnic disparities in insurance coverage, disparities in healthcare access, utilization, spending, and outcomes persist.<span class="citation" data-cites="wallace2021 dieleman2021 baik2023 mcwilliams2023 nationalacademiesofsciencesengineeringandmedicine2024"><sup><a href="#ref-wallace2021" role="doc-biblioref">21</a>–<a href="#ref-nationalacademiesofsciencesengineeringandmedicine2024" role="doc-biblioref">25</a></sup></span> Historical fee-for-service spending data, which are used to estimate risk scores and determine payments, embed these longstanding disparities. Recently, risk adjusted payments were documented to exceed observed spending for Black and Hispanic beneficiaries. This suggests that population-based payment systems could promote health equity though resource reallocation towards historically marginalized groups.<span class="citation" data-cites="mcwilliams2023"><sup><a href="#ref-mcwilliams2023" role="doc-biblioref">24</a></sup></span> The existing payment system leaves access and utilization disparities for Medicare Advantage beneficiaries,<span class="citation" data-cites="gangopadhyaya2023 ochieng2023"><sup><a href="#ref-ochieng2023" role="doc-biblioref">19</a>,<a href="#ref-gangopadhyaya2023" role="doc-biblioref">26</a></sup></span> which can lead to the risk adjusted payments exceeding the observed (suboptimal) spending.</p>
+<p>Risk adjustment is a core component of capitated payment systems aiming to mitigate selection incentives that encourage plans to attract profitable enrollees and avoid unprofitable enrollees.<span class="citation" data-cites="pope2004 pope2011 mcwilliams2012 ellis2018 reportt2021 mcwilliams1 mcwilliams2"><sup><a href="#ref-pope2004" role="doc-biblioref">1</a>–<a href="#ref-mcwilliams2" role="doc-biblioref">7</a></sup></span> The algorithms used to risk adjust payments to Medicare Advantage plans predict healthcare spending as a function of beneficiary demographic characteristics and a set of diagnosed health conditions.<span class="citation" data-cites="pope2004 reportt2021 medicarepaymentadvisorycommission2024"><sup><a href="#ref-pope2004" role="doc-biblioref">1</a>,<a href="#ref-reportt2021" role="doc-biblioref">5</a>,<a href="#ref-medicarepaymentadvisorycommission2024" role="doc-biblioref">8</a></sup></span> With Medicare Advantage accounting for more than half of Medicare spending, improvements to Medicare’s risk adjustment system have the potential to lead to substantial changes in healthcare spending, access, and outcomes.</p>
+<p>Currently, Medicare Advantage plan payment risk adjustment is based on least squares regression. Prior studies have proposed approaches to improve risk adjustment by increasing predictive power, mitigating incentives for upcoding, and reducing opportunities for favorable selection.<span class="citation" data-cites="rose2016 rose2017 vankleef2017 rose2018 kan2019 bergquist2019 irvin2020 zink2020 zink2021 mcguire2021 andriola2024 skopec"><sup><a href="#ref-rose2016" role="doc-biblioref">9</a>,<a href="#ref-rose2017" role="doc-biblioref">10</a>,<a href="#ref-vankleef2017" role="doc-biblioref">11</a>,<a href="#ref-rose2018" role="doc-biblioref">12</a>–<a href="#ref-skopec" role="doc-biblioref">20</a></sup></span> These studies employ a range of methods, including constrained regressions, penalized regressions, data transformations, random forests, and other machine learning algorithms. Only a few consider fair regression methods, which optimize for both overall and group-level fit metrics for marginalized groups. These methods do not add marginalized groups as predictors in the regression, which can reinforce inequities from the data.<span class="citation" data-cites="bergquist2019 zink2020"><sup><a href="#ref-bergquist2019" role="doc-biblioref">14</a>,<a href="#ref-zink2020" role="doc-biblioref">16</a></sup></span> Notably, algorithms to achieve fairness goals across multiple minoritized racial/ethnic groups in Medicare have not been examined previously. This gap in the literature is important because a greater percentage of Black, Hispanic, and Asian/Pacific Islander beneficiaries are enrolled in Medicare Advantage plans, compared to white beneficiaries.<span class="citation" data-cites="meyers2021 ochieng2023"><sup><a href="#ref-meyers2021" role="doc-biblioref">21</a>,<a href="#ref-ochieng2023" role="doc-biblioref">22</a></sup></span> Additionally, the population aged 65 years and older is projected to become more racially and ethnically diverse over the coming decades.<span class="citation" data-cites="bureau"><sup><a href="#ref-bureau" role="doc-biblioref">23</a></sup></span></p>
+<p>Although Medicare eligibility reduces racial/ethnic disparities in insurance coverage, disparities in healthcare access, utilization, spending, and outcomes persist.<span class="citation" data-cites="obermeyer2019 wallace2021 dieleman2021 baik2023 mcwilliams2023 nationalacademiesofsciencesengineeringandmedicine2024"><sup><a href="#ref-obermeyer2019" role="doc-biblioref">24</a>–<a href="#ref-nationalacademiesofsciencesengineeringandmedicine2024" role="doc-biblioref">29</a></sup></span> Historical fee-for-service spending data, which are used by the Centers for Medicare and Medicaid Services (CMS) to estimate risk scores and determine payments, embed these longstanding disparities. Recently, risk adjusted payments were documented to exceed observed spending for Black and Hispanic beneficiaries. This suggests that population-based payment systems could promote health equity though resource reallocation towards historically marginalized groups.<span class="citation" data-cites="mcwilliams2023"><sup><a href="#ref-mcwilliams2023" role="doc-biblioref">28</a></sup></span> The existing payment system leaves access and utilization disparities for Medicare Advantage beneficiaries,<span class="citation" data-cites="gangopadhyaya2023 ochieng2023"><sup><a href="#ref-ochieng2023" role="doc-biblioref">22</a>,<a href="#ref-gangopadhyaya2023" role="doc-biblioref">30</a></sup></span> which can lead to the risk adjusted payments exceeding the observed (suboptimal) spending.</p>
 <p>This study demonstrates the potential for algorithmic tools to achieve more equitable plan payment for Medicare. First, we describe existing levels of net compensation by racial/ethnic group and propose a basic measure of healthcare spending disparity that can inform fair spending targets. We then evaluate two approaches to achieve fair spending targets: constrained regression and post-processing. Our analysis presents algorithms for Medicare risk adjustment that promote more equitable payments, maintain current levels of performance, and remain flexible, feasible, transparent, and interpretable.</p>
 </section>
 <section id="methods" class="level2">
 <h2 class="anchored" data-anchor-id="methods">Methods</h2>
 <section id="study-design-and-data" class="level4">
 <h4 class="anchored" data-anchor-id="study-design-and-data">Study Design and Data</h4>
-<p>We analyzed a 20% random sample of Medicare fee-for-service beneficiaries, and included claims occurring between January 1, 2017 and December 31, 2020.<span class="citation" data-cites="mbsf_old mbsf_new carrier_old carrier_new outpatient_old outpatient_new medpar_old medpar_new"><sup><a href="#ref-mbsf_old" role="doc-biblioref">27</a>–<a href="#ref-medpar_new" role="doc-biblioref">34</a></sup></span> Medicare risk adjustment is prospective, where observed beneficiary demographic characteristics and health conditions from a given year are used to predict spending in the following year. As a result, our analytic cohorts each span two calendar years. These cohorts included beneficiaries who were aged 65 years and older, continuously enrolled in Medicare Parts A and B, not enrolled in Medicare Part C, and not dual eligible for Medicaid. Eligibility criteria were based on the largest of the six community segments that the Centers for Medicare and Medicaid Services (CMS) uses to stratify beneficiaries for risk adjustment. In our study, we included beneficiaries who died in the payment year, but excluded beneficiaries who became ineligible for other reasons, such as transitioning to a Part C plan. Further details are included in the <a href="#supp_eligibility">Supplement</a>.</p>
-<p>For each eligible beneficiary, we extracted demographic characteristics from the Master Beneficiary Summary File and diagnoses from inpatient, outpatient, and carrier claims. Demographic characteristics included age, documented sex, race/ethnicity, county, and original reason for Medicare eligibility. Race/ethnicity was based on the enhanced race/ethnicity code that applies the Research Triangle Institute race imputation algorithm <a href="#supplement_fig_1">(eFigure 1 in the Supplement)</a>.<span class="citation" data-cites="eicheldinger2008"><sup><a href="#ref-eicheldinger2008" role="doc-biblioref">35</a></sup></span> We used CMS labels for racial/ethnic groups (American Indian/Alaska Native, Asian/Pacific Islander, Black, Hispanic, non-Hispanic white), although we used “Additional Group” to refer to the group labeled “Other” by CMS. Beneficiaries categorized as American Indian/Alaska Native, Asian/Pacific Islander, Black, or part of an Additional Group are classified as non-Hispanic.</p>
-<p>We constructed hierarchical condition categories (HCCs) from International Classification of Diseases Version 10 (ICD-10) diagnoses coded in inpatient, outpatient, and carrier claims files. Diagnoses from outpatient and carrier claims files were included after filtering visits by qualifying Healthcare Common Procedure Coding System codes.<span class="citation" data-cites="medicare"><sup><a href="#ref-medicare" role="doc-biblioref">36</a></sup></span> We mapped 9,474 unique ICD-10 diagnosis codes to the 86 HCCs included in CMS’s version 24 risk adjustment software.<span class="citation" data-cites="centersformedicareandmedicaidservices"><sup><a href="#ref-centersformedicareandmedicaidservices" role="doc-biblioref">37</a></sup></span> Finally, we calculated total annual payments by Medicare from inpatient, outpatient, and carrier claims.</p>
+<p>We analyzed a 20% random sample of Medicare fee-for-service beneficiaries and included claims occurring between January 1, 2017 and December 31, 2020.<span class="citation" data-cites="mbsf_old mbsf_new carrier_old carrier_new outpatient_old outpatient_new medpar_old medpar_new"><sup><a href="#ref-mbsf_old" role="doc-biblioref">31</a>–<a href="#ref-medpar_new" role="doc-biblioref">38</a></sup></span> Medicare risk adjustment is prospective, where observed beneficiary demographic characteristics and health conditions from a given year are used to predict spending in the following year. As a result, our analytic cohorts each span two calendar years. These cohorts included beneficiaries who were aged 65 years and older, continuously enrolled in Medicare Parts A and B, not enrolled in Medicare Part C, and not dual eligible for Medicaid. Eligibility criteria were based on the largest of the six community segments that CMS uses to stratify beneficiaries for risk adjustment. In our study, we included beneficiaries who died in the payment year, but excluded beneficiaries who became ineligible for other reasons, such as transitioning to a Part C plan. Further details are included in the <a href="#supp_eligibility">Supplement</a>.</p>
+<p>For each eligible beneficiary, we extracted demographic characteristics from the Master Beneficiary Summary File and diagnoses from inpatient, outpatient, and carrier claims. Demographic characteristics included age, documented sex, race/ethnicity, county, and original reason for Medicare eligibility. Race/ethnicity was based on the enhanced race/ethnicity code that applies the Research Triangle Institute race imputation algorithm <a href="#supplement_fig_1">(eFigure 1 in the Supplement)</a>.<span class="citation" data-cites="eicheldinger2008"><sup><a href="#ref-eicheldinger2008" role="doc-biblioref">39</a></sup></span> We used CMS labels for racial/ethnic groups (American Indian/Alaska Native, Asian/Pacific Islander, Black, Hispanic, non-Hispanic white), although we used “Additional Group” to refer to the group labeled “Other” by CMS. Beneficiaries categorized as American Indian/Alaska Native, Asian/Pacific Islander, Black, or part of an Additional Group are classified as non-Hispanic.</p>
+<p>We constructed hierarchical condition categories (HCCs) from International Classification of Diseases Version 10 (ICD-10) diagnoses coded in inpatient, outpatient, and carrier claims files. Diagnoses from outpatient and carrier claims files were included after filtering visits by qualifying Healthcare Common Procedure Coding System codes.<span class="citation" data-cites="medicare"><sup><a href="#ref-medicare" role="doc-biblioref">40</a></sup></span> We mapped 9,474 unique ICD-10 diagnosis codes to the 86 HCCs included in CMS’s version 24 risk adjustment software.<span class="citation" data-cites="centersformedicareandmedicaidservices"><sup><a href="#ref-centersformedicareandmedicaidservices" role="doc-biblioref">41</a></sup></span> Finally, we calculated total annual payments by Medicare from inpatient, outpatient, and carrier claims.</p>
 <p>The Stanford University Institutional Review Board approved this study (Protocol ID #66714).</p>
 </section>
 <section id="fair-spending-targets" class="level4">
 <h4 class="anchored" data-anchor-id="fair-spending-targets">Fair Spending Targets</h4>
 <p>We estimated two possible sets of fair spending targets, which are prespecified levels of net compensation for minoritized racial/ethnic groups that incorporate fairness goals. Net compensation is the difference between mean predicted spending (from the payment algorithm) and mean observed spending. The first set of spending targets, referred to as “disparities-based targets,” aim to capture the additional spending by beneficiaries in minoritized racial/ethnic groups if they had the same healthcare access and utilization as non-Hispanic white beneficiaries. Specifically, we fit an ordinary least squares regression to predict spending using data from only non-Hispanic white beneficiaries. The regression included fixed effects for age group, documented sex, number of diagnosed payment-eligible HCCs, whether the beneficiary was first eligible for Medicare based on a disabling condition, and county. Using this regression, we predicted spending for all other racial/ethnic groups. Our disparities-based fair spending targets are set as the difference between mean predicted spending, based on the regression using data from only non-Hispanic white beneficiaries, and mean observed spending for American Indian/Alaska Native, Asian/Pacific Islander, Black, and Hispanic racial/ethnic groups.</p>
-<p>Our second set of fair spending targets, referred to as “five percent targets,” add five percent of mean spending across all eligible beneficiaries to net compensation from the baseline regression for minoritized racial/ethnic groups. The five percent targets are based on the current bonus paid to plans with high quality ratings.<span class="citation" data-cites="medicarepaymentadvisorycommission2024"><sup><a href="#ref-medicarepaymentadvisorycommission2024" role="doc-biblioref">6</a></sup></span></p>
+<p>Our second set of fair spending targets, referred to as “five percent targets,” add five percent of mean spending across all eligible beneficiaries to net compensation from the baseline regression for minoritized racial/ethnic groups. The five percent targets are based on the current bonus paid to plans with high quality ratings.<span class="citation" data-cites="medicarepaymentadvisorycommission2024"><sup><a href="#ref-medicarepaymentadvisorycommission2024" role="doc-biblioref">8</a></sup></span></p>
 <p>In this study, the purpose of our two sets of fair spending targets is to examine the effects of algorithmic tools to achieve policy-determined fair spending targets. In practice, implemented spending targets should be determined through broad consultation and further research.</p>
 </section>
 <section id="risk-adjustment-algorithms" class="level4">
@@ -223,9 +223,9 @@ window.Quarto = {
 </section>
 <section id="statistical-analysis" class="level4">
 <h4 class="anchored" data-anchor-id="statistical-analysis">Statistical Analysis</h4>
-<p>We used 10-fold cross-validation to generate out-of-sample estimates of overall and group-level algorithm performance. Overall performance was measured by mean absolute error and payment system fit. Payment system fit is equivalent to <span class="math inline">\(R^2\)</span> for the baseline and constrained regressions. Payment system fit for the post-processing algorithm is equal to the residual sum of squares using the post-processed predicted spending, divided by the total sum of squares. We computed net compensation to evaluate group-level algorithm performance. Finally, we evaluated the difference in predicted spending between algorithms by the socioeconomic status domain of the county-level Centers for Disease Control and Prevention and Agency for Toxic Substance and Disease Registry Social Vulnerability Index (SVI).<span class="citation" data-cites="cdc/atsd2024"><sup><a href="#ref-cdc/atsd2024" role="doc-biblioref">38</a></sup></span> Higher SVI values reflect greater exposure to socioeconomic factors that can adversely affect health outcomes.</p>
+<p>We used 10-fold cross-validation to generate out-of-sample estimates of overall and group-level algorithm performance. Overall performance was measured by mean absolute error and payment system fit. Payment system fit is equivalent to <span class="math inline">\(R^2\)</span> for the baseline and constrained regressions. Payment system fit for the post-processing algorithm is equal to one minus the residual sum of squares using the post-processed predicted spending, divided by the total sum of squares. We computed net compensation to evaluate group-level algorithm performance. Finally, since the Medicare data do not include individual-level indicators of socioeconomic status, we evaluated the difference in predicted spending between algorithms by the socioeconomic status domain of the county-level Centers for Disease Control and Prevention and Agency for Toxic Substance and Disease Registry Social Vulnerability Index (SVI).<span class="citation" data-cites="cdc/atsd2024"><sup><a href="#ref-cdc/atsd2024" role="doc-biblioref">42</a></sup></span> Higher SVI values reflect greater exposure to socioeconomic factors that can adversely affect health outcomes.</p>
 <p>Our main analysis focused on the 2018-2019 cohort because it included the most recent payment year prior to the COVID-19 pandemic for which we had access to data. Sensitivity analyses focused on the 2017-2018 and 2019-2020 cohorts. Additionally, we examined the sensitivity of out-of-sample algorithm performance to exclusion of beneficiaries who died in the payment year.</p>
-<p>Analyses were conducted using R version 4.0.3 and Python version 3.7.17. We fit all regressions using CVXPY.<span class="citation" data-cites="diamond2016cvxpy agrawal2018rewriting"><sup><a href="#ref-diamond2016cvxpy" role="doc-biblioref">39</a>,<a href="#ref-agrawal2018rewriting" role="doc-biblioref">40</a></sup></span> Analytic code is available at https://github.com/StanfordHPDS/medicare_fair_risk_adjustment. We followed the Standard for Reporting Diagnostic Accuracy <a href="http://www.equator-network.org/reporting-guidelines/stard/">(STARD)</a> reporting guideline.</p>
+<p>Analyses were conducted using R version 4.0.3 and Python version 3.7.17. We fit all regressions using CVXPY.<span class="citation" data-cites="diamond2016cvxpy agrawal2018rewriting"><sup><a href="#ref-diamond2016cvxpy" role="doc-biblioref">43</a>,<a href="#ref-agrawal2018rewriting" role="doc-biblioref">44</a></sup></span> Analytic code is available at https://github.com/StanfordHPDS/medicare_fair_risk_adjustment. We followed the Standard for Reporting Diagnostic Accuracy <a href="http://www.equator-network.org/reporting-guidelines/stard/">(STARD)</a> reporting guideline.</p>
 </section>
 </section>
 <section id="results-1" class="level2">
@@ -235,6 +235,16 @@ window.Quarto = {
 <section id="table_1" class="level6">
 <h6 class="anchored" data-anchor-id="table_1">Table 1. Sample size, characteristics, observed spending, and predicted spending, overall and by race/ethnicity.</h6>
 <div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in attr(x, "align"): 'xfun::attr()' is deprecated.
+Use 'xfun::attr2()' instead.
+See help("Deprecated")</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in attr(x, "format"): 'xfun::attr()' is deprecated.
+Use 'xfun::attr2()' instead.
+See help("Deprecated")</code></pre>
+</div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
 <colgroup>
@@ -358,11 +368,21 @@ window.Quarto = {
 <section id="net-compensation-and-fair-spending-targets" class="level4">
 <h4 class="anchored" data-anchor-id="net-compensation-and-fair-spending-targets">Net Compensation and Fair Spending Targets</h4>
 <p>The baseline regression resulted in undercompensation for American Indian/Alaska Native (-$448) and Non-Hispanic white (-$129) beneficiaries, and overcompensation for Asian/Pacific Islander (+$1,513), Black (+$691), Hispanic (+$1,088), Additional Group (+$947), and Unknown (+$67) beneficiaries <a href="#table_1">(Table 1)</a>.</p>
-<p>Disparities-based fair spending targets added varying amounts to net compensation from the baseline regression: $300 for American Indian/Alaska Native beneficiaries, $604 for Asian/Pacific Islander beneficiaries, $518 for Black beneficiaries, and $513 for Hispanic beneficiaries <a href="#table_2">(Table 2)</a>. These targets reflect additional predicted spending if beneficiaries in minoritized racial/ethnic groups had sufficient healthcare access, such that their spending matched that of non-Hispanic white beneficiaries, conditional on age group, documented sex, number of diagnosed HCCs, originally disabled status, and county of residence.</p>
+<p>Disparities-based fair spending targets added varying amounts to net compensation from the baseline regression: $300 for American Indian/Alaska Native beneficiaries, $604 for Asian/Pacific Islander beneficiaries, $518 for Black beneficiaries, and $513 for Hispanic beneficiaries <a href="#table_2">(Table 2)</a>. These targets reflect additional predicted spending if beneficiaries in minoritized racial/ethnic groups had sufficient healthcare access, such that their spending matched that of non-Hispanic white beneficiaries, conditional on age group, documented sex, number of diagnosed HCCs, originally disabled status, and county of residence <a href="#supplement_table_1">(eTable 1 in the Supplement)</a>.</p>
 <p>Fair spending targets based on five percent of overall mean spending increased net compensation by $417 for minoritized racial/ethnic groups.</p>
 <section id="table_2" class="level6">
 <h6 class="anchored" data-anchor-id="table_2">Table 2. Additional payments to reach fair spending targets for minoritized racial/ethnic groups.</h6>
 <div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in attr(x, "align"): 'xfun::attr()' is deprecated.
+Use 'xfun::attr2()' instead.
+See help("Deprecated")</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in attr(x, "format"): 'xfun::attr()' is deprecated.
+Use 'xfun::attr2()' instead.
+See help("Deprecated")</code></pre>
+</div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
 <colgroup>
@@ -406,10 +426,20 @@ window.Quarto = {
 </section>
 <section id="algorithm-performance" class="level4">
 <h4 class="anchored" data-anchor-id="algorithm-performance">Algorithm Performance</h4>
-<p>The baseline regression achieved an out-of-sample mean absolute error of $8,359 and payment system fit of 12.7% <a href="#table_3">(Table 3)</a>. Achieving fair spending targets using constrained regression or post-processing resulted in only a small reduction in out-of-sample predictive performance. Compared to the baseline regression, payment system fit decreased by less than 0.1 percentage points and mean absolute error increased by at most $21 across both sets of fair spending targets and both algorithms. Out-of-sample net compensation was similar to in-sample baseline net compensation and net compensation for fair spending targets <a href="#supplement_table_1">(eTable 1 in the Supplement)</a>.</p>
+<p>The baseline regression achieved an out-of-sample mean absolute error of $8,359 and payment system fit of 12.7% <a href="#table_3">(Table 3)</a>. Achieving fair spending targets using constrained regression or post-processing resulted in only a small reduction in out-of-sample predictive performance. Compared to the baseline regression, payment system fit decreased by less than 0.1 percentage points and mean absolute error increased by at most $21 across both sets of fair spending targets and both algorithms. Out-of-sample net compensation was similar to in-sample baseline net compensation and net compensation for fair spending targets <a href="#supplement_table_2">(eTable 2 in the Supplement)</a>.</p>
 <section id="table_3" class="level6">
 <h6 class="anchored" data-anchor-id="table_3">Table 3. Out-of-sample algorithm performance measures for baseline regression, constrained regression, and post-processing.</h6>
 <div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in attr(x, "align"): 'xfun::attr()' is deprecated.
+Use 'xfun::attr2()' instead.
+See help("Deprecated")</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in attr(x, "format"): 'xfun::attr()' is deprecated.
+Use 'xfun::attr2()' instead.
+See help("Deprecated")</code></pre>
+</div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
 <colgroup>
@@ -478,20 +508,20 @@ window.Quarto = {
 </section>
 <section id="sensitivity-analyses" class="level4">
 <h4 class="anchored" data-anchor-id="sensitivity-analyses">Sensitivity Analyses</h4>
-<p>Sensitivity analyses focusing on the 2017-2018 and 2019-2020 cohorts demonstrate that our algorithmic framework yields largely stable results over time <a href="#supplement_table_2">(eTables 2a, 2b, 3a, and 3b in the Supplement)</a>. Payment system fit differences between the baseline regression, constrained regression, and post-processing algorithm were negligible in alternative cohorts, similar to those observed in the main analysis <a href="#supplement_table_4">(eTable 4 in the Supplement)</a>. Excluding beneficiaries that died in the payment year also resulted in negligible differences between algorithms. Trends in predicted spending by racial/ethnic group and county SVI quintile for alternative cohorts were similar to those documented in the main analysis <a href="#supplement_fig_4a">(eFigures 4a and 4b in the Supplement)</a>.</p>
+<p>Sensitivity analyses focusing on the 2017-2018 and 2019-2020 cohorts demonstrate that our algorithmic framework yields largely stable results over time <a href="#supplement_table_3">(eTables 3a, 3b, 4a, and 4b in the Supplement)</a>. Payment system fit differences between the baseline regression, constrained regression, and post-processing algorithm were negligible in alternative cohorts, similar to those observed in the main analysis <a href="#supplement_table_5">(eTable 5 in the Supplement)</a>. Excluding beneficiaries that died in the payment year also resulted in negligible differences between algorithms. Trends in predicted spending by racial/ethnic group and county SVI quintile for alternative cohorts were similar to those documented in the main analysis <a href="#supplement_fig_4a">(eFigures 4a and 4b in the Supplement)</a>.</p>
 </section>
 </section>
 <section id="discussion" class="level2">
 <h2 class="anchored" data-anchor-id="discussion">Discussion</h2>
-<p>This study developed two algorithms, constrained regression and post-processing, to achieve fairness goals across multiple minoritized racial/ethnic groups in Medicare risk adjustment. Both algorithms reach fair spending targets without sacrificing overall fit, compared to the baseline regression. Importantly, both algorithms represent feasible extensions of the regression currently used to estimate risk scores, which supports algorithm flexibility, transparency, interpretability, and potential for implementation.</p>
+<p>This study developed two algorithms, constrained regression and post-processing, to achieve fairness goals across multiple minoritized racial/ethnic groups in Medicare risk adjustment. Both algorithms reach fair spending targets without sacrificing overall fit compared to the baseline regression. Importantly, both algorithms represent feasible extensions of the regression currently used to estimate risk scores, which supports algorithm flexibility, transparency, interpretability, and potential for implementation.</p>
 <p>Whereas post-processing directly changes payments for specified groups, constrained regression changes payments for health conditions, which can impact all groups. As a result, for our fair spending targets, we find that constrained regression can achieve more widespread equity enhancing changes in payments compared to post-processing. This is a desirable feature when leveraging payment reform to broadly mitigate health disparities, to the extent that social and structural forces result in the clustering of certain health conditions among marginalized groups.</p>
-<p>Consistent with prior literature, we find that the current risk adjustment algorithm undercompensates American Indian/Alaska Native and non-Hispanic white Medicare beneficiaries, and overcompensates Asian/Pacific Islander, Black, and Hispanic beneficiaries.<span class="citation" data-cites="mcwilliams2023"><sup><a href="#ref-mcwilliams2023" role="doc-biblioref">24</a></sup></span> Observed spending is lowest among overcompensated racial/ethnic groups, likely as a result of healthcare access barriers leading to lower utilization. Although most minoritized groups are already overcompensated, our disparities-based fair spending targets suggest that resource reallocation through the current risk adjustment algorithm may be insufficient to fully mitigate disparities. From a health equity perspective, increased payments for marginalized groups may be needed to reduce inequalities in access and outcomes.</p>
-<p>Both algorithms evaluated in our study achieve fair spending targets for multiple minoritized racial/ethnic groups with negligible reduction in overall payment system fit. This aligns with prior work on fair regression, contributing to a mounting case for payment system reform that aims to achieve dual goals of equity and efficiency.<span class="citation" data-cites="bergquist2019 irvin2020 zink2020 mcguire2021 mcwilliams2023 andriola2024"><sup><a href="#ref-bergquist2019" role="doc-biblioref">11</a>–<a href="#ref-zink2020" role="doc-biblioref">13</a>,<a href="#ref-mcguire2021" role="doc-biblioref">15</a>,<a href="#ref-andriola2024" role="doc-biblioref">16</a>,<a href="#ref-mcwilliams2023" role="doc-biblioref">24</a></sup></span> The Netherlands has recently applied constrained regression to ensure fair payment for individuals with multiple chronic illnesses.<span class="citation" data-cites="cattel2023"><sup><a href="#ref-cattel2023" role="doc-biblioref">41</a></sup></span> Two crucial policy features must be determined before such reform is implemented: the fair spending targets and the system for ensuring that additional payments are effectively used to address drivers of disparities.</p>
+<p>Consistent with prior literature, we find that the current risk adjustment algorithm undercompensates American Indian/Alaska Native and non-Hispanic white Medicare beneficiaries and overcompensates Asian/Pacific Islander, Black, and Hispanic beneficiaries.<span class="citation" data-cites="mcwilliams2023"><sup><a href="#ref-mcwilliams2023" role="doc-biblioref">28</a></sup></span> Observed spending is lowest among overcompensated racial/ethnic groups, likely as a result of healthcare access barriers leading to lower utilization.<span class="citation" data-cites="obermeyer2019"><sup><a href="#ref-obermeyer2019" role="doc-biblioref">24</a></sup></span> Although most minoritized groups are already overcompensated, our disparities-based fair spending targets suggest that resource reallocation through the current risk adjustment algorithm may be insufficient to fully mitigate disparities. From a health equity perspective, increased payments for marginalized groups may be needed to reduce inequalities in access and outcomes. If budget neutrality were not required to implement fair spending targets, estimated total Medicare Advantage spending would increase by less than two percent.</p>
+<p>Both algorithms evaluated in our study achieve fair spending targets for multiple minoritized racial/ethnic groups with negligible reduction in overall payment system fit. This aligns with prior work on fair regression, contributing to a mounting case for payment system reform that aims to achieve dual goals of equity and efficiency.<span class="citation" data-cites="vankleef2017 bergquist2019 irvin2020 zink2020 mcguire2021 mcwilliams2023 andriola2024"><sup><a href="#ref-vankleef2017" role="doc-biblioref">11</a>,<a href="#ref-bergquist2019" role="doc-biblioref">14</a>–<a href="#ref-zink2020" role="doc-biblioref">16</a>,<a href="#ref-mcguire2021" role="doc-biblioref">18</a>,<a href="#ref-andriola2024" role="doc-biblioref">19</a>,<a href="#ref-mcwilliams2023" role="doc-biblioref">28</a></sup></span> The Netherlands has recently applied constrained regression to ensure fair payment for individuals with multiple chronic illnesses.<span class="citation" data-cites="cattel2023"><sup><a href="#ref-cattel2023" role="doc-biblioref">45</a></sup></span> Two crucial policy features must be determined before such reform is implemented: the fair spending targets and the system for ensuring that additional payments are effectively used to address drivers of disparities.</p>
 <section id="limitations" class="level4">
 <h4 class="anchored" data-anchor-id="limitations">Limitations</h4>
-<p>Our fair spending targets serve the purpose of allowing us to demonstrate the impact of algorithmic tools. Fair spending targets included in any payment reform policy should be determined through broad consultation and additional research. Further examination of potential consequences for groups included and not included in fairness objectives is necessary. Additionally, existing payment systems and our analysis both rely heavily on diagnosed health conditions. Underdiagnosis of health conditions among minoritized racial/ethnic groups would result in lower predicted spending compared to what would be expected if all racial/ethnic groups experienced equal rates of diagnosis. As a result, our estimates of disparities are likely smaller than if we were to adjust for beneficiaries’ true health status. Future research should focus on evaluating, and mitigating, the effects of differential rates of diagnosis in payment policy.</p>
-<p>Strategic responses by insurers, the extent to which additional payments will impact beneficiaries’ experiences, and the potential for such payments to mitigate disparities in healthcare access and outcomes were not included in our study. Other policy levers would need to be paired with algorithmic changes to the payment system to increase the likelihood that reform yields desired outcomes. Importantly, health care disparities are the result of many long-standing and interconnected social and structural forces.<span class="citation" data-cites="nationalacademiesofsciencesengineeringandmedicine2024"><sup><a href="#ref-nationalacademiesofsciencesengineeringandmedicine2024" role="doc-biblioref">25</a></sup></span> Algorithmic changes alone cannot eliminate disparities, but algorithms can be designed to support a more equitable system.<span class="citation" data-cites="pmlr-v248-cusick24a"><sup><a href="#ref-pmlr-v248-cusick24a" role="doc-biblioref">42</a></sup></span></p>
-<p>We did not have access to self-reported race/ethnicity. Despite the Research Triangle Institute enhanced race/ethnicity variable having better validity than the variable based directly on Social Security Administration documentation, misclassification of race/ethnicity remains a persistent problem.<span class="citation" data-cites="jarrín2020"><sup><a href="#ref-jarrín2020" role="doc-biblioref">43</a></sup></span> Further, health spending and outcome disparities exist across multiple social and structural dimensions. Although our analysis focuses on increasing spending for minoritized racial/ethnic groups, additional spending may be warranted to mitigate disparities for other groups. Finally, our data include only fee-for-service claims, so we could not evaluate differences in health status, spending, utilization, and outcomes between beneficiaries enrolled in Traditional Medicare versus Medicare Advantage.</p>
+<p>Our fair spending targets serve the purpose of allowing us to demonstrate the impact of algorithmic tools. Fair spending targets included in any payment reform policy should be determined through broad consultation and additional research. Further examination of potential consequences for groups included and not included in fairness objectives is necessary. Additionally, existing payment systems and our analysis both rely heavily on diagnosed health conditions. Underdiagnosis of health conditions among minoritized racial/ethnic groups would result in lower predicted spending compared to what would be expected if all racial/ethnic groups experienced equal rates of diagnosis. As a result, our estimates of disparities are likely smaller than if we were to adjust for beneficiaries’ true health status. Future research should focus on evaluating and mitigating the effects of differential rates of diagnosis in payment policy.</p>
+<p>Strategic responses by insurers, the extent to which additional payments will impact beneficiaries’ experiences, and the potential for such payments to mitigate disparities in healthcare access and outcomes were not included in our study. Other policy levers would need to be paired with algorithmic changes to the payment system to increase the likelihood that reform yields desired outcomes. Importantly, health care disparities are the result of many long-standing and interconnected social and structural forces.<span class="citation" data-cites="nationalacademiesofsciencesengineeringandmedicine2024"><sup><a href="#ref-nationalacademiesofsciencesengineeringandmedicine2024" role="doc-biblioref">29</a></sup></span> Algorithmic changes and market forces alone cannot eliminate disparities, but algorithms can be designed to support and contribute to a more equitable system.<span class="citation" data-cites="pmlr-v248-cusick24a"><sup><a href="#ref-pmlr-v248-cusick24a" role="doc-biblioref">46</a></sup></span></p>
+<p>We did not have access to self-reported race/ethnicity. Despite the Research Triangle Institute enhanced race/ethnicity variable having better validity than the variable based directly on Social Security Administration documentation, misclassification of race/ethnicity remains a persistent problem.<span class="citation" data-cites="jarrín2020"><sup><a href="#ref-jarrín2020" role="doc-biblioref">47</a></sup></span> Further, health spending and outcome disparities exist across multiple social and structural dimensions. Although our analysis focuses on increasing spending for minoritized racial/ethnic groups, additional spending may be warranted to mitigate disparities for other groups. Finally, our data include only fee-for-service claims, so we could not evaluate differences in health status, spending, utilization, and outcomes between beneficiaries enrolled in Traditional Medicare versus Medicare Advantage.</p>
 </section>
 <section id="conclusions" class="level4">
 <h4 class="anchored" data-anchor-id="conclusions">Conclusions</h4>
@@ -528,7 +558,7 @@ window.Quarto = {
 <h5 class="anchored" data-anchor-id="baseline-regression">Baseline Regression</h5>
 <p>First, we approximated the least squares regression approach used by CMS to estimate the risk scores for Medicare Advantage plan payment risk adjustment:</p>
 <p><span class="math display">\[Y_{i} = \alpha + \beta D_{i} + \gamma H_{i} + \delta C_{i},\]</span></p>
-<p>where <span class="math inline">\(\gamma\)</span> is constrained to be non-negative. We fit this regression by minimizing the square root of the sum of squared residuals, which yields an equivalent result to minimizing the sum of squared residuals.<span class="citation" data-cites="advanced"><sup><a href="#ref-advanced" role="doc-biblioref">44</a></sup></span></p>
+<p>where <span class="math inline">\(\gamma\)</span> is constrained to be non-negative. We fit this regression by minimizing the square root of the sum of squared residuals, which yields an equivalent result to minimizing the sum of squared residuals.<span class="citation" data-cites="advanced"><sup><a href="#ref-advanced" role="doc-biblioref">48</a></sup></span></p>
 <p>We deviated from the CMS Version 24 formula by grouping beneficiaries aged 95+ with beneficiaries aged 90-94 due to the small sample sizes for the 95+ group. We also excluded the indicators capturing the number of HCCs.</p>
 </section>
 <section id="constrained-regression-and-post-processing-for-fair-spending" class="level5">
@@ -563,16 +593,105 @@ window.Quarto = {
 </section>
 <section id="supplement_fig_3" class="level6">
 <h6 class="anchored" data-anchor-id="supplement_fig_3">eFigure 3. Distribution of the number of payment-eligible hierarchical condition categories among the 2018-2019 cohort.</h6>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="safe_figures/2018/n_hcc_histogram.png" class="img-fluid figure-img"></p>
-<figcaption>Note: Number of Hierarchical Condition Categories is top-coded at 10 in figure due to long right tail.</figcaption>
-</figure>
+<p><img src="safe_figures/2018/n_hcc_histogram.png" class="img-fluid" alt="Note: Number of Hierarchical Condition Categories is top-coded at 10 in figure due to long right tail."> ###### eTable 1. Regression coefficients for the disparities-based targets (coefficients for counties not included). {#supplement_table_1}</p>
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in attr(x, "align"): 'xfun::attr()' is deprecated.
+Use 'xfun::attr2()' instead.
+See help("Deprecated")</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in attr(x, "format"): 'xfun::attr()' is deprecated.
+Use 'xfun::attr2()' instead.
+See help("Deprecated")</code></pre>
+</div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 83%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Variable</th>
+<th style="text-align: left;">Coefficient</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">First Eligible for Medicare Based on a Disabling Condition</td>
+<td style="text-align: left;">$1,519</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of Diagnosed Payment-Eligible HCCs</td>
+<td style="text-align: left;">$2,966</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Female 65-69</td>
+<td style="text-align: left;">$0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Female 70-74</td>
+<td style="text-align: left;">$509</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Female 75-79</td>
+<td style="text-align: left;">$974</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Female 80-84</td>
+<td style="text-align: left;">$875</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Female 85-89</td>
+<td style="text-align: left;">$501</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Female 90+</td>
+<td style="text-align: left;">-$566</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Male 65-69</td>
+<td style="text-align: left;">-$123</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Male 70-74</td>
+<td style="text-align: left;">$616</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Male 75-79</td>
+<td style="text-align: left;">$1,602</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Male 80-84</td>
+<td style="text-align: left;">$1,700</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Male 85-89</td>
+<td style="text-align: left;">$1,381</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Male 90+</td>
+<td style="text-align: left;">$379</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </section>
-<section id="supplement_table_1" class="level6">
-<h6 class="anchored" data-anchor-id="supplement_table_1">eTable 1. Out-of-sample net compensation by algorithm, spending target, and racial/ethnic group for the 2018-2019 cohort.</h6>
+<section id="supplement_table_2" class="level6">
+<h6 class="anchored" data-anchor-id="supplement_table_2">eTable 2. Out-of-sample net compensation by algorithm, spending target, and racial/ethnic group for the 2018-2019 cohort.</h6>
 <div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in attr(x, "align"): 'xfun::attr()' is deprecated.
+Use 'xfun::attr2()' instead.
+See help("Deprecated")</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in attr(x, "format"): 'xfun::attr()' is deprecated.
+Use 'xfun::attr2()' instead.
+See help("Deprecated")</code></pre>
+</div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
 <colgroup>
@@ -655,9 +774,19 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="supplement_table_2" class="level6">
-<h6 class="anchored" data-anchor-id="supplement_table_2">eTable 2a. Sample size, characteristics, observed spending, and predicted spending, overall and by race/ethnicity for the 2017-2018 cohort.</h6>
+<section id="supplement_table_3" class="level6">
+<h6 class="anchored" data-anchor-id="supplement_table_3">eTable 3a. Sample size, characteristics, observed spending, and predicted spending, overall and by race/ethnicity for the 2017-2018 cohort.</h6>
 <div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in attr(x, "align"): 'xfun::attr()' is deprecated.
+Use 'xfun::attr2()' instead.
+See help("Deprecated")</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in attr(x, "format"): 'xfun::attr()' is deprecated.
+Use 'xfun::attr2()' instead.
+See help("Deprecated")</code></pre>
+</div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
 <colgroup>
@@ -778,9 +907,19 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="etable-2b.-sample-size-characteristics-observed-spending-and-predicted-spending-overall-and-by-raceethnicity-for-the-2019-2020-cohort." class="level6">
-<h6 class="anchored" data-anchor-id="etable-2b.-sample-size-characteristics-observed-spending-and-predicted-spending-overall-and-by-raceethnicity-for-the-2019-2020-cohort.">eTable 2b. Sample size, characteristics, observed spending, and predicted spending, overall and by race/ethnicity for the 2019-2020 cohort.</h6>
+<section id="etable-3b.-sample-size-characteristics-observed-spending-and-predicted-spending-overall-and-by-raceethnicity-for-the-2019-2020-cohort." class="level6">
+<h6 class="anchored" data-anchor-id="etable-3b.-sample-size-characteristics-observed-spending-and-predicted-spending-overall-and-by-raceethnicity-for-the-2019-2020-cohort.">eTable 3b. Sample size, characteristics, observed spending, and predicted spending, overall and by race/ethnicity for the 2019-2020 cohort.</h6>
 <div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in attr(x, "align"): 'xfun::attr()' is deprecated.
+Use 'xfun::attr2()' instead.
+See help("Deprecated")</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in attr(x, "format"): 'xfun::attr()' is deprecated.
+Use 'xfun::attr2()' instead.
+See help("Deprecated")</code></pre>
+</div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
 <colgroup>
@@ -901,9 +1040,19 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="supplement_table_3" class="level6">
-<h6 class="anchored" data-anchor-id="supplement_table_3">eTable 3a. Observed spending and net compensation by algorithm, spending target, and racial/ethnic group for the 2017-2018 cohort.</h6>
+<section id="supplement_table_4" class="level6">
+<h6 class="anchored" data-anchor-id="supplement_table_4">eTable 4a. Observed spending and net compensation by algorithm, spending target, and racial/ethnic group for the 2017-2018 cohort.</h6>
 <div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in attr(x, "align"): 'xfun::attr()' is deprecated.
+Use 'xfun::attr2()' instead.
+See help("Deprecated")</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in attr(x, "format"): 'xfun::attr()' is deprecated.
+Use 'xfun::attr2()' instead.
+See help("Deprecated")</code></pre>
+</div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
 <colgroup>
@@ -995,9 +1144,19 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="etable-3b.-observed-spending-and-net-compensation-by-algorithm-spending-target-and-racialethnic-group-for-the-2019-2020-cohort." class="level6">
-<h6 class="anchored" data-anchor-id="etable-3b.-observed-spending-and-net-compensation-by-algorithm-spending-target-and-racialethnic-group-for-the-2019-2020-cohort.">eTable 3b. Observed spending and net compensation by algorithm, spending target, and racial/ethnic group for the 2019-2020 cohort.</h6>
+<section id="etable-4b.-observed-spending-and-net-compensation-by-algorithm-spending-target-and-racialethnic-group-for-the-2019-2020-cohort." class="level6">
+<h6 class="anchored" data-anchor-id="etable-4b.-observed-spending-and-net-compensation-by-algorithm-spending-target-and-racialethnic-group-for-the-2019-2020-cohort.">eTable 4b. Observed spending and net compensation by algorithm, spending target, and racial/ethnic group for the 2019-2020 cohort.</h6>
 <div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in attr(x, "align"): 'xfun::attr()' is deprecated.
+Use 'xfun::attr2()' instead.
+See help("Deprecated")</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in attr(x, "format"): 'xfun::attr()' is deprecated.
+Use 'xfun::attr2()' instead.
+See help("Deprecated")</code></pre>
+</div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
 <colgroup>
@@ -1089,9 +1248,19 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="supplement_table_4" class="level6">
-<h6 class="anchored" data-anchor-id="supplement_table_4">eTable 4. Payment system fit across algorithms, spending targets, and cohorts.</h6>
+<section id="supplement_table_5" class="level6">
+<h6 class="anchored" data-anchor-id="supplement_table_5">eTable 5. Payment system fit across algorithms, spending targets, and cohorts.</h6>
 <div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in attr(x, "align"): 'xfun::attr()' is deprecated.
+Use 'xfun::attr2()' instead.
+See help("Deprecated")</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in attr(x, "format"): 'xfun::attr()' is deprecated.
+Use 'xfun::attr2()' instead.
+See help("Deprecated")</code></pre>
+</div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
 <colgroup>
@@ -1178,127 +1347,139 @@ window.Quarto = {
 <div class="csl-left-margin">3. </div><div class="csl-right-inline">McWilliams JM, Hsu J, Newhouse JP. New risk-adjustment system was associated with reduced favorable selection in medicare advantage. <em>Health Affairs (Project Hope)</em>. 2012;31(12):2630-2640. doi:<a href="https://doi.org/10.1377/hlthaff.2011.1344">10.1377/hlthaff.2011.1344</a></div>
 </div>
 <div id="ref-ellis2018" class="csl-entry" role="listitem">
-<div class="csl-left-margin">4. </div><div class="csl-right-inline">Ellis RP, Martins B, Rose S. Chapter 3 - Risk Adjustment for Health Plan Payment. In: McGuire TG, Kleef RC van, eds. Academic Press; 2018:55-104. doi:<a href="https://doi.org/10.1016/B978-0-12-811325-7.00003-8">10.1016/B978-0-12-811325-7.00003-8</a></div>
+<div class="csl-left-margin">4. </div><div class="csl-right-inline">Ellis RP, Martins B, Rose S. Chapter 3 - Risk Adjustment for Health Plan Payment. In: McGuire TG, Van Kleef RC, eds. Academic Press; 2018:55-104. doi:<a href="https://doi.org/10.1016/B978-0-12-811325-7.00003-8">10.1016/B978-0-12-811325-7.00003-8</a></div>
 </div>
 <div id="ref-reportt2021" class="csl-entry" role="listitem">
 <div class="csl-left-margin">5. </div><div class="csl-right-inline"><em>Report to Congress: Risk Adjustment in Medicare Advantage</em>.; 2021. <a href="https://www.cms.gov/files/document/report-congress-risk-adjustment-medicare-advantage-december-2021.pdf">https://www.cms.gov/files/document/report-congress-risk-adjustment-medicare-advantage-december-2021.pdf</a></div>
 </div>
+<div id="ref-mcwilliams1" class="csl-entry" role="listitem">
+<div class="csl-left-margin">6. </div><div class="csl-right-inline">McWilliams JM. Risk Adjustment Reform: Navigating Ideas And Tradeoffs (Part 1). <em>Health Affairs Forefront</em>. Published online March 26, 2025. doi:<a href="https://doi.org/10.1377/forefront.20250317.758292">10.1377/forefront.20250317.758292</a></div>
+</div>
+<div id="ref-mcwilliams2" class="csl-entry" role="listitem">
+<div class="csl-left-margin">7. </div><div class="csl-right-inline">McWilliams JM. Risk Adjustment Reform: Navigating Ideas And Tradeoffs (Part 2). <em>Health Affairs Forefront</em>. Published online March 27, 2025. doi:<a href="https://doi.org/10.1377/forefront.20250317.506040">10.1377/forefront.20250317.506040</a></div>
+</div>
 <div id="ref-medicarepaymentadvisorycommission2024" class="csl-entry" role="listitem">
-<div class="csl-left-margin">6. </div><div class="csl-right-inline">Medicare Payment Advisory Commission. Chapter 12: The medicare advantage program: Status report. Published online March 2024. <a href="https://www.medpac.gov/wp-content/uploads/2024/03/Mar24_Ch12_MedPAC_Report_To_Congress_SEC.pdf">https://www.medpac.gov/wp-content/uploads/2024/03/Mar24_Ch12_MedPAC_Report_To_Congress_SEC.pdf</a></div>
+<div class="csl-left-margin">8. </div><div class="csl-right-inline">Medicare Payment Advisory Commission. Chapter 12: The medicare advantage program: Status report. Published online March 2024. <a href="https://www.medpac.gov/wp-content/uploads/2024/03/Mar24_Ch12_MedPAC_Report_To_Congress_SEC.pdf">https://www.medpac.gov/wp-content/uploads/2024/03/Mar24_Ch12_MedPAC_Report_To_Congress_SEC.pdf</a></div>
 </div>
 <div id="ref-rose2016" class="csl-entry" role="listitem">
-<div class="csl-left-margin">7. </div><div class="csl-right-inline">Rose S. A machine learning framework for plan payment risk adjustment. <em>Health Services Research</em>. 2016;51(6):2358-2374. doi:<a href="https://doi.org/10.1111/1475-6773.12464">10.1111/1475-6773.12464</a></div>
+<div class="csl-left-margin">9. </div><div class="csl-right-inline">Rose S. A machine learning framework for plan payment risk adjustment. <em>Health Services Research</em>. 2016;51(6):2358-2374. doi:<a href="https://doi.org/10.1111/1475-6773.12464">10.1111/1475-6773.12464</a></div>
 </div>
 <div id="ref-rose2017" class="csl-entry" role="listitem">
-<div class="csl-left-margin">8. </div><div class="csl-right-inline">Rose S, Bergquist SL, Layton TJ. Computational health economics for identification of unprofitable health care enrollees. <em>Biostatistics (Oxford, England)</em>. 2017;18(4):682-694. doi:<a href="https://doi.org/10.1093/biostatistics/kxx012">10.1093/biostatistics/kxx012</a></div>
+<div class="csl-left-margin">10. </div><div class="csl-right-inline">Rose S, Bergquist SL, Layton TJ. Computational health economics for identification of unprofitable health care enrollees. <em>Biostatistics (Oxford, England)</em>. 2017;18(4):682-694. doi:<a href="https://doi.org/10.1093/biostatistics/kxx012">10.1093/biostatistics/kxx012</a></div>
+</div>
+<div id="ref-vankleef2017" class="csl-entry" role="listitem">
+<div class="csl-left-margin">11. </div><div class="csl-right-inline">Van Kleef RC, McGuire TG, Van Vliet RCJA, Van de Ven WPPM. Improving risk equalization with constrained regression. <em>The European Journal of Health Economics</em>. 2017;18(9):1137-1156. doi:<a href="https://doi.org/10.1007/s10198-016-0859-1">10.1007/s10198-016-0859-1</a></div>
 </div>
 <div id="ref-rose2018" class="csl-entry" role="listitem">
-<div class="csl-left-margin">9. </div><div class="csl-right-inline">Rose S. Robust machine learning variable importance analyses of medical conditions for health care spending. <em>Health Services Research</em>. 2018;53(5):3836-3854. doi:<a href="https://doi.org/10.1111/1475-6773.12848">10.1111/1475-6773.12848</a></div>
+<div class="csl-left-margin">12. </div><div class="csl-right-inline">Rose S. Robust machine learning variable importance analyses of medical conditions for health care spending. <em>Health Services Research</em>. 2018;53(5):3836-3854. doi:<a href="https://doi.org/10.1111/1475-6773.12848">10.1111/1475-6773.12848</a></div>
 </div>
 <div id="ref-kan2019" class="csl-entry" role="listitem">
-<div class="csl-left-margin">10. </div><div class="csl-right-inline">Kan HJ, Kharrazi H, Chang HY, Bodycombe D, Lemke K, Weiner JP. Exploring the use of machine learning for risk adjustment: A comparison of standard and penalized linear regression models in predicting health care costs in older adults. <em>PloS One</em>. 2019;14(3):e0213258. doi:<a href="https://doi.org/10.1371/journal.pone.0213258">10.1371/journal.pone.0213258</a></div>
+<div class="csl-left-margin">13. </div><div class="csl-right-inline">Kan HJ, Kharrazi H, Chang HY, Bodycombe D, Lemke K, Weiner JP. Exploring the use of machine learning for risk adjustment: A comparison of standard and penalized linear regression models in predicting health care costs in older adults. <em>PloS One</em>. 2019;14(3):e0213258. doi:<a href="https://doi.org/10.1371/journal.pone.0213258">10.1371/journal.pone.0213258</a></div>
 </div>
 <div id="ref-bergquist2019" class="csl-entry" role="listitem">
-<div class="csl-left-margin">11. </div><div class="csl-right-inline">Bergquist SL, Layton TJ, McGuire TG, Rose S. Data transformations to improve the performance of health plan payment methods. <em>Journal of Health Economics</em>. 2019;66:195-207. doi:<a href="https://doi.org/10.1016/j.jhealeco.2019.05.005">10.1016/j.jhealeco.2019.05.005</a></div>
+<div class="csl-left-margin">14. </div><div class="csl-right-inline">Bergquist SL, Layton TJ, McGuire TG, Rose S. Data transformations to improve the performance of health plan payment methods. <em>Journal of Health Economics</em>. 2019;66:195-207. doi:<a href="https://doi.org/10.1016/j.jhealeco.2019.05.005">10.1016/j.jhealeco.2019.05.005</a></div>
 </div>
 <div id="ref-irvin2020" class="csl-entry" role="listitem">
-<div class="csl-left-margin">12. </div><div class="csl-right-inline">Irvin JA, Kondrich AA, Ko M, et al. Incorporating machine learning and social determinants of health indicators into prospective risk adjustment for health plan payments. <em>BMC Public Health</em>. 2020;20(1):608. doi:<a href="https://doi.org/10.1186/s12889-020-08735-0">10.1186/s12889-020-08735-0</a></div>
+<div class="csl-left-margin">15. </div><div class="csl-right-inline">Irvin JA, Kondrich AA, Ko M, et al. Incorporating machine learning and social determinants of health indicators into prospective risk adjustment for health plan payments. <em>BMC Public Health</em>. 2020;20(1):608. doi:<a href="https://doi.org/10.1186/s12889-020-08735-0">10.1186/s12889-020-08735-0</a></div>
 </div>
 <div id="ref-zink2020" class="csl-entry" role="listitem">
-<div class="csl-left-margin">13. </div><div class="csl-right-inline">Zink A, Rose S. Fair regression for health care spending. <em>Biometrics</em>. 2020;76(3):973-982. doi:<a href="https://doi.org/10.1111/biom.13206">10.1111/biom.13206</a></div>
+<div class="csl-left-margin">16. </div><div class="csl-right-inline">Zink A, Rose S. Fair regression for health care spending. <em>Biometrics</em>. 2020;76(3):973-982. doi:<a href="https://doi.org/10.1111/biom.13206">10.1111/biom.13206</a></div>
 </div>
 <div id="ref-zink2021" class="csl-entry" role="listitem">
-<div class="csl-left-margin">14. </div><div class="csl-right-inline">Zink A, Rose S. Identifying undercompensated groups defined by multiple attributes in risk adjustment. <em>BMJ Health &amp; Care Informatics</em>. 2021;28(1):e100414. doi:<a href="https://doi.org/10.1136/bmjhci-2021-100414">10.1136/bmjhci-2021-100414</a></div>
+<div class="csl-left-margin">17. </div><div class="csl-right-inline">Zink A, Rose S. Identifying undercompensated groups defined by multiple attributes in risk adjustment. <em>BMJ Health &amp; Care Informatics</em>. 2021;28(1):e100414. doi:<a href="https://doi.org/10.1136/bmjhci-2021-100414">10.1136/bmjhci-2021-100414</a></div>
 </div>
 <div id="ref-mcguire2021" class="csl-entry" role="listitem">
-<div class="csl-left-margin">15. </div><div class="csl-right-inline">McGuire TG, Zink AL, Rose S. Improving the performance of risk adjustment systems: Constrained regressions, reinsurance, and variable selection. <em>American Journal of Health Economics</em>. 2021;7(4):497-521. doi:<a href="https://doi.org/10.1086/716199">10.1086/716199</a></div>
+<div class="csl-left-margin">18. </div><div class="csl-right-inline">McGuire TG, Zink AL, Rose S. Improving the performance of risk adjustment systems: Constrained regressions, reinsurance, and variable selection. <em>American Journal of Health Economics</em>. 2021;7(4):497-521. doi:<a href="https://doi.org/10.1086/716199">10.1086/716199</a></div>
 </div>
 <div id="ref-andriola2024" class="csl-entry" role="listitem">
-<div class="csl-left-margin">16. </div><div class="csl-right-inline">Andriola C, Ellis RP, Siracuse JJ, et al. A novel machine learning algorithm for creating risk-adjusted payment formulas. <em>JAMA Health Forum</em>. 2024;5(4):e240625. doi:<a href="https://doi.org/10.1001/jamahealthforum.2024.0625">10.1001/jamahealthforum.2024.0625</a></div>
+<div class="csl-left-margin">19. </div><div class="csl-right-inline">Andriola C, Ellis RP, Siracuse JJ, et al. A novel machine learning algorithm for creating risk-adjusted payment formulas. <em>JAMA Health Forum</em>. 2024;5(4):e240625. doi:<a href="https://doi.org/10.1001/jamahealthforum.2024.0625">10.1001/jamahealthforum.2024.0625</a></div>
 </div>
 <div id="ref-skopec" class="csl-entry" role="listitem">
-<div class="csl-left-margin">17. </div><div class="csl-right-inline">Skopec L, Garrett B, Gangopadhyaya A. Reimagining the medicare advantage risk adjustment program.</div>
+<div class="csl-left-margin">20. </div><div class="csl-right-inline">Skopec L, Garrett B, Gangopadhyaya A. Reimagining the medicare advantage risk adjustment program.</div>
 </div>
 <div id="ref-meyers2021" class="csl-entry" role="listitem">
-<div class="csl-left-margin">18. </div><div class="csl-right-inline">Meyers DJ, Mor V, Rahman M, Trivedi AN. Growth in medicare advantage greatest among black and hispanic enrollees. <em>Health affairs (Project Hope)</em>. 2021;40(6):945-950. doi:<a href="https://doi.org/10.1377/hlthaff.2021.00118">10.1377/hlthaff.2021.00118</a></div>
+<div class="csl-left-margin">21. </div><div class="csl-right-inline">Meyers DJ, Mor V, Rahman M, Trivedi AN. Growth in medicare advantage greatest among black and hispanic enrollees. <em>Health affairs (Project Hope)</em>. 2021;40(6):945-950. doi:<a href="https://doi.org/10.1377/hlthaff.2021.00118">10.1377/hlthaff.2021.00118</a></div>
 </div>
 <div id="ref-ochieng2023" class="csl-entry" role="listitem">
-<div class="csl-left-margin">19. </div><div class="csl-right-inline">Ochieng N, Biniek JF, Cubanski J, Published TN. Disparities in health measures by race and ethnicity among beneficiaries in medicare advantage: A review of the literature. Published online December 13, 2023. <a href="https://www.kff.org/medicare/report/disparities-in-health-measures-by-race-and-ethnicity-among-beneficiaries-in-medicare-advantage-a-review-of-the-literature/">https://www.kff.org/medicare/report/disparities-in-health-measures-by-race-and-ethnicity-among-beneficiaries-in-medicare-advantage-a-review-of-the-literature/</a></div>
+<div class="csl-left-margin">22. </div><div class="csl-right-inline">Ochieng N, Biniek JF, Cubanski J, Published TN. Disparities in health measures by race and ethnicity among beneficiaries in medicare advantage: A review of the literature. Published online December 13, 2023. <a href="https://www.kff.org/medicare/report/disparities-in-health-measures-by-race-and-ethnicity-among-beneficiaries-in-medicare-advantage-a-review-of-the-literature/">https://www.kff.org/medicare/report/disparities-in-health-measures-by-race-and-ethnicity-among-beneficiaries-in-medicare-advantage-a-review-of-the-literature/</a></div>
 </div>
 <div id="ref-bureau" class="csl-entry" role="listitem">
-<div class="csl-left-margin">20. </div><div class="csl-right-inline">Bureau UC. 2023 national population projections datasets. <a href="https://www.census.gov/data/datasets/2023/demo/popproj/2023-popproj.html">https://www.census.gov/data/datasets/2023/demo/popproj/2023-popproj.html</a></div>
+<div class="csl-left-margin">23. </div><div class="csl-right-inline">Bureau UC. 2023 national population projections datasets. <a href="https://www.census.gov/data/datasets/2023/demo/popproj/2023-popproj.html">https://www.census.gov/data/datasets/2023/demo/popproj/2023-popproj.html</a></div>
+</div>
+<div id="ref-obermeyer2019" class="csl-entry" role="listitem">
+<div class="csl-left-margin">24. </div><div class="csl-right-inline">Obermeyer Z, Powers B, Vogeli C, Mullainathan S. Dissecting racial bias in an algorithm used to manage the health of populations. <em>Science</em>. 2019;366(6464):447-453. doi:<a href="https://doi.org/10.1126/science.aax2342">10.1126/science.aax2342</a></div>
 </div>
 <div id="ref-wallace2021" class="csl-entry" role="listitem">
-<div class="csl-left-margin">21. </div><div class="csl-right-inline">Wallace J, Jiang K, Goldsmith-Pinkham P, Song Z. Changes in racial and ethnic disparities in access to care and health among US adults at age 65 years. <em>JAMA Internal Medicine</em>. 2021;181(9):1207-1215. doi:<a href="https://doi.org/10.1001/jamainternmed.2021.3922">10.1001/jamainternmed.2021.3922</a></div>
+<div class="csl-left-margin">25. </div><div class="csl-right-inline">Wallace J, Jiang K, Goldsmith-Pinkham P, Song Z. Changes in racial and ethnic disparities in access to care and health among US adults at age 65 years. <em>JAMA Internal Medicine</em>. 2021;181(9):1207-1215. doi:<a href="https://doi.org/10.1001/jamainternmed.2021.3922">10.1001/jamainternmed.2021.3922</a></div>
 </div>
 <div id="ref-dieleman2021" class="csl-entry" role="listitem">
-<div class="csl-left-margin">22. </div><div class="csl-right-inline">Dieleman JL, Chen C, Crosby SW, et al. US health care spending by race and ethnicity, 2002-2016. <em>JAMA</em>. 2021;326(7):649-659. doi:<a href="https://doi.org/10.1001/jama.2021.9937">10.1001/jama.2021.9937</a></div>
+<div class="csl-left-margin">26. </div><div class="csl-right-inline">Dieleman JL, Chen C, Crosby SW, et al. US health care spending by race and ethnicity, 2002-2016. <em>JAMA</em>. 2021;326(7):649-659. doi:<a href="https://doi.org/10.1001/jama.2021.9937">10.1001/jama.2021.9937</a></div>
 </div>
 <div id="ref-baik2023" class="csl-entry" role="listitem">
-<div class="csl-left-margin">23. </div><div class="csl-right-inline">Baik SH, Baye F, McDonald CJ. Trends in racial disparities in healthcare expenditures among senior medicare fee-for-service enrollees in 2007 - 2020. <em>Journal of Racial and Ethnic Health Disparities</em>. Published online November 13, 2023. doi:<a href="https://doi.org/10.1007/s40615-023-01832-x">10.1007/s40615-023-01832-x</a></div>
+<div class="csl-left-margin">27. </div><div class="csl-right-inline">Baik SH, Baye F, McDonald CJ. Trends in racial disparities in healthcare expenditures among senior medicare fee-for-service enrollees in 2007 - 2020. <em>Journal of Racial and Ethnic Health Disparities</em>. Published online November 13, 2023. doi:<a href="https://doi.org/10.1007/s40615-023-01832-x">10.1007/s40615-023-01832-x</a></div>
 </div>
 <div id="ref-mcwilliams2023" class="csl-entry" role="listitem">
-<div class="csl-left-margin">24. </div><div class="csl-right-inline">McWilliams JM, Weinreb G, Ding L, Ndumele CD, Wallace J. Risk adjustment and promoting health equity in population-based payment: Concepts and evidence. <em>Health Affairs</em>. 2023;42(1):105-114. doi:<a href="https://doi.org/10.1377/hlthaff.2022.00916">10.1377/hlthaff.2022.00916</a></div>
+<div class="csl-left-margin">28. </div><div class="csl-right-inline">McWilliams JM, Weinreb G, Ding L, Ndumele CD, Wallace J. Risk adjustment and promoting health equity in population-based payment: Concepts and evidence. <em>Health Affairs</em>. 2023;42(1):105-114. doi:<a href="https://doi.org/10.1377/hlthaff.2022.00916">10.1377/hlthaff.2022.00916</a></div>
 </div>
 <div id="ref-nationalacademiesofsciencesengineeringandmedicine2024" class="csl-entry" role="listitem">
-<div class="csl-left-margin">25. </div><div class="csl-right-inline">National Academies of Sciences, Engineering, and Medicine. Ending Unequal Treatment: Strategies to Achieve Equitable Health Care and Optimal Health for All. Published online 2024. <a href="https://doi.org/10.17226/27820">https://doi.org/10.17226/27820</a></div>
+<div class="csl-left-margin">29. </div><div class="csl-right-inline">National Academies of Sciences, Engineering, and Medicine. Ending Unequal Treatment: Strategies to Achieve Equitable Health Care and Optimal Health for All. Published online 2024. <a href="https://doi.org/10.17226/27820">https://doi.org/10.17226/27820</a></div>
 </div>
 <div id="ref-gangopadhyaya2023" class="csl-entry" role="listitem">
-<div class="csl-left-margin">26. </div><div class="csl-right-inline">Gangopadhyaya A, Zuckerman S, Rao N. Assessing the difference in racial and ethnic disparities in access to and use of care between traditional medicare and medicare advantage. <em>Health Services Research</em>. 2023;58(4):914-923. doi:<a href="https://doi.org/10.1111/1475-6773.14150">10.1111/1475-6773.14150</a></div>
+<div class="csl-left-margin">30. </div><div class="csl-right-inline">Gangopadhyaya A, Zuckerman S, Rao N. Assessing the difference in racial and ethnic disparities in access to and use of care between traditional medicare and medicare advantage. <em>Health Services Research</em>. 2023;58(4):914-923. doi:<a href="https://doi.org/10.1111/1475-6773.14150">10.1111/1475-6773.14150</a></div>
 </div>
 <div id="ref-mbsf_old" class="csl-entry" role="listitem">
-<div class="csl-left-margin">27. </div><div class="csl-right-inline">Stanford Center for Population Health Sciences. <span class="nocase">Medicare 20% [2006-2018] Enrollment/Summary (MBSF) (Version 1.0) [Data set]</span>. <em><span>Redivis (RRID:SCR_023111)</span></em>. Published online 2021. doi:<a href="https://doi.org/10.57761/wnn9-b060">10.57761/wnn9-b060</a></div>
+<div class="csl-left-margin">31. </div><div class="csl-right-inline">Stanford Center for Population Health Sciences. <span class="nocase">Medicare 20% [2006-2018] Enrollment/Summary (MBSF) (Version 1.0) [Data set]</span>. <em><span>Redivis (RRID:SCR_023111)</span></em>. Published online 2021. doi:<a href="https://doi.org/10.57761/wnn9-b060">10.57761/wnn9-b060</a></div>
 </div>
 <div id="ref-mbsf_new" class="csl-entry" role="listitem">
-<div class="csl-left-margin">28. </div><div class="csl-right-inline">Stanford Center for Population Health Sciences. <span class="nocase">Medicare 20% [2019-2020] Enrollment/Summary (MBSF) (Version 1.0) [Data set]</span>. <em><span>Redivis (RRID:SCR_023111)</span></em>. Published online 2023. doi:<a href="https://doi.org/10.57761/xg2t-1343">10.57761/xg2t-1343</a></div>
+<div class="csl-left-margin">32. </div><div class="csl-right-inline">Stanford Center for Population Health Sciences. <span class="nocase">Medicare 20% [2019-2020] Enrollment/Summary (MBSF) (Version 1.0) [Data set]</span>. <em><span>Redivis (RRID:SCR_023111)</span></em>. Published online 2023. doi:<a href="https://doi.org/10.57761/xg2t-1343">10.57761/xg2t-1343</a></div>
 </div>
 <div id="ref-carrier_old" class="csl-entry" role="listitem">
-<div class="csl-left-margin">29. </div><div class="csl-right-inline">Stanford Center for Population Health Sciences. <span class="nocase">Medicare 20% [2006-2018] Carrier (Version 1.0) [Data set]</span>. <em><span>Redivis (RRID:SCR_023111)</span></em>. Published online 2021. doi:<a href="https://doi.org/10.57761/d1kp-xa44">10.57761/d1kp-xa44</a></div>
+<div class="csl-left-margin">33. </div><div class="csl-right-inline">Stanford Center for Population Health Sciences. <span class="nocase">Medicare 20% [2006-2018] Carrier (Version 1.0) [Data set]</span>. <em><span>Redivis (RRID:SCR_023111)</span></em>. Published online 2021. doi:<a href="https://doi.org/10.57761/d1kp-xa44">10.57761/d1kp-xa44</a></div>
 </div>
 <div id="ref-carrier_new" class="csl-entry" role="listitem">
-<div class="csl-left-margin">30. </div><div class="csl-right-inline">Stanford Center for Population Health Sciences. <span class="nocase">Medicare 20% [2019-2020] Carrier (Version 1.0) [Data set]</span>. <em><span>Redivis (RRID:SCR_023111)</span></em>. Published online 2023. doi:<a href="https://doi.org/10.57761/w5a5-yb97">10.57761/w5a5-yb97</a></div>
+<div class="csl-left-margin">34. </div><div class="csl-right-inline">Stanford Center for Population Health Sciences. <span class="nocase">Medicare 20% [2019-2020] Carrier (Version 1.0) [Data set]</span>. <em><span>Redivis (RRID:SCR_023111)</span></em>. Published online 2023. doi:<a href="https://doi.org/10.57761/w5a5-yb97">10.57761/w5a5-yb97</a></div>
 </div>
 <div id="ref-outpatient_old" class="csl-entry" role="listitem">
-<div class="csl-left-margin">31. </div><div class="csl-right-inline">Stanford Center for Population Health Sciences. <span class="nocase">Medicare 20% [2006-2018] Outpatient (Version 1.0) [Data set]</span>. <em><span>Redivis (RRID:SCR_023111)</span></em>. Published online 2021. doi:<a href="https://doi.org/10.57761/qgsq-tj66">10.57761/qgsq-tj66</a></div>
+<div class="csl-left-margin">35. </div><div class="csl-right-inline">Stanford Center for Population Health Sciences. <span class="nocase">Medicare 20% [2006-2018] Outpatient (Version 1.0) [Data set]</span>. <em><span>Redivis (RRID:SCR_023111)</span></em>. Published online 2021. doi:<a href="https://doi.org/10.57761/qgsq-tj66">10.57761/qgsq-tj66</a></div>
 </div>
 <div id="ref-outpatient_new" class="csl-entry" role="listitem">
-<div class="csl-left-margin">32. </div><div class="csl-right-inline">Stanford Center for Population Health Sciences. <span class="nocase">Medicare 20% [2019-2020] Outpatient (Version 1.0) [Data set]</span>. <em><span>Redivis (RRID:SCR_023111)</span></em>. Published online 2023. doi:<a href="https://doi.org/10.57761/9ct0-kf53">10.57761/9ct0-kf53</a></div>
+<div class="csl-left-margin">36. </div><div class="csl-right-inline">Stanford Center for Population Health Sciences. <span class="nocase">Medicare 20% [2019-2020] Outpatient (Version 1.0) [Data set]</span>. <em><span>Redivis (RRID:SCR_023111)</span></em>. Published online 2023. doi:<a href="https://doi.org/10.57761/9ct0-kf53">10.57761/9ct0-kf53</a></div>
 </div>
 <div id="ref-medpar_old" class="csl-entry" role="listitem">
-<div class="csl-left-margin">33. </div><div class="csl-right-inline">Stanford Center for Population Health Sciences. <span class="nocase">Medicare 20% [2006-2018] MedPAR (Version 1.0) [Data set]</span>. <em><span>Redivis (RRID:SCR_023111)</span></em>. Published online 2021. doi:<a href="https://doi.org/10.57761/nc92-5272">10.57761/nc92-5272</a></div>
+<div class="csl-left-margin">37. </div><div class="csl-right-inline">Stanford Center for Population Health Sciences. <span class="nocase">Medicare 20% [2006-2018] MedPAR (Version 1.0) [Data set]</span>. <em><span>Redivis (RRID:SCR_023111)</span></em>. Published online 2021. doi:<a href="https://doi.org/10.57761/nc92-5272">10.57761/nc92-5272</a></div>
 </div>
 <div id="ref-medpar_new" class="csl-entry" role="listitem">
-<div class="csl-left-margin">34. </div><div class="csl-right-inline">Stanford Center for Population Health Sciences. <span class="nocase">Medicare 20% [2019-2020] MedPAR (Version 1.0) [Data set]</span>. <em><span>Redivis (RRID:SCR_023111)</span></em>. Published online 2023. doi:<a href="https://doi.org/10.57761/67t8-9d86">10.57761/67t8-9d86</a></div>
+<div class="csl-left-margin">38. </div><div class="csl-right-inline">Stanford Center for Population Health Sciences. <span class="nocase">Medicare 20% [2019-2020] MedPAR (Version 1.0) [Data set]</span>. <em><span>Redivis (RRID:SCR_023111)</span></em>. Published online 2023. doi:<a href="https://doi.org/10.57761/67t8-9d86">10.57761/67t8-9d86</a></div>
 </div>
 <div id="ref-eicheldinger2008" class="csl-entry" role="listitem">
-<div class="csl-left-margin">35. </div><div class="csl-right-inline">Eicheldinger C, Bonito A. More accurate racial and ethnic codes for medicare administrative data. <em>Health Care Financing Review</em>. 2008;29(3):27-42.</div>
+<div class="csl-left-margin">39. </div><div class="csl-right-inline">Eicheldinger C, Bonito A. More accurate racial and ethnic codes for medicare administrative data. <em>Health Care Financing Review</em>. 2008;29(3):27-42.</div>
 </div>
 <div id="ref-medicare" class="csl-entry" role="listitem">
-<div class="csl-left-margin">36. </div><div class="csl-right-inline">Medicare risk adjustment eligible CPT/HCPCS codes | CMS. <a href="https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/Risk-Adjustors-Items/CPT-HCPCS">https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/Risk-Adjustors-Items/CPT-HCPCS</a></div>
+<div class="csl-left-margin">40. </div><div class="csl-right-inline">Medicare risk adjustment eligible CPT/HCPCS codes | CMS. <a href="https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/Risk-Adjustors-Items/CPT-HCPCS">https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/Risk-Adjustors-Items/CPT-HCPCS</a></div>
 </div>
 <div id="ref-centersformedicareandmedicaidservices" class="csl-entry" role="listitem">
-<div class="csl-left-margin">37. </div><div class="csl-right-inline">Medicare C for, Medicaid Services. 2020 model software/ICD-10 mappings | CMS. <a href="https://www.cms.gov/medicare/health-plans/medicareadvtgspecratestats/risk-adjustors-items/risk2020">https://www.cms.gov/medicare/health-plans/medicareadvtgspecratestats/risk-adjustors-items/risk2020</a></div>
+<div class="csl-left-margin">41. </div><div class="csl-right-inline">Medicare C for, Medicaid Services. 2020 model software/ICD-10 mappings | CMS. <a href="https://www.cms.gov/medicare/health-plans/medicareadvtgspecratestats/risk-adjustors-items/risk2020">https://www.cms.gov/medicare/health-plans/medicareadvtgspecratestats/risk-adjustors-items/risk2020</a></div>
 </div>
 <div id="ref-cdc/atsd2024" class="csl-entry" role="listitem">
-<div class="csl-left-margin">38. </div><div class="csl-right-inline">CDC/ATSDR social vulnerability index (CDC/ATSDR SVI). Published online June 14, 2024. <a href="https://www.atsdr.cdc.gov/placeandhealth/svi/index.html">https://www.atsdr.cdc.gov/placeandhealth/svi/index.html</a></div>
+<div class="csl-left-margin">42. </div><div class="csl-right-inline">CDC/ATSDR social vulnerability index (CDC/ATSDR SVI). Published online June 14, 2024. <a href="https://www.atsdr.cdc.gov/placeandhealth/svi/index.html">https://www.atsdr.cdc.gov/placeandhealth/svi/index.html</a></div>
 </div>
 <div id="ref-diamond2016cvxpy" class="csl-entry" role="listitem">
-<div class="csl-left-margin">39. </div><div class="csl-right-inline">Diamond S, Boyd S. <span>CVXPY</span>: <span>A</span> <span>P</span>ython-embedded modeling language for convex optimization. <em>Journal of Machine Learning Research</em>. 2016;17(83):1-5.</div>
+<div class="csl-left-margin">43. </div><div class="csl-right-inline">Diamond S, Boyd S. <span>CVXPY</span>: <span>A</span> <span>P</span>ython-embedded modeling language for convex optimization. <em>Journal of Machine Learning Research</em>. 2016;17(83):1-5.</div>
 </div>
 <div id="ref-agrawal2018rewriting" class="csl-entry" role="listitem">
-<div class="csl-left-margin">40. </div><div class="csl-right-inline">Agrawal A, Verschueren R, Diamond S, Boyd S. A rewriting system for convex optimization problems. <em>Journal of Control and Decision</em>. 2018;5(1):42-60.</div>
+<div class="csl-left-margin">44. </div><div class="csl-right-inline">Agrawal A, Verschueren R, Diamond S, Boyd S. A rewriting system for convex optimization problems. <em>Journal of Control and Decision</em>. 2018;5(1):42-60.</div>
 </div>
 <div id="ref-cattel2023" class="csl-entry" role="listitem">
-<div class="csl-left-margin">41. </div><div class="csl-right-inline">Cattel FE D., Vliet RCJA van. Onderzoek risicoverevening 2024: Berekening normbedragen" rapport ESHPM, rotterdam: Erasmus universiteit. English: "Research for dutch risk equalization model 2024: Calibration of payment weights. <em>Rotterdam: Erasmus Universiteit Rotterdam</em>. Published online 2023.</div>
+<div class="csl-left-margin">45. </div><div class="csl-right-inline">Cattel FE D., Vliet RCJA van. Onderzoek risicoverevening 2024: Berekening normbedragen" rapport ESHPM, rotterdam: Erasmus universiteit. English: "Research for dutch risk equalization model 2024: Calibration of payment weights. <em>Rotterdam: Erasmus Universiteit Rotterdam</em>. Published online 2023.</div>
 </div>
 <div id="ref-pmlr-v248-cusick24a" class="csl-entry" role="listitem">
-<div class="csl-left-margin">42. </div><div class="csl-right-inline">Cusick MM, Chertow GM, Owens DK, Williams MY, Rose S. Algorithmic changes are not enough: Evaluating the removal of race adjustment from the eGFR equation. In: Pollard T, Choi E, Singhal P, et al., eds. <em>Proceedings of the Fifth Conference on Health, Inference, and Learning</em>. Vol 248. Proceedings of machine learning research. PMLR; 2024:619-643. <a href="https://proceedings.mlr.press/v248/cusick24a.html">https://proceedings.mlr.press/v248/cusick24a.html</a></div>
+<div class="csl-left-margin">46. </div><div class="csl-right-inline">Cusick MM, Chertow GM, Owens DK, Williams MY, Rose S. Algorithmic changes are not enough: Evaluating the removal of race adjustment from the eGFR equation. In: Pollard T, Choi E, Singhal P, et al., eds. <em>Proceedings of the Fifth Conference on Health, Inference, and Learning</em>. Vol 248. Proceedings of machine learning research. PMLR; 2024:619-643. <a href="https://proceedings.mlr.press/v248/cusick24a.html">https://proceedings.mlr.press/v248/cusick24a.html</a></div>
 </div>
 <div id="ref-jarrín2020" class="csl-entry" role="listitem">
-<div class="csl-left-margin">43. </div><div class="csl-right-inline">Jarrín OF, Nyandege AN, Grafova IB, Dong X, Lin H. Validity of race and ethnicity codes in medicare administrative data compared with gold-standard self-reported race collected during routine home health care visits. <em>Medical Care</em>. 2020;58(1):e1. doi:<a href="https://doi.org/10.1097/MLR.0000000000001216">10.1097/MLR.0000000000001216</a></div>
+<div class="csl-left-margin">47. </div><div class="csl-right-inline">Jarrín OF, Nyandege AN, Grafova IB, Dong X, Lin H. Validity of race and ethnicity codes in medicare administrative data compared with gold-standard self-reported race collected during routine home health care visits. <em>Medical Care</em>. 2020;58(1):e1. doi:<a href="https://doi.org/10.1097/MLR.0000000000001216">10.1097/MLR.0000000000001216</a></div>
 </div>
 <div id="ref-advanced" class="csl-entry" role="listitem">
-<div class="csl-left-margin">44. </div><div class="csl-right-inline">Advanced topics <span></span> CVX users’ guide. <a href="https://cvxr.com/cvx/doc/advanced.html#eliminating-quadratic-forms">https://cvxr.com/cvx/doc/advanced.html#eliminating-quadratic-forms</a></div>
+<div class="csl-left-margin">48. </div><div class="csl-right-inline">Advanced topics <span></span> CVX users’ guide. <a href="https://cvxr.com/cvx/doc/advanced.html#eliminating-quadratic-forms">https://cvxr.com/cvx/doc/advanced.html#eliminating-quadratic-forms</a></div>
 </div>
 </div></section></div></main>
 <!-- /main column -->

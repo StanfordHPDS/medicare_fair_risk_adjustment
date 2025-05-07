@@ -65,6 +65,8 @@ run_disparities_regression <- function(year) {
   setnames(geo_beta, c("HCC", "beta"), c("grp_county", "geo_beta"))
   beta_est <- beta_est[!(HCC %like% "grp_county")]
 
+  write.csv(beta_est, file.path("safe_figures", year, "disparities_targets_regression_coefficients.csv"))
+  
   ## DEMO BETAS
   age_sex_beta <- beta_est[HCC %like% "age_sex"]
   age_sex_beta <- age_sex_beta[, HCC := gsub("age_sex", "", HCC, fixed = TRUE)]
