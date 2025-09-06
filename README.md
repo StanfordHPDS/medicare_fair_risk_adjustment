@@ -1,6 +1,6 @@
 # Algorithms to Improve Fairness in Medicare Risk Adjustment
 
-This repository contains analytic code for the paper "Algorithms to Improve Fairness in Medicare Risk Adjustment" by Marissa Reitsma, Thomas McGuire, and Sherri Rose (2025), [medRxiv:10.1101/2025.01.25.25321057](https://www.medrxiv.org/content/10.1101/2025.01.25.25321057v1).
+This repository contains analytic code for the paper "Algorithms to Improve Fairness in Medicare Risk Adjustment" by Marissa Reitsma, Thomas McGuire, and Sherri Rose (2025), *JAMA Health Forum*. [[Link]](https://jamanetwork.com/journals/jama-health-forum/fullarticle/2837998) [[Policy Brief]](https://hai.stanford.edu/policy/increasing-fairness-in-medicare-payment-algorithms)
 
 Medicare data contain protected health information and cannot be accessed without IRB approval and a Research Identifiable File (RIF) Data Use Agreement with CMS. As a result, no data are made available in this repository, but the code should allow for replication by reserachers with access to the Medicare RIF data.
 
